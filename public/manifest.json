@@ -1,0 +1,19 @@
+{
+  "name": "MLB",
+  "id": "mlb-games",
+  "short_name": "MLB",
+  "description": "Today's MLB Games",
+  "theme_color": "#020287",
+  "background_color": "#020287",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

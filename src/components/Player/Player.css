@@ -1,0 +1,70 @@
+.player {
+  display: grid;
+  margin: 0 0 1rem;
+  gap: 0.25rem 0.5rem;
+  font-size: 12px;
+  flex: 1 0 calc(100% - 1rem);
+  align-items: center;
+  line-height: 1;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    "avatar name name"
+    "avatar summary note";
+
+  &:last-child {
+    margin-bottom: 0.25rem;
+  }
+
+  & p {
+    margin: 0;
+  }
+
+  & * {
+    pointer-events: none;
+  }
+}
+
+.player-note {
+  grid-area: note;
+}
+
+.player-avatar {
+  width: 2rem;
+  height: 2rem;
+  display: block;
+  margin: 0;
+}
+
+.player-name {
+  line-height: 1.5;
+  color: var(--text);
+  font-weight: 600;
+
+  &:empty {
+    display: none;
+  }
+
+  &[data-pos]::after {
+    content: "(" attr(data-pos) ")";
+    font-weight: 400;
+    color: var(--text1);
+    margin-left: 0.25rem;
+  }
+}
+
+.player .player-summary {
+  color: var(--text1);
+  text-wrap: balance;
+}
+
+.player .player-avatar {
+  grid-area: avatar;
+}
+
+.player .player-name {
+  grid-area: name;
+}
+
+.player .player-summary {
+  grid-area: summary;
+}

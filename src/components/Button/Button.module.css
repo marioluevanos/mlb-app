@@ -1,0 +1,26 @@
+.button {
+  font-size: 12px;
+  font-family: var(--font);
+  font-weight: 700;
+  color: var(--text1);
+  background: var(--bg1);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  border: none;
+  transition: background 0.15s ease-out, border-color 0.15s ease-out;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+
+  & * {
+    pointer-events: none;
+  }
+}
+
+.button:hover {
+  background: var(--bg2);
+}
