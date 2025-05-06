@@ -83,3 +83,7 @@ body {
 main {
   width: 100%;
 }
+
+h3 {
+  font: 700 0.875rem/1 var(--font-sans);
+}

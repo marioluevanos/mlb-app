@@ -164,19 +164,22 @@
 }
 
 /* Winner */
-.scoreboard .team.winner .team-name,
-.scoreboard .scoreboard-column .winner {
+.scoreboard:not(.no-innings) .team.winner .team-name,
+.scoreboard:not(.no-innings) .scoreboard-column .winner {
   color: var(--text);
   font-weight: 700;
 }
 
-.scoreboard.final .team.winner .team-logo::after {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 6px;
-  background: var(--accent);
-  position: absolute;
-  top: 0;
-  right: 0;
+.scoreboard.final,
+.scoreboard.game-over {
+  & .team.winner .team-logo::after {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+    background: var(--accent);
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 }

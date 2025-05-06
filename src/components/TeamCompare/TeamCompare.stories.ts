@@ -13,7 +13,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const LAD: Story = {
+export const Default: Story = {
   args: {
     away: GAME_FINAL.away,
     home: GAME_FINAL.home,

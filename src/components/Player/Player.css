@@ -38,6 +38,7 @@
 .player-name {
   line-height: 1.5;
   color: var(--text);
+  font-family: var(--font-sans);
   font-weight: 600;
 
   &:empty {

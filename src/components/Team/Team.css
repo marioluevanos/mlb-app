@@ -7,7 +7,8 @@
 }
 
 .team-name {
-  width: 3ch;
+  font-family: var(--font-sans);
+  font-weight: 600;
   display: flex;
   line-height: 1;
   align-items: center;
@@ -15,6 +16,7 @@
 }
 
 .team-record {
+  font-family: var(--font-mono);
   color: var(--text1);
   font-size: 0.75em;
 }
