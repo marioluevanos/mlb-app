@@ -1,4 +1,6 @@
 .scoreboard {
+  --char-w: 2ch;
+
   display: flex;
   gap: 0.5rem;
   font-size: 14px;
@@ -40,6 +42,69 @@
   scroll-padding: 0 0 0 0;
 }
 
+/* Innings */
+.scoreboard .scoreboard-innings {
+  display: flex;
+  gap: 0.25rem;
+}
+
+/* Inning */
+.scoreboard .scoreboard-inning {
+  width: var(--char-w);
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  color: var(--text1);
+
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+
+  &::before {
+    font-size: 10px;
+    font-weight: 400;
+    content: attr(data-inning);
+    display: inline-flex;
+    color: var(--text1);
+  }
+}
+
+/* Inning Runs */
+.scoreboard .scoreboard-inning .runs {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: inherit;
+  position: relative;
+}
+
+.scoreboard .scoreboard-inning .runs::after {
+  content: "";
+  border-radius: 4px;
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scoreboard.is-top .scoreboard-inning:last-child::before {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.scoreboard.is-top .scoreboard-inning:last-child .runs.away::after,
+.scoreboard.is-bottom .scoreboard-inning:last-child .runs.home::after {
+  border: 1px dotted transparent;
+  border-color: var(--accent);
+}
+
 /* Score Column (R B H) */
 .scoreboard .scoreboard-score {
   position: sticky;
@@ -51,6 +116,7 @@
   padding-left: 0.5rem;
   background: var(--bg);
   z-index: 1;
+  gap: 0 0.5rem;
 }
 
 .scoreboard .scoreboard-score-column {
@@ -61,7 +127,7 @@
   justify-content: space-between;
 
   & span {
-    width: 2.5ch;
+    width: var(--char-w);
     flex: 1;
     display: flex;
     justify-content: center;
@@ -84,42 +150,6 @@
   }
   &.errors::before {
     content: "E";
-  }
-}
-
-/* Innings */
-.scoreboard .scoreboard-innings {
-  display: flex;
-}
-
-.scoreboard .scoreboard-inning {
-  width: 2.5ch;
-  gap: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  z-index: 1;
-  color: var(--text1);
-
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-
-  &::before {
-    font-size: 10px;
-    font-weight: 400;
-    content: attr(data-inning);
-    display: inline-flex;
-    color: var(--text1);
-  }
-
-  & span {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: inherit;
   }
 }
 

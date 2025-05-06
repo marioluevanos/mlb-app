@@ -67,7 +67,7 @@ const mapToTeam = (team: "home" | "away", data: MLBLive): TeamClub => {
   };
 };
 
-export function mapToGame(g: GameToday, data: MLBLive): GameToday {
+export function mapToGame(g: Partial<GameToday>, data: MLBLive): GameToday {
   const { gameData, liveData } = data;
   const { linescore, boxscore, plays, decisions } = liveData;
   const { currentPlay, scoringPlays, allPlays, playsByInning } = plays;
@@ -75,7 +75,10 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
   const awayTeam = mapToTeam("away", data);
   const homeTeam = mapToTeam("home", data);
   const status = gameData.status.detailedState;
-  const allPlayers = [...awayTeam.players, ...homeTeam.players];
+  const allPlayers = [
+    ...(awayTeam?.players || []),
+    ...(homeTeam.players || []),
+  ];
   const matchup = getCurrentMatchup({
     players: allPlayers,
     matchup: currentPlay?.matchup,
@@ -87,7 +90,11 @@ export function mapToGame(g: GameToday, data: MLBLive): GameToday {
     : currentInning.bottom;
 
   return {
-    ...g,
+    id: data.gamePk,
+    feed: data.link,
+    // highlights: [],
+    // streams: [],
+    time: `${data.gameData.datetime.time} ${data.gameData.datetime.ampm}`,
     status,
     away: awayTeam,
     home: homeTeam,
@@ -272,14 +279,23 @@ function getDecision(
   if (!final) return;
 
   const winner =
-    Number(away.score.runs) > Number(home.score.runs) ? "away" : "home";
+    away.score &&
+    home.score &&
+    Number(away.score.runs) > Number(home.score.runs)
+      ? "away"
+      : "home";
+
   const looser =
-    Number(away.score.runs) < Number(home.score.runs) ? "away" : "home";
+    away.score &&
+    home.score &&
+    Number(away.score.runs) < Number(home.score.runs)
+      ? "away"
+      : "home";
   const teams = { home, away };
 
-  const wp = teams[winner]?.players.find((p) => p.id === decisions.winner.id);
-  const lp = teams[looser]?.players.find((p) => p.id === decisions.loser.id);
-  const sv = teams[winner]?.players.find((p) => p.id === decisions.save?.id);
+  const wp = teams[winner]?.players?.find((p) => p.id === decisions.winner.id);
+  const lp = teams[looser]?.players?.find((p) => p.id === decisions.loser.id);
+  const sv = teams[winner]?.players?.find((p) => p.id === decisions.save?.id);
 
   return {
     winner: {

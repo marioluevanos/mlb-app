@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { GameMatchup } from "./GameMatchup";
-import { Batter, Pitcher } from "../Player/Player.stories";
+import { Batter } from "../Player/Player.stories";
 import { createElement } from "react";
 import { GameBug } from "../GameBug/GameBug";
+import { GAME_XINN } from "@/_mockdata/mockdata";
 
 const meta = {
   title: "Components/GameMatchup",
@@ -20,10 +21,7 @@ export const Default: Story = {
     return createElement(
       GameMatchup,
       {
-        matchup: {
-          pitcher: { ...Pitcher.args?.player, throws: "R" },
-          batter: { ...Batter.args?.player, bats: "L" },
-        },
+        matchup: GAME_XINN.currentPlay?.matchup,
       },
       createElement(GameBug, {
         count: {

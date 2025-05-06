@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ScoringPlays } from "./ScoringPlays";
+import { PlayEvents } from "./PlayEvents";
 import { GAME_XINN } from "@/_mockdata/mockdata";
 
 const meta = {
-  title: "Components/ScoringPlays",
-  component: ScoringPlays,
+  title: "Components/PlayEvents",
+  component: PlayEvents,
   parameters: {},
   argTypes: {},
-} satisfies Meta<typeof ScoringPlays>;
+} satisfies Meta<typeof PlayEvents>;
 
 export default meta;
 
@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    onPlayerClick: () => undefined,
-    scoringPlays: GAME_XINN.scoringPlays,
+    events: GAME_XINN.currentPlay?.events,
+    result: GAME_XINN.currentPlay?.result,
   },
 };

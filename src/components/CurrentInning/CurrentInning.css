@@ -1,10 +1,9 @@
 .current-inning {
   font-size: 10px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   color: var(--accent);
-  width: 100%;
   font-weight: 600;
   text-transform: uppercase;
   text-align: center;

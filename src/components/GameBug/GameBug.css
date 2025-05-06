@@ -11,6 +11,7 @@
   flex: 0;
 
   & .current-inning {
+    width: 100%;
     margin-top: 0.5rem;
     font-size: 10px;
   }

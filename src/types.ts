@@ -81,20 +81,20 @@ export type GameInnings = {
 export type GameToday = {
   id: number;
   feed: string;
-  content: string;
   status: GameStatus;
   away: TeamClub;
   home: TeamClub;
   time: string;
   currentInning: string;
   topPerformers: GamePlayer[];
-  highlights: GameHighlight[];
-  streams: GameStream[];
   innings: GameInnings[];
   currentPlay?: CurrentPlay;
   scoringPlays?: ScoringPlay[];
   playsByInning?: InningPlay[];
-  decisions: GameDecision;
+  decisions: GameDecision | undefined;
+  // content: string;
+  // highlights: GameHighlight[];
+  // streams: GameStream[];
 };
 
 export type InningPlay = Omit<CurrentPlay, "runners" | "count" | "events"> & {

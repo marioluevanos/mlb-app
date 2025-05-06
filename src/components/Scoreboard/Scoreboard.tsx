@@ -15,18 +15,21 @@ type ScoreboardProps = {
   className?: string;
   status: GameStatus;
   innings: GameInnings[];
+  isTopInning?: boolean;
   teams: [ScoreboardTeam, ScoreboardTeam];
 };
 
 export const Scoreboard: FC<ScoreboardProps> = (props) => {
-  const { className, teams = [], innings = [], status } = props;
+  const { className, teams = [], isTopInning, innings = [], status } = props;
   const winner = isWinner(teams[0], teams[1]);
+  const inProgress = status === "In Progress";
 
   return (
     <section
       className={cn(
         "scoreboard",
         cn(toKebabCase(status)),
+        inProgress ? (isTopInning ? "is-top" : "is-bottom") : undefined,
         !innings.length && "no-innings",
         className
       )}
@@ -51,10 +54,20 @@ export const Scoreboard: FC<ScoreboardProps> = (props) => {
               key={inning.num}
               data-inning={inning.num}
             >
-              <span className={cn((inning.away.runs || 0) > 0 ? "scored" : "")}>
+              <span
+                className={cn(
+                  "away runs",
+                  (inning.away.runs || 0) > 0 ? "scored" : ""
+                )}
+              >
                 {inning.away.runs}
               </span>
-              <span className={cn((inning.home.runs || 0) > 0 ? "scored" : "")}>
+              <span
+                className={cn(
+                  "home runs",
+                  (inning.home.runs || 0) > 0 ? "scored" : ""
+                )}
+              >
                 {inning.home.runs}
               </span>
             </span>

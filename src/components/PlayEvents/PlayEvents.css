@@ -1,0 +1,149 @@
+.play-events {
+  padding: 0 1rem 0;
+
+  & ol {
+    counter-reset: section;
+    padding: 0;
+    line-height: 1;
+    list-style: none;
+    position: relative;
+    margin-bottom: 0;
+
+    &::before {
+      content: "";
+      position: absolute;
+      content: "";
+      width: 1px;
+      top: 0;
+      bottom: 12px;
+      background: var(--bg2);
+      left: 12px;
+    }
+  }
+
+  & ol:has(li:only-child)::before {
+    display: none;
+  }
+
+  & .play-event {
+    font-size: 12px;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    font-weight: 700;
+
+    &:not(:last-of-type) {
+      margin-bottom: 1rem;
+    }
+  }
+
+  & .event {
+    display: block;
+    color: var(--text1);
+    line-height: 1;
+    font-size: 10px;
+    display: inline-block;
+    margin-bottom: 0.25rem;
+  }
+
+  & .description {
+    color: var(--text);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  & .play-event.is-strike.is-out .status-icon {
+    position: relative;
+    color: transparent;
+    background: var(--bg1);
+    border: 2px solid var(--red);
+
+    &::before {
+      content: "K";
+      font: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      color: var(--text);
+      inset: 0;
+    }
+  }
+
+  & .count {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text);
+    margin-left: auto;
+    align-self: flex-end;
+  }
+
+  & .play-event[data-type="action"] {
+    .description {
+      display: flex;
+      flex-direction: column;
+      align-self: center;
+      height: auto;
+      min-height: auto;
+    }
+  }
+}
+
+.pitch {
+  display: block;
+  gap: 0.5rem;
+  font-size: 10px;
+  margin: 0.25rem 0 0 0;
+
+  & .mph {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  & .type {
+    font-weight: 400;
+    color: var(--text1);
+  }
+}
+
+.play-event .status-icon {
+  counter-increment: section;
+  content: counter(section);
+  margin-right: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  border-radius: 1.5rem;
+  background: var(--bg1);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--bg2);
+
+  & svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.play-event.is-strike .status-icon {
+  font-weight: 700;
+  background: var(--red);
+  border-color: var(--red);
+  color: white;
+}
+
+.play-event.is-ball .status-icon {
+  font-weight: 700;
+  background: var(--blue);
+  border-color: var(--blue);
+  color: white;
+}
+
+.play-event.is-in-play .status-icon {
+  font-weight: 700;
+  border-color: var(--accent);
+  color: var(--accent);
+}
