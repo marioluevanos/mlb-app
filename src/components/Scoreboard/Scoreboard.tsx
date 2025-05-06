@@ -23,7 +23,14 @@ export const Scoreboard: FC<ScoreboardProps> = (props) => {
   const winner = isWinner(teams[0], teams[1]);
 
   return (
-    <section className={cn("scoreboard", cn(toKebabCase(status)), className)}>
+    <section
+      className={cn(
+        "scoreboard",
+        cn(toKebabCase(status)),
+        !innings.length && "no-innings",
+        className
+      )}
+    >
       <div className="scoreboard-teams">
         {teams.map((team, index) => (
           <Team
@@ -53,18 +60,20 @@ export const Scoreboard: FC<ScoreboardProps> = (props) => {
             </span>
           ))}
         </div>
-        <div className="scoreboard-score">
-          {(["runs", "hits", "errors"] as const).map((key) => (
-            <span className={cn("scoreboard-score-column", key)} key={key}>
-              <span className={cn("away", winner === "away" && "winner")}>
-                {getTeamScore(teams[0], key)}
+        {innings.length > 0 ? (
+          <div className="scoreboard-score">
+            {(["runs", "hits", "errors"] as const).map((key) => (
+              <span className={cn("scoreboard-score-column", key)} key={key}>
+                <span className={cn("away", winner === "away" && "winner")}>
+                  {getTeamScore(teams[0], key)}
+                </span>
+                <span className={cn("home", winner === "home" && "winner")}>
+                  {getTeamScore(teams[1], key)}
+                </span>
               </span>
-              <span className={cn("home", winner === "home" && "winner")}>
-                {getTeamScore(teams[1], key)}
-              </span>
-            </span>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : null}
       </div>
     </section>
   );

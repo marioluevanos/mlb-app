@@ -1,15 +1,15 @@
 import { ScoringPlay } from "@/types";
 import "./ScoringPlays.css";
-import { FC } from "react";
-import { Player, PlayerProps } from "../Player/Player";
+import { BaseSyntheticEvent, FC } from "react";
+import { Player } from "../Player/Player";
 import { cn } from "@/utils/cn";
 import { CurrentInning } from "../CurrentInning/CurrentInning";
 
 type PlayEventsProps = {
+  title?: string;
   scoringPlays?: ScoringPlay[];
   className?: string;
-  onPlayerClick?: PlayerProps["onClick"];
-  title?: string;
+  onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };
 
 export const ScoringPlays: FC<PlayEventsProps> = (props) => {

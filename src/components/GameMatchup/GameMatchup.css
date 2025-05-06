@@ -16,9 +16,10 @@
   }
 
   & .current-matchup .player {
+    display: grid;
     grid-template-columns: auto 1fr auto;
     grid-template-areas:
-      "avatar name"
+      "avatar name name"
       "avatar summary summary"
       "avatar note note";
 
@@ -40,6 +41,8 @@
   }
 
   & .player-avatar {
+    width: 50px;
+    height: 50px;
     margin-top: 0.25rem;
   }
 

@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Team } from "./Team";
-import teamData from "../../team.json";
-import { TeamClub } from "@/types";
 
 const meta = {
   title: "Components/Team",
@@ -14,8 +12,14 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const LAD: Story = {
   args: {
-    team: teamData as unknown as TeamClub,
+    team: {
+      record: { wins: 23, losses: 11, ties: 0, pct: ".676" },
+      name: "Los Angeles Dodgers",
+      id: 119,
+      abbreviation: "LAD",
+      logo: "https://midfield.mlbstatic.com/v1/team/119/spots/64",
+    },
   },
 };

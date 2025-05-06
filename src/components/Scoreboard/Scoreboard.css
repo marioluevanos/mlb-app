@@ -2,11 +2,7 @@
   display: flex;
   gap: 0.5rem;
   font-size: 14px;
-  padding: 1rem 0;
-
-  &.in-progress {
-    padding: 2rem 0 1rem;
-  }
+  padding: 0;
 }
 
 /* Teams */
@@ -84,7 +80,7 @@
     content: "R";
   }
   &.hits::before {
-    content: "R";
+    content: "H";
   }
   &.errors::before {
     content: "E";
@@ -129,13 +125,28 @@
 
 /* Team Record */
 .scoreboard .team-record {
-  position: relative;
   display: none;
+  color: var(--text1);
+}
+
+.scoreboard.no-innings .team-record {
+  display: flex;
 }
 
 /* Winner */
-.scoreboard .winner .team-name,
+.scoreboard .team.winner .team-name,
 .scoreboard .scoreboard-column .winner {
   color: var(--text);
   font-weight: 700;
+}
+
+.scoreboard.final .team.winner .team-logo::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 6px;
+  background: var(--accent);
+  position: absolute;
+  top: 0;
+  right: 0;
 }
