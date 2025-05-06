@@ -3,7 +3,7 @@ import { fn } from "@storybook/test";
 import { Button } from "./Button";
 
 const meta = {
-  title: "Components/Button",
+  title: "UI/Button",
   component: Button,
   parameters: {
     layout: "centered",
@@ -16,7 +16,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Defualt: Story = {
   args: {
-    primary: true,
-    label: "Button",
+    children: "Button",
   },
 };

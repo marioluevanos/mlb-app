@@ -152,16 +152,34 @@ function playByInning(
       teamAbbreviation: play.about.isTopInning
         ? teamAbbreviation[0]
         : teamAbbreviation[1],
-      events: play?.playEvents,
       result: play?.result,
       matchup: {
-        batter: matchup?.batter,
-        pitcher: matchup?.pitcher,
+        batter: mapToBatter(matchup?.batter, play?.result, { bats: "" }),
+        pitcher: mapToBatter(matchup?.pitcher, play?.result, { throws: "" }),
       },
     });
   }
 
   return acc;
+
+  function mapToBatter(
+    player?: GamePlayer,
+    result?: AtBat["result"],
+    arm?: { bats?: string; throws?: string }
+  ) {
+    const bats = arm?.bats || "";
+    const throws = arm?.throws || "";
+
+    return {
+      id: player?.id,
+      avatar: player?.avatar,
+      fullName: player?.fullName,
+      position: player?.position,
+      summary: result?.rbi ? `(${result?.rbi} RBI)` : "",
+      bats,
+      throws,
+    };
+  }
 }
 
 function scoringPlay(
@@ -187,7 +205,6 @@ function scoringPlay(
       teamAbbreviation: play.about.isTopInning
         ? teamAbbreviation[0]
         : teamAbbreviation[1],
-      events: play?.playEvents,
       result: play?.result,
       matchup: {
         batter: matchup?.batter,
@@ -224,15 +241,15 @@ function getCurrentMatchup(args: {
     batter: {
       ...batter,
       bats: matchup?.batSide?.code,
-      summary: `(G) ${batter?.game?.batting.summary}`,
-      note: `(S) ${batter?.season?.batting.avg} AVG, ${batter?.season?.batting.homeRuns} HR, ${batter?.season?.batting.rbi} RBI`,
+      summary: `${batter?.game?.batting.summary}`,
+      note: `${batter?.season?.batting.avg} AVG, ${batter?.season?.batting.homeRuns} HR, ${batter?.season?.batting.rbi} RBI`,
       avatar: avatar(matchup?.batter.id),
     },
     pitcher: {
       ...pitcher,
       throws: matchup?.pitchHand?.code,
-      summary: `(G) ${pitcher?.game?.pitching.summary}`,
-      note: `(S) ${pitcher?.season?.pitching.era} ERA, ${pitcher?.season?.pitching.whip} WHIP`,
+      summary: `${pitcher?.game?.pitching.summary}`,
+      note: `${pitcher?.season?.pitching.era} ERA, ${pitcher?.season?.pitching.whip} WHIP`,
       avatar: avatar(matchup?.pitcher.id),
     },
   };

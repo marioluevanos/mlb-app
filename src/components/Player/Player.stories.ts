@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 import { Player } from "./Player";
 
-// More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
   title: "Components/Player",
   component: Player,
@@ -15,13 +14,30 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Batter: Story = {
   args: {
     player: {
-      fullName: "Joe Blow",
-      id: 1,
-      jerseyNumber: "12",
-      avatar: "",
+      avatar: "https://midfield.mlbstatic.com/v1/people/657077/spots/120",
+      jerseyNumber: "8",
+      id: 657077,
+      fullName: "Alex Verdugo",
+      position: "LF",
+      summary: "0-0 | BB",
+      note: "16 H, 5 BB, 0 HR",
+    },
+  },
+};
+
+export const Pitcher: Story = {
+  args: {
+    player: {
+      jerseyNumber: "85",
+      position: "P",
+      fullName: "Dustin May",
+      id: 669160,
+      avatar: "https://midfield.mlbstatic.com/v1/people/669160/spots/120",
+      summary: "0.1 IP, 2 ER, K, BB",
+      note: "4.55 ERA, 1.30 WHIP",
     },
   },
 };

@@ -1,0 +1,18 @@
+.current-inning {
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  width: 100%;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
+
+  & svg {
+    width: 12px;
+    height: 12px;
+    position: relative;
+    top: 1px;
+  }
+}

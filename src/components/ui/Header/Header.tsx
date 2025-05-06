@@ -1,8 +1,10 @@
+import "./Header.css";
 import { formatDate } from "@/utils/date";
 import Image from "next/image";
 import { BaseSyntheticEvent, FC, ReactNode } from "react";
-import { RefreshIcon } from "../Icon";
 import { cn } from "@/utils/cn";
+import { RefreshIcon } from "../Icon";
+import { Button } from "../Button/Button";
 
 export const Header: FC<{
   children?: ReactNode;
@@ -55,7 +57,7 @@ const Nav: FC<HeaderNavProps> = (props) => {
     >
       <LeftIcon />
     </button> */}
-      <button
+      <Button
         id="refresh"
         className={cn("button", isLoading && "loading")}
         title="Refresh content"
@@ -63,7 +65,7 @@ const Nav: FC<HeaderNavProps> = (props) => {
         data-date={date}
       >
         <RefreshIcon />
-      </button>
+      </Button>
       {/* <button
       id="next-date"
       className={cn("button", isLoading && "loading")}

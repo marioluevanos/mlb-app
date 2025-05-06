@@ -12,23 +12,24 @@ export type TeamRecord = {
   wins: number;
   losses: number;
   pct: string;
+  ties?: number;
 };
 
 export type TeamStats = {
-  batting: BattingRecord;
-  pitching: PitchingRecord;
-  fielding?: FieldingRecord;
+  batting: Partial<BattingRecord>;
+  pitching: Partial<PitchingRecord>;
+  fielding?: Partial<FieldingRecord>;
 };
 
 export type TeamClub = {
   record: TeamRecord;
   name: string;
-  startingPitcher?: GamePlayer;
-  score: TeamScore;
   abbreviation: string;
   logo: string;
   id: number;
-  players: GamePlayer[];
+  score?: TeamScore;
+  startingPitcher?: GamePlayer;
+  players?: GamePlayer[];
 } & Partial<TeamStats>;
 
 export type TeamRoster = GamePlayer;
@@ -93,21 +94,21 @@ export type GameToday = {
   currentPlay?: CurrentPlay;
   scoringPlays?: ScoringPlay[];
   playsByInning?: InningPlay[];
-  decisions?: GameDecision;
+  decisions: GameDecision;
 };
 
-export type InningPlay = Omit<CurrentPlay, "runners" | "count" | "event"> & {
+export type InningPlay = Omit<CurrentPlay, "runners" | "count" | "events"> & {
   teamAbbreviation: string;
 };
 
-export type ScoringPlay = Omit<CurrentPlay, "runners" | "count"> & {
+export type ScoringPlay = Omit<CurrentPlay, "runners" | "count" | "events"> & {
   inning: string;
   teamAbbreviation: string;
 };
 
 export type GameDecision = {
-  winner: GamePlayer;
-  loser: GamePlayer;
+  winner?: GamePlayer;
+  loser?: GamePlayer;
   save?: GamePlayer;
 };
 
@@ -126,10 +127,10 @@ export type GamePlayer = {
 
 export type CurrentMatchup = {
   batter: {
-    bats: string;
+    bats?: string;
   } & GamePlayer;
   pitcher: {
-    throws: string;
+    throws?: string;
   } & GamePlayer;
 };
 

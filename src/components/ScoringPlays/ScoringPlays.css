@@ -1,0 +1,101 @@
+.scoring-plays {
+  padding: 1rem 1rem 0;
+  border-bottom: 1px dotted var(--bg2);
+
+  & ol {
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    list-style: none;
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  & .scoring-event {
+    display: block;
+    font-size: 12px;
+    position: relative;
+    padding-bottom: 1.5rem;
+    font-weight: 700;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 12px;
+      bottom: 0;
+      top: 0;
+      border-left: 1px solid var(--bg2);
+    }
+  }
+
+  & .scoring-event .header {
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0 0 1rem;
+    border: 1px solid var(--bg2);
+    background: var(--bg);
+    border-radius: 10000rem;
+    padding: 0 0.75rem 0;
+    height: 1.5rem;
+    line-height: 1;
+    width: max-content;
+    position: relative;
+    left: -2px;
+    gap: 0.5rem;
+  }
+
+  & .scoring-event .current-inning {
+    margin: 0;
+    width: auto;
+  }
+
+  & .description {
+    color: var(--text1);
+    line-height: 1.5;
+    font-size: 14px;
+    font-weight: 400;
+    display: block;
+    padding-left: 2rem;
+  }
+
+  & .count {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text1);
+    margin-top: 0;
+    display: block;
+  }
+
+  & .player {
+    padding-left: 2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    grid-template-columns: auto auto 1fr;
+    grid-template-areas: "avatar name summary";
+  }
+
+  & .player-summary {
+    color: var(--text);
+  }
+
+  & .player-avatar {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+    align-items: center;
+  }
+
+  & .abbreviation,
+  & .event {
+    display: inline-flex;
+    color: var(--text);
+  }
+
+  & .abbreviation {
+    color: var(--accent);
+  }
+}

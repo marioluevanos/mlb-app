@@ -1,0 +1,71 @@
+.game-bug {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1rem 1.5rem;
+  background: var(--bg1);
+  border-radius: 8px;
+  width: min-content;
+  margin: 0;
+  flex: 0;
+
+  & .current-inning {
+    margin-top: 0.5rem;
+    font-size: 10px;
+  }
+
+  & .outs {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  & .out {
+    font-size: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+    border: 1px solid var(--text1);
+  }
+
+  & .out.is-out {
+    background: var(--text);
+    border-color: var(--text);
+  }
+
+  & .balls-strikes {
+    margin: 0.5rem 0 0.5rem;
+    display: flex;
+    gap: 0.25rem;
+    display: flex;
+    align-items: center;
+    font-size: 10px;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  & .bases {
+    position: relative;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    transform: rotate(45deg) translate(4px, 4px);
+
+    & .base {
+      width: 8px;
+      height: 8px;
+      border: 1px solid var(--text1);
+    }
+
+    & .base.runner {
+      background: var(--text);
+      border-color: var(--text);
+    }
+
+    & .base.home {
+      visibility: hidden;
+    }
+  }
+}

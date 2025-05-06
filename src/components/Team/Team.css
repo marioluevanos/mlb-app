@@ -1,0 +1,44 @@
+.team {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.team-name {
+  width: 3ch;
+  display: flex;
+  line-height: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-record {
+  font-size: 0.75em;
+}
+
+.team-logo {
+  min-width: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0;
+  display: block;
+  position: relative;
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  &.loading {
+    border-radius: 4rem;
+    overflow: hidden;
+
+    & img {
+      visibility: hidden;
+    }
+  }
+}

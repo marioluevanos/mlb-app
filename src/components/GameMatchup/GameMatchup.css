@@ -1,0 +1,51 @@
+.game-matchup {
+  font-size: 14px;
+  padding: 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px dotted var(--bg2);
+
+  & h3 {
+    flex: 1 0 100%;
+  }
+
+  & .current-matchup {
+    flex: 1;
+  }
+
+  & .current-matchup .player {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "avatar name"
+      "avatar summary summary"
+      "avatar note note";
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  & .player-summary::before {
+    content: "(G) ";
+  }
+
+  & .player-note::before {
+    content: "(S) ";
+  }
+
+  & .player-avatar {
+    align-self: flex-start;
+  }
+
+  & .player-avatar {
+    margin-top: 0.25rem;
+  }
+
+  & .play-events {
+    flex: 1 0 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
