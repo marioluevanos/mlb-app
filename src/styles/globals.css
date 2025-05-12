@@ -11,7 +11,7 @@
   --bg2: hsl(210deg 8% 92%);
   --bg3: hsl(210deg 8% 88%);
   --text: hsl(210deg 0% 24%);
-  --text1: hsl(210deg 0% 42%);
+  --text1: hsl(210deg 0% 56%);
   --text2: hsl(210deg 0% 64%);
   --text-active: var(--text);
 }

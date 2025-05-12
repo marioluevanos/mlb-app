@@ -1,3 +1,72 @@
+export interface MLBGames {
+  dates: MLBDates[];
+}
+export interface MLBDates {
+  date: string;
+  totalItems: number;
+  totalEvents: number;
+  totalGames: number;
+  totalGamesInProgress: number;
+  games: MLBGamePreview[];
+  events: unknown[];
+}
+
+export interface MLBGamePreview {
+  gamePk: number;
+  gameGuid: string;
+  link: string;
+  gameType: string;
+  season: string;
+  gameDate: string;
+  officialDate: string;
+  status: GameStatus;
+  teams: GameTeams;
+  venue: VenueRef;
+  content: ContentLink;
+  isTie: boolean;
+  gameNumber: number;
+  publicFacing: boolean;
+  doubleHeader: string;
+  gamedayType: string;
+  tiebreaker: string;
+  calendarEventID: string;
+  seasonDisplay: string;
+  dayNight: string;
+  scheduledInnings: number;
+  reverseHomeAwayStatus: boolean;
+  inningBreakLength: number;
+  gamesInSeries: number;
+  seriesGameNumber: number;
+  seriesDescription: string;
+  recordSource: string;
+  ifNecessary: string;
+  ifNecessaryDescription: string;
+}
+
+export interface GameTeams {
+  away: TeamInfo;
+  home: TeamInfo;
+}
+
+export interface TeamInfo {
+  leagueRecord: LeagueRecord;
+  score: number;
+  team: TeamRef;
+  isWinner: boolean;
+  splitSquad: boolean;
+  seriesNumber: number;
+}
+
+export interface LeagueRecord {
+  wins: number;
+  losses: number;
+  pct: string;
+}
+
+export interface ContentLink {
+  link: string;
+}
+
 export type MLBLive = {
   gamePk: number;
   link: string;
@@ -136,14 +205,7 @@ export interface GameDateTime {
 export interface GameStatus {
   abstractGameState: string;
   codedGameState: string;
-  detailedState:
-    | "Final"
-    | "Scheduled"
-    | "Pre-Game"
-    | "Postponed"
-    | "In Progress"
-    | "Game Over"
-    | "Warmup";
+  detailedState: string;
   statusCode: string;
   startTimeTBD: boolean;
   abstractGameCode: string;

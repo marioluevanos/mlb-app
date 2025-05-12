@@ -1,5 +1,4 @@
 import "./Team.css";
-import { TeamClub } from "@/types";
 import { FC, ReactNode } from "react";
 import { cn } from "@/utils/cn";
 import Image from "next/image";
@@ -7,7 +6,11 @@ import Image from "next/image";
 export type TeamProps = {
   className?: string;
   children?: ReactNode;
-  team: Pick<TeamClub, "abbreviation" | "id" | "logo" | "name" | "record">;
+  team: {
+    name: string;
+    logo: string;
+    id: number;
+  };
 };
 
 export const Team: FC<TeamProps> = (props) => {
@@ -20,10 +23,7 @@ export const Team: FC<TeamProps> = (props) => {
           <Image src={team.logo} width={32} height={32} alt={team.name} />
         )}
       </span>
-      <span className="team-name">{team.abbreviation}</span>
-      <span className="team-record">
-        ({team.record.wins} &ndash; {team.record.losses})
-      </span>
+      <span className="team-name">{team.name}</span>
       {children}
     </div>
   );

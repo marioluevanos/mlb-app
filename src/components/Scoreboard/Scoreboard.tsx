@@ -1,15 +1,10 @@
-import { GameInnings, GameStatus, TeamClub, TeamScore } from "@/types";
+import { GameInnings, GameStatus, ScoreboardTeam, TeamScore } from "@/types";
 import "./Scoreboard.css";
 import { FC } from "react";
 import { cn } from "@/utils/cn";
 import { Team } from "../Team/Team";
 import { toKebabCase } from "@/utils/toKebabCase";
 import { isWinner } from "@/utils/isWinner";
-
-type ScoreboardTeam = Omit<
-  TeamClub,
-  "players" | "batting" | "fielding" | "pitching"
->;
 
 type ScoreboardProps = {
   className?: string;

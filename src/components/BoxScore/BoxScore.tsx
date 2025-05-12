@@ -1,15 +1,10 @@
 import { GamePlayer, GameStatus, TeamClub } from "@/types";
 import "./BoxScore.css";
-import {
-  BaseSyntheticEvent,
-  FC,
-  ReactNode,
-  useCallback,
-  useMemo,
-  useState,
-} from "react";
+import { BaseSyntheticEvent, FC, ReactNode, useMemo, useState } from "react";
 import { cn } from "@/utils/cn";
 import { Button } from "../ui/Button/Button";
+import { toKebabCase } from "@/utils/toKebabCase";
+import { cssVars } from "@/utils/cssVars";
 
 export type BoxScoreProps = {
   home: TeamClub;
@@ -38,12 +33,13 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
   const boxTabs = [];
   const awayWin = winner === "away";
   const homeWin = winner === "home";
+  const isAwayStats = activeTab === 0 && (hasAwayBatting || hasAwayPitching);
+  const isHomeStats = activeTab === 1 && (hasHomeBatting || hasHomePitching);
 
   if (hasAwayBatting || hasAwayPitching) {
     boxTabs.push(
       <>
         <span className="label">{away.abbreviation} (Away)</span>
-
         {isFinal && (
           <span className={cn(awayWin ? "win" : "loss")}>
             {awayWin ? "W" : "L"} {away.record.wins}&ndash;{away.record.losses}
@@ -68,7 +64,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
   }
 
   return (
-    <section className={cn("box-score tabs")}>
+    <section className="box-score">
       {boxTabs.length > 0 ? (
         <div className="box-score-actions">
           {boxTabs?.map((t, i) => (
@@ -85,57 +81,49 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
         </div>
       ) : null}
       <div className="box-score-content">
-        {activeTab === 0 && (hasAwayBatting || hasAwayPitching) && (
-          <div>
-            {hasAwayBatting && (
-              <BoxPlayers
-                onPlayerClick={onPlayerClick}
-                className={cn(isFinal && "final")}
-                title={`Batting (${away.abbreviation})`}
-                players={away.players}
-                position="Batting"
-                key="batting-away"
-                matchup={matchup}
-              />
-            )}
-            {hasAwayPitching && (
-              <BoxPlayers
-                onPlayerClick={onPlayerClick}
-                className={cn(isFinal && "final")}
-                title={`Pitching (${away.abbreviation})`}
-                players={away.players}
-                position="Pitching"
-                key="pitching-away"
-                matchup={matchup}
-              />
-            )}
-          </div>
+        {hasAwayBatting && (
+          <BoxPlayers
+            onPlayerClick={onPlayerClick}
+            className={cn(isFinal && "final", isAwayStats && "active")}
+            title={`Batting`}
+            players={away.players}
+            position="Batting"
+            key="batting-away"
+            matchup={matchup}
+          />
         )}
-        {activeTab === 1 && (hasHomeBatting || hasHomePitching) && (
-          <div>
-            {hasHomeBatting && (
-              <BoxPlayers
-                onPlayerClick={onPlayerClick}
-                className={cn(isFinal && "final")}
-                title={`Batting (${home.abbreviation})`}
-                players={home.players}
-                position="Batting"
-                key="batting-home"
-                matchup={matchup}
-              />
-            )}
-            {hasHomePitching && (
-              <BoxPlayers
-                onPlayerClick={onPlayerClick}
-                className={cn(isFinal && "final")}
-                title={`Pitching (${home.abbreviation})`}
-                players={home.players}
-                position="Pitching"
-                key="pitching-home"
-                matchup={matchup}
-              />
-            )}
-          </div>
+        {hasAwayPitching && (
+          <BoxPlayers
+            onPlayerClick={onPlayerClick}
+            className={cn(isFinal && "final", isAwayStats && "active")}
+            title={`Pitching`}
+            players={away.players}
+            position="Pitching"
+            key="pitching-away"
+            matchup={matchup}
+          />
+        )}
+        {hasHomeBatting && (
+          <BoxPlayers
+            onPlayerClick={onPlayerClick}
+            className={cn(isFinal && "final", isHomeStats && "active")}
+            title={`Batting`}
+            players={home.players}
+            position="Batting"
+            key="batting-home"
+            matchup={matchup}
+          />
+        )}
+        {hasHomePitching && (
+          <BoxPlayers
+            onPlayerClick={onPlayerClick}
+            className={cn(isFinal && "final", isHomeStats && "active")}
+            title={`Pitching`}
+            players={home.players}
+            position="Pitching"
+            key="pitching-home"
+            matchup={matchup}
+          />
         )}
       </div>
     </section>
@@ -164,46 +152,21 @@ const BoxPlayers: FC<BoxPlayersProps> = (props) => {
   } = props;
 
   /**
+   * Get Batters or Pitchers
+   */
+  const currentPlayers = useMemo(() => {
+    return position === "Batting"
+      ? getBattingOrder(players)
+      : getPitchingOrder(players);
+  }, [position, players]);
+
+  /**
    * Modified player name
    */
   const firstName = (name: string = "") => {
-    const [last, f] = name?.split(" ").reverse();
-    return `${f.charAt(0)}. ${last}`;
+    const [last, first] = name?.split(" ").reverse();
+    return `${first.charAt(0)}. ${last}`;
   };
-
-  /**
-   * Get the batting order
-   */
-  const getBattingOrder = useCallback((players: GamePlayer[]) => {
-    return players
-      .reduce<GamePlayer[]>((acc, p) => {
-        if (typeof p.battingOrder === "number") {
-          acc.push(p);
-        }
-        return acc;
-      }, [])
-      .sort((a, b) => {
-        if (Number(a.battingOrder) > Number(b.battingOrder)) {
-          return 1;
-        }
-        if (Number(a.battingOrder) < Number(b.battingOrder)) {
-          return -1;
-        }
-        return 0;
-      });
-  }, []);
-
-  /**
-   * Get the pitching order
-   */
-  const getPitchingOrder = useCallback((players: GamePlayer[]) => {
-    return players.reduce<GamePlayer[]>((acc, p) => {
-      if (p.position === "P" && Object.values(p.game?.pitching || {}).length) {
-        acc.unshift(p);
-      }
-      return acc;
-    }, []);
-  }, []);
 
   /**
    * Pinch hitter class
@@ -211,85 +174,173 @@ const BoxPlayers: FC<BoxPlayersProps> = (props) => {
   const ph = (bo?: number | string) => (Number(bo) % 100 > 0 ? "ph" : "");
 
   /**
-   * Get Batters or Pitchers
+   * Get longest name to set column width
    */
-  const currentPlayers = useMemo(() => {
-    return position === "Batting"
-      ? getBattingOrder(players)
-      : getPitchingOrder(players);
-  }, [position, players, getBattingOrder, getPitchingOrder]);
+  const longestName = currentPlayers.reduce<string>((acc, player) => {
+    const name = firstName(player.fullName);
+    if (acc.length < name.length) {
+      acc = name;
+    }
+    return acc;
+  }, "");
 
   return players.length > 0 ? (
-    <div className={cn("box-players", className)}>
+    <section
+      className={cn("box-players", className)}
+      style={cssVars({
+        "--max": longestName.length,
+      })}
+    >
       {header}
-      <div className={cn("box-row labels", position.toLowerCase())}>
-        <span className="box-name">{title}</span>
-        {position === "Batting" ? (
-          <span className="box-stats">
-            <span>AB</span>
-            <span>R</span>
-            <span>H</span>
-            <span>RBI</span>
-            <span>BB</span>
-            <span>SO</span>
-            <span>AVG</span>
-            <span>OPS</span>
-          </span>
-        ) : (
-          <span className="box-stats">
-            <span>IP</span>
-            <span>H</span>
-            <span>R</span>
-            <span>ER</span>
-            <span>BB</span>
-            <span>SO</span>
-            <span>ERA</span>
-            <span>WHIP</span>
-          </span>
-        )}
-      </div>
-      {currentPlayers.map((player) => (
-        <div
-          key={player.id}
-          data-player-id={player.id}
-          onClick={onPlayerClick}
-          className={cn(
-            "box-row players",
-            matchup?.batterId === player.id && "active",
-            matchup?.pitcherId === player.id && "active",
-            position.toLowerCase(),
-            ph(player.battingOrder)
-          )}
-        >
-          <span className="box-name" data-pos={player.position}>
-            {firstName(player.fullName)}
-          </span>
-          {player.game &&
-            (position === "Batting" ? (
-              <span className="box-stats">
-                <span>{player.game.batting?.atBats}</span>
-                <span>{player.game.batting?.runs}</span>
-                <span>{player.game.batting?.hits}</span>
-                <span>{player.game.batting?.rbi}</span>
-                <span>{player.game.batting?.baseOnBalls}</span>
-                <span>{player.game.batting?.strikeOuts}</span>
-                <span>{player.season?.batting?.avg?.slice(0, 4)}</span>
-                <span>{player.season?.batting?.ops?.slice(0, 4)}</span>
-              </span>
-            ) : (
-              <span className="box-stats">
-                <span>{player.game.pitching?.inningsPitched}</span>
-                <span>{player.game.pitching?.hits}</span>
-                <span>{player.game.pitching?.runs}</span>
-                <span>{player.game.pitching?.earnedRuns}</span>
-                <span>{player.game.pitching?.baseOnBalls}</span>
-                <span>{player.game.pitching?.strikeOuts}</span>
-                <span>{player.season?.pitching?.era}</span>
-                <span>{player.season?.pitching?.whip}</span>
-              </span>
-            ))}
+      <div className="box-players-data">
+        <div className="box-player-names">
+          <div className="box-heading-labels">
+            <span className="box-name">{title}</span>
+          </div>
+          {currentPlayers.map((player) => (
+            <span
+              className={cn(
+                "box-name",
+                matchup?.batterId === player.id && "active",
+                matchup?.pitcherId === player.id && "active",
+                ph(player.battingOrder)
+              )}
+              data-pos={player.position}
+              key={player.id}
+            >
+              {firstName(player.fullName)}
+            </span>
+          ))}
         </div>
-      ))}
-    </div>
+        <div className={cn("box-player-stats", toKebabCase(position))}>
+          <BoxScorePlayers
+            currentPlayers={currentPlayers}
+            position={position}
+            onPlayerClick={onPlayerClick}
+            matchup={matchup}
+          />
+        </div>
+      </div>
+    </section>
   ) : null;
 };
+
+const BoxScorePlayers: FC<
+  Pick<BoxPlayersProps, "position" | "onPlayerClick" | "matchup"> & {
+    currentPlayers: GamePlayer[];
+  }
+> = (props) => {
+  const { position, onPlayerClick, matchup, currentPlayers } = props;
+
+  return [
+    <>
+      {position === "Batting" ? (
+        <div className="box-stats box-heading-labels">
+          <span>AB</span>
+          <span>R</span>
+          <span>H</span>
+          <span>RBI</span>
+          <span>BB</span>
+          <span>K</span>
+          <span className="season">AVG</span>
+          <span className="season">OPS</span>
+          <span className="season">SB</span>
+        </div>
+      ) : position === "Pitching" ? (
+        <div className="box-stats box-heading-labels">
+          <span>IP</span>
+          <span>H</span>
+          <span>R</span>
+          <span>ER</span>
+          <span>BB</span>
+          <span>K</span>
+          <span className="season">ERA</span>
+          <span className="season">WHIP</span>
+          <span className="season">W</span>
+          <span className="season">L</span>
+        </div>
+      ) : null}
+    </>,
+    currentPlayers.map((player) => (
+      <div
+        key={player.id}
+        data-player-id={player.id}
+        onClick={onPlayerClick}
+        className={cn(
+          "box-stats",
+          matchup?.batterId === player.id && "active",
+          matchup?.pitcherId === player.id && "active",
+          position.toLowerCase()
+        )}
+      >
+        {player.game &&
+          (position === "Batting" ? (
+            <>
+              <span>{player.game.batting?.atBats}</span>
+              <span>{player.game.batting?.runs}</span>
+              <span>{player.game.batting?.hits}</span>
+              <span>{player.game.batting?.rbi}</span>
+              <span>{player.game.batting?.baseOnBalls}</span>
+              <span>{player.game.batting?.strikeOuts}</span>
+              <span className="season">
+                {player.season?.batting?.avg?.slice(0, 4)}
+              </span>
+              <span className="season">
+                {player.season?.batting?.ops?.slice(0, 4)}
+              </span>
+              <span className="season">
+                {player.season?.batting?.stolenBases}
+              </span>
+            </>
+          ) : (
+            <>
+              <span>{player.game.pitching?.inningsPitched}</span>
+              <span>{player.game.pitching?.hits}</span>
+              <span>{player.game.pitching?.runs}</span>
+              <span>{player.game.pitching?.earnedRuns}</span>
+              <span>{player.game.pitching?.baseOnBalls}</span>
+              <span>{player.game.pitching?.strikeOuts}</span>
+              <span className="season">{player.season?.pitching?.era}</span>
+              <span className="season">{player.season?.pitching?.whip}</span>
+              <span className="season">{player.season?.pitching?.wins}</span>
+              <span className="season">{player.season?.pitching?.losses}</span>
+            </>
+          ))}
+      </div>
+    )),
+  ];
+};
+
+/**
+ * Get the batting order
+ */
+function getBattingOrder(players: GamePlayer[]) {
+  return players
+    .reduce<GamePlayer[]>((acc, p) => {
+      if (typeof p.battingOrder === "number") {
+        acc.push(p);
+      }
+      return acc;
+    }, [])
+    .sort((a, b) => {
+      if (Number(a.battingOrder) > Number(b.battingOrder)) {
+        return 1;
+      }
+      if (Number(a.battingOrder) < Number(b.battingOrder)) {
+        return -1;
+      }
+      return 0;
+    });
+}
+
+/**
+ * Get the pitching order
+ */
+function getPitchingOrder(players: GamePlayer[]) {
+  return players.reduce<GamePlayer[]>((acc, p) => {
+    if (p.position === "P" && Object.values(p.game?.pitching || {}).length) {
+      acc.unshift(p);
+    }
+    return acc;
+  }, []);
+}

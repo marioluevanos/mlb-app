@@ -15,10 +15,8 @@ type Story = StoryObj<typeof meta>;
 export const LAD: Story = {
   args: {
     team: {
-      record: { wins: 23, losses: 11, ties: 0, pct: ".676" },
       name: "Los Angeles Dodgers",
       id: 119,
-      abbreviation: "LAD",
       logo: "https://midfield.mlbstatic.com/v1/team/119/spots/64",
     },
   },

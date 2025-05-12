@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Scoreboard } from "./Scoreboard";
-import { LAD } from "../Team/Team.stories";
 import { GAME_1ST, GAME_FINAL, GAME_XINN } from "@/_mockdata/mockdata";
 
 const meta = {
@@ -14,43 +13,6 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const PreGame: Story = {
-  args: {
-    status: "Pre-Game",
-    innings: [],
-    teams: [
-      {
-        ...LAD.args.team,
-        score: { runs: 6, hits: 9, errors: 0, leftOnBase: 0 },
-        startingPitcher: {
-          jerseyNumber: "86",
-          position: "2 — 1",
-          fullName: "J. Dreyer",
-          id: 676263,
-          avatar: "https://midfield.mlbstatic.com/v1/people/676263/spots/120",
-          summary: "3.57 ERA, 1.13 WHIP",
-        },
-      },
-      {
-        record: { wins: 13, losses: 20, ties: 0, pct: ".394" },
-        score: { runs: 1, hits: 5, errors: 1, leftOnBase: 3 },
-        name: "Miami Marlins",
-        id: 146,
-        startingPitcher: {
-          jerseyNumber: "22",
-          position: "2 — 3",
-          fullName: "S. Alcantara",
-          id: 645261,
-          avatar: "https://midfield.mlbstatic.com/v1/people/645261/spots/120",
-          summary: "8.42 ERA, 1.61 WHIP",
-        },
-        abbreviation: "MIA",
-        logo: "https://midfield.mlbstatic.com/v1/team/146/spots/64",
-      },
-    ],
-  },
-};
-
 export const InProgress: Story = {
   args: {
     status: GAME_1ST.status,
@@ -60,7 +22,7 @@ export const InProgress: Story = {
   },
 };
 
-export const XTraInn: Story = {
+export const ExtraInnings: Story = {
   args: {
     status: GAME_XINN.status,
     innings: GAME_XINN.innings,

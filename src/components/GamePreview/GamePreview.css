@@ -1,0 +1,27 @@
+.game-preview {
+  --char-w: 2ch;
+
+  display: flex;
+  gap: 0.5rem;
+  font-size: 14px;
+  padding: 0;
+}
+
+/* Teams */
+.game-preview .team {
+  line-height: 24px;
+}
+
+.game-preview .game-preview-teams {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &::before {
+    font-size: 10px;
+    font-weight: 400;
+    content: "TEAMS";
+    display: inline-flex;
+    color: transparent;
+  }
+}

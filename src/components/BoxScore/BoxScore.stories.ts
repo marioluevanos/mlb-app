@@ -5,7 +5,9 @@ import { GAME_XINN } from "@/_mockdata/mockdata";
 const meta = {
   title: "Components/BoxScore",
   component: BoxScore,
-  parameters: {},
+  parameters: {
+    layout: "fullscreen",
+  },
   argTypes: {},
 } satisfies Meta<typeof BoxScore>;
 

@@ -32,6 +32,11 @@ export type TeamClub = {
   players?: GamePlayer[];
 } & Partial<TeamStats>;
 
+export type ScoreboardTeam = Omit<
+  TeamClub,
+  "players" | "batting" | "fielding" | "pitching"
+>;
+
 export type TeamRoster = GamePlayer;
 
 export type GameStatus =
@@ -78,6 +83,28 @@ export type GameInnings = {
   ordinalNum: string;
 };
 
+export type GamePreview = {
+  id: number;
+  feed: string;
+  content: string;
+  status: GameStatus | (string & {});
+  away: ScheduledTeam;
+  home: ScheduledTeam;
+  time?: string;
+  gameNumber: number;
+  gamesInSeries: number;
+  venue: string | undefined;
+};
+
+export type ScheduledTeam = {
+  record: TeamRecord;
+  name: string;
+  logo: string;
+  id: number;
+  isWinner: boolean;
+  score: number;
+};
+
 export type GameToday = {
   id: number;
   feed: string;
@@ -92,9 +119,6 @@ export type GameToday = {
   scoringPlays?: ScoringPlay[];
   playsByInning?: InningPlay[];
   decisions: GameDecision | undefined;
-  // content: string;
-  // highlights: GameHighlight[];
-  // streams: GameStream[];
 };
 
 export type InningPlay = Omit<CurrentPlay, "runners" | "count" | "events"> & {
