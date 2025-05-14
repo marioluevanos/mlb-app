@@ -2,26 +2,64 @@
   --char-w: 2ch;
 
   display: flex;
-  gap: 0.5rem;
   font-size: 14px;
-  padding: 0;
+  width: 100%;
+  border-bottom: 1px solid var(--bg2);
 }
 
 /* Teams */
-.game-preview .team {
-  line-height: 24px;
-}
 
 .game-preview .game-preview-teams {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding: 1rem 0;
+  flex: 1;
+}
 
-  &::before {
-    font-size: 10px;
-    font-weight: 400;
-    content: "TEAMS";
-    display: inline-flex;
-    color: transparent;
+.game-preview .team {
+  line-height: 24px;
+  flex: 1;
+  width: 100%;
+
+  & .team-name {
+    width: 4ch;
   }
+}
+
+.game-preview-record {
+  color: var(--text1);
+  margin-left: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: inherit;
+}
+
+.game-preview-details {
+  margin-left: auto;
+}
+
+.game-preview-aside {
+  font-size: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.game-preview-status {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
+  margin-left: 1rem;
+  border-left: 1px solid var(--bg2);
+  height: 52px;
+  min-width: 16ch;
 }

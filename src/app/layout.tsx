@@ -1,7 +1,8 @@
-import { Header } from "@/components/ui/Header/Header";
 import "../styles/globals.css";
 import type { Metadata } from "next";
 import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+import { Header } from "@/components/ui/Header/Header";
+import { MLBProvider } from "../components/ui/MLBProvider";
 
 const fontMono = IBM_Plex_Mono({
   variable: "--font-mono",
@@ -28,15 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fontMono.variable} ${fontSans.variable}`}>
-        <Header>
-          <Header.Nav
-            key="header-nav"
-            // onRefresh={onRefresh}
-            // date={data.date}
-            // isLoading={isLoading}
-          />
-        </Header>
-        {children}
+        <MLBProvider>
+          <Header />
+          {children}
+        </MLBProvider>
       </body>
     </html>
   );

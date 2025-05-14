@@ -1,54 +1,15 @@
 #header {
+  height: 3rem;
   position: sticky;
   top: 0;
   padding: 0 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 3rem;
   background: var(--bg);
-  z-index: 100;
+  border-bottom: 1px solid var(--bg2);
   box-shadow: 0 1px 1px hsl(0deg 0% 16%/8%);
-
-  & .game-open & {
-    background: var(--bg1);
-
-    & .button {
-      background: var(--bg);
-    }
-  }
-
-  & #refresh.loading svg {
-    background: none !important;
-    animation: spin 1s infinite linear;
-    color: var(--bg);
-  }
-
-  & #refresh {
-    position: relative;
-
-    &.loading {
-      background: var(--text);
-      color: var(--bg);
-      border-radius: 0.5rem;
-    }
-  }
-
-  & #refresh::before {
-    left: 0;
-    margin-left: -1rem;
-    transform: translateX(-100%);
-    content: attr(data-time-ago);
-    position: absolute;
-    display: inline-flex;
-    color: var(--text1);
-    pointer-events: none;
-    white-space: nowrap;
-    font-weight: 400;
-    font-size: 12px;
-    text-transform: none;
-    letter-spacing: 0;
-  }
+  z-index: 100;
 
   & h1 {
     display: flex;
@@ -62,26 +23,9 @@
     height: auto;
   }
 
-  & .last-updated {
-    padding: 1rem;
-    font-size: 12px;
-    color: var(--text1);
-  }
-
-  & .ctas {
+  & .header-nav {
     align-items: center;
     display: flex;
     gap: 1rem;
-  }
-
-  & .today {
-    display: inline-flex;
-    color: var(--text1);
-    pointer-events: none;
-    white-space: nowrap;
-    font-weight: 400;
-    font-size: 12px;
-    text-transform: none;
-    letter-spacing: 0;
   }
 }

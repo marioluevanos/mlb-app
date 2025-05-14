@@ -19,11 +19,12 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   text-align: center;
   gap: 0.25rem 0;
 
-  &.team {
+  &.teams {
+    align-items: flex-start;
     text-align: left;
   }
 

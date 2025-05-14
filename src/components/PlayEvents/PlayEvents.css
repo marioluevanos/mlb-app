@@ -99,6 +99,7 @@
   & .mph {
     color: var(--text);
     font-weight: 600;
+    font-family: var(--font-mono);
   }
 
   & .type {

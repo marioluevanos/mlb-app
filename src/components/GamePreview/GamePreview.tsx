@@ -12,7 +12,7 @@ type GamePreviewProps = {
 
 export const GamePreview: FC<GamePreviewProps> = (props) => {
   const { className, gamePreview } = props;
-  const { away, home, status, id } = gamePreview;
+  const { away, home, status, id, time } = gamePreview;
 
   return (
     <section
@@ -20,9 +20,26 @@ export const GamePreview: FC<GamePreviewProps> = (props) => {
       className={cn("game-preview", cn(toKebabCase(status)), className)}
     >
       <div className="game-preview-teams">
-        <Team key={away.id} team={away} className={cn()} />
-        <Team key={home.id} team={home} className={cn()} />
+        <Team key={away.id} team={away} className={cn()}>
+          <span className="game-preview-record">
+            ({away.record.wins} &ndash; {away.record.losses})
+          </span>
+          <span className="game-preview-details">
+            <span className="game-preview-score">{away.score}</span>
+          </span>
+        </Team>
+        <Team key={home.id} team={home} className={cn()}>
+          <span className="game-preview-record">
+            ({home.record.wins} &ndash; {home.record.losses})
+          </span>
+          <span className="game-preview-details">
+            <span className="game-preview-score">{home.score}</span>
+          </span>
+        </Team>
       </div>
+      <span className="game-preview-aside">
+        <span className="game-preview-status">{time || status}</span>
+      </span>
     </section>
   );
 };

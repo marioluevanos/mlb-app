@@ -39,7 +39,7 @@ export const Player: FC<PlayerProps> = (props) => {
         <Image
           width={32}
           height={32}
-          className="player-avatar"
+          className="player-avatar loading"
           src={avatar}
           alt={fullName}
         />

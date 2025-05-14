@@ -25,7 +25,7 @@ export const Default: Story = {
       away: {
         logo: "https://midfield.mlbstatic.com/v1/team/118/spots/64",
         record: { wins: 7, losses: 7, pct: ".500" },
-        name: "Kansas City Royals",
+        name: "KC",
         id: 118,
         isWinner: false,
         score: 1,
@@ -33,7 +33,7 @@ export const Default: Story = {
       home: {
         logo: "https://midfield.mlbstatic.com/v1/team/114/spots/64",
         record: { wins: 7, losses: 6, pct: ".538" },
-        name: "Cleveland Guardians",
+        name: "CLE",
         id: 114,
         isWinner: true,
         score: 3,

@@ -21,6 +21,8 @@
   }
 }
 
-.button:hover {
-  background: var(--bg2);
+@media (hover: hover) {
+  .button:hover {
+    background: var(--bg2);
+  }
 }

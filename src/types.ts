@@ -96,6 +96,11 @@ export type GamePreview = {
   venue: string | undefined;
 };
 
+export type GamePreviews = {
+  games: GamePreview[];
+  date: string;
+};
+
 export type ScheduledTeam = {
   record: TeamRecord;
   name: string;

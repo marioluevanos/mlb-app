@@ -29,8 +29,10 @@
 }
 
 .player-avatar {
-  width: 2rem;
-  height: 2rem;
+  --size: 2rem;
+  width: var(--size);
+  height: var(--size);
+  border-radius: var(--size);
   display: block;
   margin: 0;
 }
