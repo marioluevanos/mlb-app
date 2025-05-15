@@ -1,4 +1,4 @@
-import { mapToGame } from "@/utils/mapToGame";
+import { mapToGame } from "@/utils/mlb";
 import RAW_FINAL from "./RAW-FINAL.json";
 import RAW_XINN from "./RAW-XINN.json";
 import RAW_1ST from "./RAW-1ST.json";

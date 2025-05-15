@@ -2,7 +2,7 @@ import "./GamePreview.css";
 import { GamePreview } from "@/types";
 import { cn } from "@/utils/cn";
 import { FC } from "react";
-import { CurrentInning } from "../CurrentInning/CurrentInning";
+import { GameBug } from "../GameBug/GameBug";
 
 export type GamePreviewDetailsProps = {
   className?: string;
@@ -11,7 +11,15 @@ export type GamePreviewDetailsProps = {
 
 export const GamePreviewDetails: FC<GamePreviewDetailsProps> = (props) => {
   const { gamePreview, className } = props;
-  const { status, currentInning = "", time } = gamePreview;
+  const {
+    status,
+    currentInning = "",
+    time,
+    count,
+    runners,
+    gameNumber,
+    doubleHeader,
+  } = gamePreview;
   const isFinal = status === "Final" || status === "Game Over";
   const isScheduled = status === "Scheduled";
   const isPregame = status === "Pre-Game";
@@ -39,13 +47,16 @@ export const GamePreviewDetails: FC<GamePreviewDetailsProps> = (props) => {
             /{totalInnings}
           </span>
         )}
+        {doubleHeader === "Y" ? (
+          <span className="double-header">/Game {gameNumber}</span>
+        ) : null}
       </span>
     );
   }
 
   return (
     <span className="game-preview-details">
-      <CurrentInning currentInning={currentInning} />
+      <GameBug currentInning={currentInning} count={count} runners={runners} />
     </span>
   );
 };

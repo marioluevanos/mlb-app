@@ -6,10 +6,9 @@ import { Team } from "../Team/Team";
 import { toKebabCase } from "@/utils/toKebabCase";
 import { GamePreviewDetails } from "./GamePreviewDetails";
 import { TeamScore } from "../TeamScore/TeamScore";
-import { isWinner } from "@/utils/isWinner";
 import { MLBLive } from "@/types.mlb";
 import { useMLB } from "../ui/MLBProvider";
-import { mapCurrentInning } from "@/utils/games";
+import { isWinner, mapCurrentInning } from "@/utils/mlb";
 
 type GamePreviewProps = {
   className?: string;
@@ -28,24 +27,38 @@ export const GamePreview: FC<GamePreviewProps> = (props) => {
   const { setGamePreviews, gamePreviews } = useMLB();
 
   /**
+   * Map live game data for preview UI
+   */
+  const mapLiveGamePreview = useCallback(
+    (game: GamePreviewType, live: MLBLive, id: number) => {
+      const { linescore, plays } = live.liveData;
+      if (game.id === id) {
+        game.home.score = linescore.teams.home;
+        game.away.score = linescore.teams.away;
+        game.currentInning = mapCurrentInning(linescore);
+        game.count = plays.currentPlay.count;
+        game.runners = {
+          first: linescore.offense.first,
+          second: linescore.offense.second,
+          third: linescore.offense.third,
+        };
+      }
+      return game;
+    },
+    []
+  );
+
+  /**
    * Fetch and update the game in progress
    */
   const updateGameInProgress = useCallback(async () => {
     const response = await fetch(feed);
     const live: MLBLive = await response.json();
-    const { linescore } = live.liveData;
-    const updated =
-      gamePreviews?.games.map((game) => {
-        if (game.id === id) {
-          game.home.score = linescore.teams.home;
-          game.away.score = linescore.teams.away;
-          game.currentInning = mapCurrentInning(linescore);
-        }
-        return game;
-      }) || [];
+    const games = gamePreviews?.games || [];
+    const updated = games.map((g) => mapLiveGamePreview(g, live, id));
 
     setGamePreviews({ date: gamePreviews?.date, games: updated });
-  }, [feed, id, setGamePreviews, gamePreviews]);
+  }, [feed, id, setGamePreviews, mapLiveGamePreview, gamePreviews]);
 
   /**
    * Check if game is in progress and update

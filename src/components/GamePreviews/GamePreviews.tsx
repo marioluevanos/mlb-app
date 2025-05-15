@@ -6,7 +6,7 @@ import { FC, useCallback, useEffect } from "react";
 import { useMLB } from "../ui/MLBProvider";
 import { GamePreview } from "../GamePreview/GamePreview";
 import { formatDateInput } from "@/utils/date";
-import { fetchTodaysGames } from "@/utils/games";
+import { fetchScheduledGames } from "@/utils/mlb";
 
 type GamePreviewProps = {
   className?: string;
@@ -22,7 +22,7 @@ export const GamePreviews: FC<GamePreviewProps> = (props) => {
   const getGamePreviews = useCallback(
     async function main() {
       const [year, month, day] = formatDateInput(date);
-      const gamePreviews = await fetchTodaysGames(year, month, day);
+      const gamePreviews = await fetchScheduledGames(year, month, day);
       setGamePreviews(gamePreviews);
     },
     [setGamePreviews, date]

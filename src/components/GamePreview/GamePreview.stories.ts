@@ -20,7 +20,7 @@ export const Default: Story = {
       content: "https://statsapi.mlb.com/api/v1/game/778375/content",
       status: "Final",
       gameNumber: 1,
-      gamesInSeries: 3,
+      doubleHeader: "N",
       venue: "Progressive Field",
       away: {
         logo: "https://midfield.mlbstatic.com/v1/team/118/spots/64",

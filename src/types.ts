@@ -77,12 +77,18 @@ export type GamePreview = {
   feed: string;
   content: string;
   status: string;
+  doubleHeader: string;
   away: ScheduledTeam;
   home: ScheduledTeam;
+  count?: CurrentCount;
+  runners?: {
+    first?: GamePlayer;
+    second?: GamePlayer;
+    third?: GamePlayer;
+  };
   time?: string;
   currentInning?: string;
   gameNumber: number;
-  gamesInSeries: number;
   venue: string | undefined;
 };
 
@@ -161,9 +167,9 @@ export type CurrentCount = {
 
 export type CurrentPlay = {
   matchup: CurrentMatchup;
-  count: CurrentCount;
   events: PlayEvent[];
   result?: PlayResult;
+  count: CurrentCount;
   runners: {
     first?: GamePlayer;
     second?: GamePlayer;
