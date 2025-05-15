@@ -7,7 +7,7 @@
 }
 
 .team-name {
-  font-family: var(--font-sans);
+  /* font-family: var(--font-sans); */
   font-weight: 600;
   display: flex;
   line-height: 1;

@@ -7,11 +7,13 @@ import { LeftIcon, RightIcon } from "../Icon";
 import { Button } from "../Button/Button";
 import { useMLB } from "@/components/ui/MLBProvider";
 import { DateNavigator, getLocalDate, toLegibleDate } from "@/utils/date";
+import { cn } from "@/utils/cn";
 
 const dateNavigator = new DateNavigator();
 
 export const Header: FC = () => {
   const { date, setDate } = useMLB();
+  const isToday = date.split("T")[0] === getLocalDate();
 
   /**
    * Handle logo click
@@ -79,8 +81,9 @@ export const Header: FC = () => {
         <Button
           title={dateNavigator.getCurrentDate().toISOString()}
           onClick={onTodayClick}
+          className={cn(isToday && "is-today", "current-day")}
         >
-          {toLegibleDate(date)}
+          {isToday ? "Today" : toLegibleDate(date)}
         </Button>
         <Button title="Next date" onClick={onNextDayClick}>
           <RightIcon />

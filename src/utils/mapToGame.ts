@@ -16,8 +16,9 @@ import {
   ScoringPlay,
   TeamClub,
 } from "../types";
+import { mapCurrentInning } from "./games";
 
-function toGamePlayer(p: Player): GamePlayer {
+export function toGamePlayer(p: Player): GamePlayer {
   return {
     game: {
       batting: p.stats.batting,
@@ -92,8 +93,6 @@ export function mapToGame(g: Partial<GameToday>, data: MLBLive): GameToday {
   return {
     id: data.gamePk,
     feed: data.link,
-    // highlights: [],
-    // streams: [],
     time: `${data.gameData.datetime.time} ${data.gameData.datetime.ampm}`,
     status,
     away: awayTeam,
@@ -130,9 +129,7 @@ export function mapToGame(g: Partial<GameToday>, data: MLBLive): GameToday {
         pitcher: matchup?.pitcher,
       },
     },
-    currentInning: `${linescore?.inningHalf?.slice(0, 3).toUpperCase() || ""} ${
-      linescore?.currentInningOrdinal || 0
-    }`,
+    currentInning: mapCurrentInning(linescore),
     decisions: getDecision(status, decisions, awayTeam, homeTeam),
   };
 }

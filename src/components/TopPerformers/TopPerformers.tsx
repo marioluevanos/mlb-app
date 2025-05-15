@@ -1,3 +1,4 @@
+import "./TopPerformers.css";
 import { GamePlayer } from "@/types";
 import { FC } from "react";
 import { Player, PlayerProps } from "../Player/Player";

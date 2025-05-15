@@ -1,6 +1,7 @@
 import { GamePreview, GamePreviews } from "@/types";
-import { MLBGames } from "@/types.mlb";
+import { Linescore, MLBGames, MLBLive, PersonRef, TeamBox } from "@/types.mlb";
 import { avatar, logo } from "./mlbAssets";
+import { toGamePlayer } from "./mapToGame";
 
 export async function fetchTodaysGames(
   yyyy: string | number,
@@ -43,7 +44,6 @@ export async function fetchTodaysGames(
               name: away.team.name,
               id: away.team.id,
               isWinner: away.isWinner,
-              score: away.score,
             },
             home: {
               logo: logo(home.team.id),
@@ -51,7 +51,6 @@ export async function fetchTodaysGames(
               name: home.team.name,
               id: home.team.id,
               isWinner: home.isWinner,
-              score: home.score,
             },
           };
         });
@@ -71,35 +70,29 @@ async function getLiveGamePreview(
       await Promise.all(
         previews.games.map(async (game) => {
           const response = await fetch(game.feed);
-          const live = await response.json();
+          const live: MLBLive = await response.json();
           return { live, game };
         })
       )
     ).map(({ live, game }) => {
-      const { teams, datetime, probablePitchers } = live.gameData;
+      const { teams, datetime } = live.gameData;
+      const { linescore } = live.liveData;
 
       return {
         ...game,
         time: `${datetime.time} ${datetime.ampm}`,
+        currentInning: mapCurrentInning(linescore),
         home: {
           ...game.home,
-          startingPitcher: {
-            fullName: probablePitchers?.home?.fullName,
-            id: probablePitchers?.home?.id,
-            avatar: avatar(probablePitchers?.home?.id),
-          },
           name: teams?.home.abbreviation,
           logo: logo(game.home.id),
+          score: linescore.teams.home,
         },
         away: {
           ...game.away,
-          startingPitcher: {
-            fullName: probablePitchers.away?.fullName,
-            id: probablePitchers.away?.id,
-            avatar: avatar(probablePitchers.away?.id),
-          },
           name: teams?.away.abbreviation,
           logo: logo(game.away.id),
+          score: linescore.teams.away,
         },
       };
     })
@@ -108,5 +101,28 @@ async function getLiveGamePreview(
   return {
     games: out,
     date: previews.date,
+  };
+}
+
+export function mapCurrentInning(linescore: Linescore) {
+  return `${linescore?.inningHalf?.slice(0, 3).toUpperCase() || ""} ${
+    linescore?.currentInningOrdinal || 0
+  }`;
+}
+
+function _mapStartingPitcher(
+  probablePitchers: PersonRef | undefined,
+  players: TeamBox["players"]
+) {
+  const playaz = Object.values(players).map(toGamePlayer);
+  const pitcher = playaz.find((p) => p.id === probablePitchers?.id);
+  const pitching = pitcher?.season?.pitching;
+
+  return {
+    fullName: probablePitchers?.fullName,
+    id: probablePitchers?.id,
+    avatar: probablePitchers ? avatar(probablePitchers?.id) : undefined,
+    position: pitching ? `${pitching?.wins} — ${pitching?.losses}` : "0-0",
+    summary: pitching ? `${pitching?.era} ERA, ${pitching?.whip} WHIP` : "",
   };
 }

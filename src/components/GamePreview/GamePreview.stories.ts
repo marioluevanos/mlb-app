@@ -28,7 +28,7 @@ export const Default: Story = {
         name: "KC",
         id: 118,
         isWinner: false,
-        score: 1,
+        // score: 1,
       },
       home: {
         logo: "https://midfield.mlbstatic.com/v1/team/114/spots/64",
@@ -36,7 +36,7 @@ export const Default: Story = {
         name: "CLE",
         id: 114,
         isWinner: true,
-        score: 3,
+        // score: 3,
       },
     },
   },

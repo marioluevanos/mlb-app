@@ -1,0 +1,57 @@
+.team-score {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  font-size: 14px;
+  display: grid;
+  gap: 1ch;
+  grid-template-columns: repeat(3, 1fr);
+  font-variant-numeric: tabular-nums;
+
+  & > span {
+    width: 2ch;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.winner:not(.loading) ~ .team-score {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.team:first-child .team-score span {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.team:first-child .team-score span::before {
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  color: var(--text1);
+  top: -1.5rem;
+  /* transform: translateY(-100%); */
+  position: absolute;
+}
+
+.team:first-child .team-score span.loading::before {
+  display: none;
+}
+
+.team:first-child .team-score span:nth-child(1)::before {
+  content: "R";
+}
+
+.team:first-child .team-score span:nth-child(2)::before {
+  content: "H";
+}
+
+.team:first-child .team-score span:nth-child(3)::before {
+  content: "E";
+}

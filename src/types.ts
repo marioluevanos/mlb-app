@@ -39,18 +39,7 @@ export type ScoreboardTeam = Omit<
 
 export type TeamRoster = GamePlayer;
 
-export type GameStatus =
-  | "Final"
-  | "Scheduled"
-  | "Pre-Game"
-  | "Postponed"
-  | "In Progress"
-  | "Game Over"
-  | "Warmup"
-  // Check these with startsWith
-  | "Umpire review"
-  | "Manager challenge"
-  | "Delayed Start";
+export type GameStatus = string;
 
 export type GameHighlight = {
   type: string;
@@ -87,10 +76,11 @@ export type GamePreview = {
   id: number;
   feed: string;
   content: string;
-  status: GameStatus | (string & {});
+  status: string;
   away: ScheduledTeam;
   home: ScheduledTeam;
   time?: string;
+  currentInning?: string;
   gameNumber: number;
   gamesInSeries: number;
   venue: string | undefined;
@@ -98,7 +88,7 @@ export type GamePreview = {
 
 export type GamePreviews = {
   games: GamePreview[];
-  date: string;
+  date: string | undefined;
 };
 
 export type ScheduledTeam = {
@@ -107,7 +97,7 @@ export type ScheduledTeam = {
   logo: string;
   id: number;
   isWinner: boolean;
-  score: number;
+  score?: TeamScore;
 };
 
 export type GameToday = {

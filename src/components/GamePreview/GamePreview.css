@@ -2,9 +2,11 @@
   --char-w: 2ch;
 
   display: flex;
+  flex-wrap: wrap;
   font-size: 14px;
   width: 100%;
   border-bottom: 1px solid var(--bg2);
+  padding: 0 1rem;
 }
 
 /* Teams */
@@ -13,8 +15,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 1rem 0;
   flex: 1;
+  padding: 2rem 0 1.5rem;
 }
 
 .game-preview .team {
@@ -23,8 +25,25 @@
   width: 100%;
 
   & .team-name {
-    width: 4ch;
+    width: 3ch;
+    font-weight: 400;
   }
+}
+
+.game-preview .winner .team-name,
+.game-preview .winner .team-score {
+  font-weight: 700;
+}
+
+.game-preview .winner .team-logo::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 6px;
+  background: var(--accent);
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .game-preview-record {
@@ -57,9 +76,29 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 1rem;
   margin-left: 1rem;
   border-left: 1px solid var(--bg2);
+  padding-left: 1rem;
   height: 52px;
-  min-width: 16ch;
+  width: 11ch;
+}
+
+.game-preview-details {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 4rem;
+  font-size: 12px;
+  justify-content: center;
+  align-self: stretch;
+  align-items: center;
+  border-left: 1px dotted var(--text2);
+  padding: 0 0 0 1rem;
+  margin-left: 1rem;
+  box-sizing: content-box;
+
+  & .current-inning {
+    position: relative;
+    left: -3px;
+  }
 }

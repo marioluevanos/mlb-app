@@ -1,45 +1,96 @@
-import { GamePreview as _GamePreview } from "@/types";
 import "./GamePreview.css";
-import { FC } from "react";
+import { GamePreview as GamePreviewType } from "@/types";
+import { FC, useCallback, useEffect } from "react";
 import { cn } from "@/utils/cn";
 import { Team } from "../Team/Team";
 import { toKebabCase } from "@/utils/toKebabCase";
+import { GamePreviewDetails } from "./GamePreviewDetails";
+import { TeamScore } from "../TeamScore/TeamScore";
+import { isWinner } from "@/utils/isWinner";
+import { MLBLive } from "@/types.mlb";
+import { useMLB } from "../ui/MLBProvider";
+import { mapCurrentInning } from "@/utils/games";
 
 type GamePreviewProps = {
   className?: string;
-  gamePreview: _GamePreview;
+  gamePreview: GamePreviewType;
 };
 
 export const GamePreview: FC<GamePreviewProps> = (props) => {
   const { className, gamePreview } = props;
-  const { away, home, status, id, time } = gamePreview;
+  const { away, home, status, id, feed } = gamePreview;
+  const isScheduled = status === "Scheduled";
+  const isPregame = status === "Pre-Game";
+  const isPostponed = status === "Postponed";
+  const isWarmup = status === "Warmup";
+  const isPre = isScheduled || isPregame || isPostponed || isWarmup;
+  const winner = isWinner(away.score, home.score);
+  const { setGamePreviews, gamePreviews } = useMLB();
+
+  /**
+   * Fetch and update the game in progress
+   */
+  const updateGameInProgress = useCallback(async () => {
+    const response = await fetch(feed);
+    const live: MLBLive = await response.json();
+    const { linescore } = live.liveData;
+    const updated =
+      gamePreviews?.games.map((game) => {
+        if (game.id === id) {
+          game.home.score = linescore.teams.home;
+          game.away.score = linescore.teams.away;
+          game.currentInning = mapCurrentInning(linescore);
+        }
+        return game;
+      }) || [];
+
+    setGamePreviews({ date: gamePreviews?.date, games: updated });
+  }, [feed, id, setGamePreviews, gamePreviews]);
+
+  /**
+   * Check if game is in progress and update
+   */
+  useEffect(() => {
+    if (status === "In Progress") {
+      const intervalId = setInterval(updateGameInProgress, 15000);
+      return () => clearInterval(intervalId);
+    }
+  }, [status, updateGameInProgress]);
 
   return (
     <section
       id={id.toString()}
-      className={cn("game-preview", cn(toKebabCase(status)), className)}
+      data-status={toKebabCase(status)}
+      className={cn(
+        "game-preview",
+        toKebabCase(status),
+        isPre && "is-pre",
+        className
+      )}
     >
       <div className="game-preview-teams">
-        <Team key={away.id} team={away} className={cn()}>
+        <Team
+          key={away.id}
+          team={away}
+          className={cn("game-preview-away", winner === "away" && "winner")}
+        >
           <span className="game-preview-record">
             ({away.record.wins} &ndash; {away.record.losses})
           </span>
-          <span className="game-preview-details">
-            <span className="game-preview-score">{away.score}</span>
-          </span>
+          {!isPre && <TeamScore score={away.score} />}
         </Team>
-        <Team key={home.id} team={home} className={cn()}>
+        <Team
+          key={home.id}
+          team={home}
+          className={cn("game-preview-home", winner === "home" && "winner")}
+        >
           <span className="game-preview-record">
             ({home.record.wins} &ndash; {home.record.losses})
           </span>
-          <span className="game-preview-details">
-            <span className="game-preview-score">{home.score}</span>
-          </span>
+          {!isPre && <TeamScore score={home.score} />}
         </Team>
       </div>
-      <span className="game-preview-aside">
-        <span className="game-preview-status">{time || status}</span>
-      </span>
+      <GamePreviewDetails gamePreview={gamePreview} />
     </section>
   );
 };

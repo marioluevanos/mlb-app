@@ -3,12 +3,12 @@
   position: sticky;
   top: 0;
   padding: 0 1rem;
+  gap: 0 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: var(--bg);
   border-bottom: 1px solid var(--bg2);
-  box-shadow: 0 1px 1px hsl(0deg 0% 16%/8%);
   z-index: 100;
 
   & h1 {
@@ -27,5 +27,16 @@
     align-items: center;
     display: flex;
     gap: 1rem;
+    flex: 1;
+    justify-content: space-between;
+  }
+
+  & .is-today {
+    color: var(--text);
+    background: var(--bg);
+  }
+
+  & .current-day {
+    /* min-width: 21ch; */
   }
 }
