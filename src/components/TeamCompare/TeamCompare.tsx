@@ -41,15 +41,15 @@ const CompareRow: FC<TeamCompareProps & { children?: ReactNode }> = (props) => {
         data-label="R"
         className={cn("val", isMore(away.score?.runs, home.score?.runs))}
       >
-        <span>{away.score?.runs}</span>
-        <span>{home.score?.runs}</span>
+        <span>{away.score?.runs || 0}</span>
+        <span>{home.score?.runs || 0}</span>
       </span>
       <span
         data-label="H"
         className={cn("val", isMore(away.score?.hits, home.score?.hits))}
       >
-        <span>{away.score?.hits}</span>
-        <span>{home.score?.hits}</span>
+        <span>{away.score?.hits || 0}</span>
+        <span>{home.score?.hits || 0}</span>
       </span>
       <span
         data-label="HR"

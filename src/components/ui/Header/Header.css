@@ -31,12 +31,15 @@
     justify-content: space-between;
   }
 
-  & .is-today {
-    color: var(--text);
-    background: var(--bg);
+  & .current-day {
+    flex: 1;
   }
 
-  & .current-day {
-    /* min-width: 21ch; */
+  & .is-today {
+    color: var(--text);
+  }
+
+  & .refresh {
+    margin-left: auto;
   }
 }

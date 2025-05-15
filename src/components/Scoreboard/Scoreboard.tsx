@@ -4,9 +4,9 @@ import { FC } from "react";
 import { cn } from "@/utils/cn";
 import { Team } from "../Team/Team";
 import { toKebabCase } from "@/utils/toKebabCase";
-import { isWinner } from "@/utils/isWinner";
+import { isWinner } from "@/utils/mlb";
 
-type ScoreboardProps = {
+export type ScoreboardProps = {
   className?: string;
   status: GameStatus;
   innings: GameInnings[];
@@ -16,7 +16,7 @@ type ScoreboardProps = {
 
 export const Scoreboard: FC<ScoreboardProps> = (props) => {
   const { className, teams = [], isTopInning, innings = [], status } = props;
-  const winner = isWinner(teams[0], teams[1]);
+  const winner = isWinner(teams[0]?.score, teams[1]?.score);
   const inProgress = status === "In Progress";
 
   return (

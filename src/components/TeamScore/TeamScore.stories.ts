@@ -14,6 +14,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    status: "Final",
+    score: {
+      errors: 0,
+      hits: 10,
+      leftOnBase: 0,
+      runs: 3,
+    },
   },
 };

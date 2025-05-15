@@ -47,7 +47,7 @@ export const GamePreviewDetails: FC<GamePreviewDetailsProps> = (props) => {
             /{totalInnings}
           </span>
         )}
-        {doubleHeader === "Y" ? (
+        {["Y", "S"].includes(doubleHeader) ? (
           <span className="double-header">/Game {gameNumber}</span>
         ) : null}
       </span>

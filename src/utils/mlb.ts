@@ -9,7 +9,7 @@ import {
   Linescore,
   MLBGames,
   PersonRef,
-  TeamBox,
+  MLBGamePreview,
 } from "../types.mlb";
 import {
   CurrentMatchup,
@@ -24,57 +24,38 @@ import {
   TeamScore,
 } from "../types";
 
+export const MLB_API = "https://statsapi.mlb.com";
+
+/**
+ * Fetch scheduled games
+ */
 export async function fetchScheduledGames(
   yyyy: string | number,
   mm: string | number,
   dd: string | number
 ) {
-  const url = "https://statsapi.mlb.com";
   const api =
-    url + `/api/v1/schedule/games/?sportId=1&date=${yyyy}-${mm}-${dd}`;
+    MLB_API + `/api/v1/schedule/games/?sportId=1&date=${yyyy}-${mm}-${dd}`;
 
   try {
     const response = await fetch(api);
     if (response.ok) {
       const json: MLBGames = await response.json();
-      const preview = mapToGamePreview(json);
-      return getLiveGamePreview(preview);
+      const previews = createGamePreviews(json);
+      return mergePreviewWithLive(previews);
     }
   } catch (error) {
     console.error(error);
   }
 
-  function mapToGamePreview(json: MLBGames): GamePreviews {
+  /**
+   * Fetch live game data and append to sheduled games
+   */
+  function createGamePreviews(json: MLBGames): GamePreviews {
     return json.dates.reduce<{ games: GamePreview[]; date: string }>(
       (acc, date) => {
         acc.date = date.date;
-        acc.games = date.games.map((g) => {
-          const { away, home } = g.teams;
-
-          return {
-            id: g.gamePk,
-            feed: url + g.link,
-            content: url + g.content.link,
-            status: g.status.detailedState,
-            gameNumber: g.gameNumber,
-            doubleHeader: g.doubleHeader,
-            venue: g.venue.name,
-            away: {
-              logo: logo(away.team.id),
-              record: away.leagueRecord,
-              name: away.team.name,
-              id: away.team.id,
-              isWinner: away.isWinner,
-            },
-            home: {
-              logo: logo(home.team.id),
-              record: home.leagueRecord,
-              name: home.team.name,
-              id: home.team.id,
-              isWinner: home.isWinner,
-            },
-          };
-        });
+        acc.games = date.games.map(mapToGamePreview);
 
         return acc;
       },
@@ -83,7 +64,38 @@ export async function fetchScheduledGames(
   }
 }
 
-async function getLiveGamePreview(
+export function mapToGamePreview(g: MLBGamePreview) {
+  const { away, home } = g.teams;
+
+  return {
+    id: g.gamePk,
+    feed: MLB_API + g.link,
+    content: MLB_API + g.content.link,
+    status: g.status.detailedState,
+    gameNumber: g.gameNumber,
+    doubleHeader: g.doubleHeader,
+    venue: g.venue.name,
+    away: {
+      logo: logo(away.team.id),
+      record: away.leagueRecord,
+      name: away.team.name,
+      id: away.team.id,
+      isWinner: away.isWinner,
+    },
+    home: {
+      logo: logo(home.team.id),
+      record: home.leagueRecord,
+      name: home.team.name,
+      id: home.team.id,
+      isWinner: home.isWinner,
+    },
+  };
+}
+
+/**
+ * Take scheduled games and append live game data
+ */
+async function mergePreviewWithLive(
   previews: GamePreviews
 ): Promise<GamePreviews> {
   const out = await Promise.all(
@@ -132,18 +144,23 @@ async function getLiveGamePreview(
   };
 }
 
+/**
+ * Get the current inning from the linescore
+ */
 export function mapCurrentInning(linescore: Linescore) {
   return `${linescore?.inningHalf?.slice(0, 3).toUpperCase() || ""} ${
     linescore?.currentInningOrdinal || 0
   }`;
 }
 
-function _mapStartingPitcher(
+/**
+ * Maps the starting pitcher
+ */
+function mapStartingPitcher(
   probablePitchers: PersonRef | undefined,
-  players: TeamBox["players"]
-) {
-  const playaz = Object.values(players).map(toGamePlayer);
-  const pitcher = playaz.find((p) => p.id === probablePitchers?.id);
+  players: GamePlayer[]
+): GamePlayer {
+  const pitcher = players.find((p) => p.id === probablePitchers?.id);
   const pitching = pitcher?.season?.pitching;
 
   return {
@@ -155,6 +172,9 @@ function _mapStartingPitcher(
   };
 }
 
+/**
+ * Maps to a generic player
+ */
 export function toGamePlayer(p: Player): GamePlayer {
   return {
     game: {
@@ -174,27 +194,22 @@ export function toGamePlayer(p: Player): GamePlayer {
   };
 }
 
-const mapToTeam = (team: "home" | "away", data: MLBLive): TeamClub => {
+/**
+ * Maps to a team
+ */
+function mapToTeam(team: "home" | "away", data: MLBLive): TeamClub {
   const { gameData, liveData } = data;
   const { linescore, boxscore } = liveData;
   const { teams, probablePitchers } = gameData;
   const players = Object.values(boxscore.teams[team].players).map(toGamePlayer);
-  const pitcher = players.find((p) => p.id === probablePitchers?.[team]?.id);
-  const pitching = pitcher?.season?.pitching;
-  const pPitchers = probablePitchers?.[team]?.fullName?.split(" ");
-  const [first = "", last = ""] = pPitchers || [];
-  const startingPitcher: GamePlayer = {
-    ...pitcher,
-    fullName: pPitchers ? `${first.slice(0, 1)}. ${last}` : "TBD",
-    id: probablePitchers?.[team]?.id,
-    avatar: avatar(probablePitchers?.[team]?.id),
-    position: pitching ? `${pitching?.wins} — ${pitching?.losses}` : "0-0",
-    summary: pitching ? `${pitching?.era} ERA, ${pitching?.whip} WHIP` : "",
-  };
+  const startingPitcher: GamePlayer = mapStartingPitcher(
+    probablePitchers[team],
+    players
+  );
 
   return {
     record: teams[team].record.leagueRecord,
-    name: teams[team].name,
+    name: teams[team].abbreviation,
     id: teams[team].id,
     score: linescore.teams[team],
     startingPitcher,
@@ -203,9 +218,12 @@ const mapToTeam = (team: "home" | "away", data: MLBLive): TeamClub => {
     ...boxscore.teams[team].teamStats,
     players,
   };
-};
+}
 
-export function mapToGame(g: Partial<GameToday>, data: MLBLive): GameToday {
+/**
+ * Maps to live game data
+ */
+export function mapToLiveGame(data: MLBLive): GameToday {
   const { gameData, liveData } = data;
   const { linescore, boxscore, plays, decisions } = liveData;
   const { currentPlay, scoringPlays, allPlays, playsByInning } = plays;
@@ -223,9 +241,8 @@ export function mapToGame(g: Partial<GameToday>, data: MLBLive): GameToday {
   });
 
   const [currentInning] = playsByInning.reverse();
-  const currentPlays = linescore.isTopInning
-    ? currentInning.top
-    : currentInning.bottom;
+  const currentPlays =
+    (linescore.isTopInning ? currentInning?.top : currentInning?.bottom) || [];
 
   return {
     id: data.gamePk,

@@ -4,7 +4,9 @@ import { GamePreview } from "./GamePreview";
 const meta = {
   title: "Components/GamePreview",
   component: GamePreview,
-  parameters: {},
+  parameters: {
+    layout: "fullscreen",
+  },
   argTypes: {},
 } satisfies Meta<typeof GamePreview>;
 
@@ -28,7 +30,7 @@ export const Default: Story = {
         name: "KC",
         id: 118,
         isWinner: false,
-        // score: 1,
+        score: { runs: 14, hits: 1, errors: 4, leftOnBase: 0 },
       },
       home: {
         logo: "https://midfield.mlbstatic.com/v1/team/114/spots/64",
@@ -36,7 +38,7 @@ export const Default: Story = {
         name: "CLE",
         id: 114,
         isWinner: true,
-        // score: 3,
+        score: { runs: 1, hits: 37, errors: 10, leftOnBase: 0 },
       },
     },
   },

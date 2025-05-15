@@ -15,6 +15,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    players: GAME_FINAL.topPerformers,
+    topPerformers: GAME_FINAL.topPerformers,
   },
 };

@@ -9,8 +9,9 @@ import { TeamScore } from "../TeamScore/TeamScore";
 import { MLBLive } from "@/types.mlb";
 import { useMLB } from "../ui/MLBProvider";
 import { isWinner, mapCurrentInning } from "@/utils/mlb";
+import Link from "next/link";
 
-type GamePreviewProps = {
+export type GamePreviewProps = {
   className?: string;
   gamePreview: GamePreviewType;
 };
@@ -81,6 +82,9 @@ export const GamePreview: FC<GamePreviewProps> = (props) => {
         className
       )}
     >
+      <Link className="game-preview-link" href={`/live/${id}`}>
+        {away.name} vs {home.name}
+      </Link>
       <div className="game-preview-teams">
         <Team
           key={away.id}

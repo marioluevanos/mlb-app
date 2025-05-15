@@ -3,25 +3,21 @@
 import "./Header.css";
 import Image from "next/image";
 import { BaseSyntheticEvent, FC, useCallback } from "react";
-import { LeftIcon, RightIcon } from "../Icon";
+import { LeftIcon, RefreshIcon, RightIcon } from "../Icon";
 import { Button } from "../Button/Button";
 import { useMLB } from "@/components/ui/MLBProvider";
 import { DateNavigator, getLocalDate, toLegibleDate } from "@/utils/date";
 import { cn } from "@/utils/cn";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const dateNavigator = new DateNavigator();
 
 export const Header: FC = () => {
   const { date, setDate } = useMLB();
   const isToday = date.split("T")[0] === getLocalDate();
-
-  /**
-   * Handle logo click
-   */
-  const onLogoClick = useCallback((event: BaseSyntheticEvent) => {
-    event.preventDefault();
-    //
-  }, []);
+  const pathname = usePathname();
+  const isLiveGame = pathname.startsWith("/live/");
 
   /**
    * Previous Day click
@@ -63,31 +59,53 @@ export const Header: FC = () => {
 
   return (
     <header id="header">
-      <h1 onClick={onLogoClick}>
-        <Image
-          priority
-          className="logo"
-          width={256}
-          height={256}
-          src="/icon.png"
-          alt="logo"
-        />
-        MLB
+      <h1>
+        <Link href="/">
+          <Image
+            priority
+            className="logo"
+            width={256}
+            height={256}
+            src="/icon.png"
+            alt="logo"
+          />
+          MLB
+        </Link>
       </h1>
       <nav className="header-nav">
-        <Button title="Previous date" onClick={onPrevDayClick}>
-          <LeftIcon />
-        </Button>
-        <Button
-          title={dateNavigator.getCurrentDate().toISOString()}
-          onClick={onTodayClick}
-          className={cn(isToday && "is-today", "current-day")}
-        >
-          {isToday ? "Today" : toLegibleDate(date)}
-        </Button>
-        <Button title="Next date" onClick={onNextDayClick}>
-          <RightIcon />
-        </Button>
+        {isLiveGame ? (
+          <>
+            <Button
+              title="Refresh"
+              key="Refresh"
+              onClick={() => {}}
+              className="refresh"
+            >
+              <RefreshIcon />
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              key="Previous"
+              title="Previous date"
+              onClick={onPrevDayClick}
+            >
+              <LeftIcon />
+            </Button>
+            <Button
+              title={dateNavigator.getCurrentDate().toISOString()}
+              onClick={onTodayClick}
+              key="Today"
+              className={cn(isToday && "is-today", "current-day")}
+            >
+              {isToday ? "Today" : toLegibleDate(date)}
+            </Button>
+            <Button key="Next" title="Next date" onClick={onNextDayClick}>
+              <RightIcon />
+            </Button>
+          </>
+        )}
       </nav>
     </header>
   );

@@ -1,0 +1,13 @@
+.live-game {
+  position: relative;
+}
+
+.live-game .scoreboard {
+  padding: 1rem;
+}
+
+.live-game .game-decisions {
+  padding-top: 0;
+  padding-bottom: 1rem;
+  border-top: 1px solid var(--bg2);
+}

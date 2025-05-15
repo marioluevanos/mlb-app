@@ -1,4 +1,12 @@
+.top-performers {
+  padding: 0 1rem 1rem;
+}
+
 .top-performers .player {
   margin: 0 0 1rem;
   flex: 1 0 calc(100% - 1rem);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }

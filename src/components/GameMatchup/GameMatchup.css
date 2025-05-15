@@ -22,6 +22,7 @@
       "avatar name name"
       "avatar summary summary"
       "avatar note note";
+    margin-bottom: 1rem;
 
     &:last-of-type {
       margin-bottom: 0;
