@@ -1,14 +1,13 @@
 import "./GameMatchup.css";
-import { FC, ReactNode } from "react";
-import { CurrentPlay } from "@/types";
-import { Player, PlayerProps } from "../Player/Player";
+import { BaseSyntheticEvent, FC, ReactNode } from "react";
+import { CurrentMatchup } from "@/types";
+import { Player } from "../Player/Player";
 
 export type GameMatchupProps = {
   className?: string;
-  matchup?: CurrentPlay["matchup"];
+  matchup?: CurrentMatchup;
   children?: ReactNode;
-  gameId?: number;
-  onPlayerClick?: PlayerProps["onClick"];
+  onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };
 
 export const GameMatchup: FC<GameMatchupProps> = (props) => {

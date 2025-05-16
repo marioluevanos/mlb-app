@@ -246,7 +246,7 @@ export function mapToLiveGame(data: MLBLive): GameToday {
 
   return {
     id: data.gamePk,
-    feed: data.link,
+    feed: MLB_API + data.link,
     time: `${data.gameData.datetime.time} ${data.gameData.datetime.ampm}`,
     status,
     away: awayTeam,
@@ -312,30 +312,21 @@ function playByInning(
         : teamAbbreviation[1],
       result: play?.result,
       matchup: {
-        batter: mapToBatter(matchup?.batter, play?.result, { bats: "" }),
-        pitcher: mapToBatter(matchup?.pitcher, play?.result, { throws: "" }),
+        batter: mapToBatter(matchup?.batter, play?.result),
+        pitcher: mapToBatter(matchup?.pitcher, play?.result),
       },
     });
   }
 
   return acc;
 
-  function mapToBatter(
-    player?: GamePlayer,
-    result?: AtBat["result"],
-    arm?: { bats?: string; throws?: string }
-  ) {
-    const bats = arm?.bats || "";
-    const throws = arm?.throws || "";
-
+  function mapToBatter(player?: GamePlayer, result?: AtBat["result"]) {
     return {
       id: player?.id,
       avatar: player?.avatar,
       fullName: player?.fullName,
       position: player?.position,
       summary: result?.rbi ? `(${result?.rbi} RBI)` : "",
-      bats,
-      throws,
     };
   }
 }
@@ -398,16 +389,12 @@ function getCurrentMatchup(args: {
   return {
     batter: {
       ...batter,
-      bats: matchup?.batSide?.code,
       summary: `${batter?.game?.batting.summary}`,
-      note: `${batter?.season?.batting.avg} AVG, ${batter?.season?.batting.homeRuns} HR, ${batter?.season?.batting.rbi} RBI`,
       avatar: avatar(matchup?.batter.id),
     },
     pitcher: {
       ...pitcher,
-      throws: matchup?.pitchHand?.code,
       summary: `${pitcher?.game?.pitching.summary}`,
-      note: `${pitcher?.season?.pitching.era} ERA, ${pitcher?.season?.pitching.whip} WHIP`,
       avatar: avatar(matchup?.pitcher.id),
     },
   };

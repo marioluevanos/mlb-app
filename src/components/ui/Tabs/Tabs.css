@@ -1,0 +1,56 @@
+.tabs {
+  position: relative;
+}
+
+.tabs .tabs-actions {
+  background: var(--bg);
+  display: flex;
+  padding: 1rem 1rem 1rem;
+  gap: 1rem;
+
+  position: sticky;
+  top: 104px;
+  background: var(--bg);
+  z-index: 9;
+  border-bottom: 1px dotted var(--bg2);
+
+  &:empty {
+    display: none;
+  }
+
+  & .button {
+    text-transform: capitalize;
+    justify-content: space-between;
+    color: var(--text);
+    flex: 1;
+  }
+
+  & .button:hover {
+    background: var(--bg1);
+  }
+
+  & .button.active {
+    outline: 1px solid var(--text1);
+  }
+
+  & .icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.tabs .label {
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: var(--font);
+}
+
+.tabs:has(.tabs-content:empty) {
+  display: none;
+}
+
+.tabs div {
+  &:empty {
+    display: none;
+  }
+}

@@ -1,64 +1,87 @@
 "use client";
 
 import "./LiveGame.css";
-import { FC } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { cn } from "@/utils/cn";
 import { toKebabCase } from "@/utils/toKebabCase";
-import { Scoreboard, ScoreboardProps } from "../Scoreboard/Scoreboard";
-import {
-  GameDecisions,
-  GameDecisionsProps,
-} from "../GameDecisions/GameDecisions";
-import { TeamCompare } from "../TeamCompare/TeamCompare";
-import {
-  TopPerformers,
-  TopPerformersProps,
-} from "../TopPerformers/TopPerformers";
+import { Scoreboard } from "../Scoreboard/Scoreboard";
 import { GamePreview } from "../GamePreview/GamePreview";
-import { useMLB } from "../ui/MLBProvider";
+import { GamePreview as GamePreviewType, GameToday } from "@/types";
+import { MLBLive } from "@/types.mlb";
+import { mapToLiveGame } from "@/utils/mlb";
+import { GameMatchup } from "../GameMatchup/GameMatchup";
+import { GameBug } from "../GameBug/GameBug";
+import { PlayEvents } from "../PlayEvents/PlayEvents";
+import { InningPlays } from "../InningPlays/InningPlays";
 
 type LiveGameProps = {
   className?: string;
-  id: number | string;
-} & ScoreboardProps &
-  GameDecisionsProps &
-  TopPerformersProps;
+  liveGame?: GameToday;
+  gamePreview?: GamePreviewType;
+};
 
 export const LiveGame: FC<LiveGameProps> = (props) => {
-  const {
-    id,
-    className,
-    innings,
-    decisions,
-    status,
-    teams,
-    isTopInning,
-    topPerformers = [],
-  } = props;
-  const { gamePreviews } = useMLB();
-  const gamePreview = gamePreviews?.games.find((g) => g.id === Number(id));
+  const { className, gamePreview } = props;
+  const [game, setGame] = useState<GameToday | undefined>(props.liveGame);
+  const isTopInning = game?.currentInning.split(" ")[0] === "TOP";
 
-  return (
+  /**
+   * Fetch and update the game in progress
+   */
+  const updateGameInProgress = useCallback(async () => {
+    if (!game?.feed) return;
+    const response = await fetch(game.feed);
+    const live: MLBLive = await response.json();
+    const updated = mapToLiveGame(live);
+
+    setGame(updated);
+  }, [game]);
+
+  /**
+   * Check if game is in progress and update
+   */
+  useEffect(() => {
+    if (game?.status === "In Progress") {
+      const intervalId = setInterval(updateGameInProgress, 15000);
+      return () => clearInterval(intervalId);
+    }
+  }, [game?.status, updateGameInProgress]);
+
+  return !game ? (
+    gamePreview && <GamePreview gamePreview={gamePreview} />
+  ) : (
     <section
-      id={id.toString()}
-      data-status={toKebabCase(status)}
-      className={cn("live-game", toKebabCase(status), className)}
+      id={game.id.toString()}
+      data-status={toKebabCase(game.status)}
+      className={cn("live-game", toKebabCase(game.status), className)}
     >
-      {innings.length > 0 ? (
+      {game.innings.length > 0 ? (
         <Scoreboard
-          innings={innings}
-          status={status}
-          teams={teams}
+          innings={game.innings}
+          status={game.status}
+          teams={[game.away, game.home]}
           isTopInning={isTopInning}
         />
-      ) : (
-        gamePreview && <GamePreview gamePreview={gamePreview} />
-      )}
-      <GameDecisions decisions={decisions} />
+      ) : null}
+      <GameMatchup matchup={game.currentPlay?.matchup}>
+        <GameBug
+          count={game.currentPlay?.count}
+          currentInning={game.currentInning}
+          runners={game.currentPlay?.runners}
+        />
+      </GameMatchup>
+      <PlayEvents events={game.currentPlay?.events} />
+      <InningPlays
+        status={game.status}
+        currentInning={game.currentInning}
+        playsByInning={game.playsByInning}
+        scoringPlays={game.scoringPlays}
+      />
+      {/* <GameDecisions decisions={decisions} />
       {topPerformers?.length > 0 ? (
         <TopPerformers topPerformers={topPerformers} />
       ) : null}
-      <TeamCompare away={teams[0]} home={teams[1]} />
+      <TeamCompare away={teams[0]} home={teams[1]} /> */}
     </section>
   );
 };

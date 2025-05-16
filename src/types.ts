@@ -151,12 +151,8 @@ export type GamePlayer = {
 };
 
 export type CurrentMatchup = {
-  batter: {
-    bats?: string;
-  } & GamePlayer;
-  pitcher: {
-    throws?: string;
-  } & GamePlayer;
+  batter: GamePlayer;
+  pitcher: GamePlayer;
 };
 
 export type CurrentCount = {

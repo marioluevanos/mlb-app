@@ -11,3 +11,13 @@
   padding-bottom: 1rem;
   border-top: 1px solid var(--bg2);
 }
+
+.live-game .game-matchup .current-matchup .player {
+  grid-template-areas:
+    "avatar name name"
+    "avatar summary summary";
+
+  & .player-note {
+    display: none;
+  }
+}
