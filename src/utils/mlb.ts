@@ -240,10 +240,6 @@ export function mapToLiveGame(data: MLBLive): GameToday {
     matchup: currentPlay?.matchup,
   });
 
-  const [currentInning] = playsByInning.reverse();
-  const currentPlays =
-    (linescore.isTopInning ? currentInning?.top : currentInning?.bottom) || [];
-
   return {
     id: data.gamePk,
     feed: MLB_API + data.link,
@@ -252,23 +248,9 @@ export function mapToLiveGame(data: MLBLive): GameToday {
     away: awayTeam,
     home: homeTeam,
     innings: linescore.innings,
-    playsByInning: currentPlays.reduce<InningPlay[]>(
-      playByInning.bind(null, {
-        allPlays,
-        allPlayers,
-        teamAbbreviation: [awayTeam.abbreviation, homeTeam.abbreviation],
-      }),
-      []
-    ),
+    playsByInning: getCurrentPlays(),
     topPerformers: boxscore.topPerformers.map(topPerformers) || [],
-    scoringPlays: scoringPlays.reduce<ScoringPlay[]>(
-      scoringPlay.bind(null, {
-        allPlays,
-        allPlayers,
-        teamAbbreviation: [awayTeam.abbreviation, homeTeam.abbreviation],
-      }),
-      []
-    ),
+    scoringPlays: getScoringPlays(),
     currentPlay: {
       count: currentPlay?.count,
       events: currentPlay?.playEvents,
@@ -286,6 +268,44 @@ export function mapToLiveGame(data: MLBLive): GameToday {
     currentInning: mapCurrentInning(linescore),
     decisions: getDecision(status, decisions, awayTeam, homeTeam),
   };
+
+  function getScoringPlays(): GameToday["scoringPlays"] {
+    return scoringPlays.reduce<NonNullable<GameToday["scoringPlays"]>>(
+      (acc, playIndex) => {
+        const play = allPlays.find((b) => b.atBatIndex === playIndex);
+        const currentInning = play?.about.inning;
+        if (currentInning) {
+          acc[`${currentInning}`] = scoringPlays.reduce<ScoringPlay[]>(
+            scoringPlay.bind(null, {
+              allPlays,
+              allPlayers,
+              currentInning,
+              teamAbbreviation: [awayTeam.abbreviation, homeTeam.abbreviation],
+            }),
+            []
+          );
+        }
+        return acc;
+      },
+      {}
+    );
+  }
+
+  function getCurrentPlays() {
+    const currentInning = playsByInning[linescore.currentInning - 1];
+    const currentPlays =
+      (linescore.isTopInning ? currentInning?.top : currentInning?.bottom) ||
+      [];
+
+    return currentPlays.reduce<InningPlay[]>(
+      playByInning.bind(null, {
+        allPlays,
+        allPlayers,
+        teamAbbreviation: [awayTeam.abbreviation, homeTeam.abbreviation],
+      }),
+      []
+    );
+  }
 }
 
 function playByInning(
@@ -335,15 +355,16 @@ function scoringPlay(
   args: {
     allPlays: AtBat[];
     allPlayers: GamePlayer[];
+    currentInning: number;
     teamAbbreviation: string[];
   },
   acc: ScoringPlay[],
   playIndex: number
 ) {
-  const { allPlayers, allPlays, teamAbbreviation = [] } = args;
+  const { allPlayers, allPlays, currentInning, teamAbbreviation = [] } = args;
   const play = allPlays.find((b) => b.atBatIndex === playIndex);
 
-  if (play) {
+  if (play && currentInning === play.about.inning) {
     const matchup = getCurrentMatchup({
       players: allPlayers,
       matchup: play.matchup,

@@ -1,5 +1,4 @@
 .scoring-plays {
-  padding: 1rem 1rem 0;
   border-bottom: 1px dotted var(--bg2);
 
   & ol {
@@ -10,6 +9,22 @@
     position: relative;
     display: flex;
     flex-direction: column-reverse;
+  }
+
+  & .scoring-event-inning h3 {
+    padding: 1rem;
+    margin: 0;
+    color: var(--accent);
+    background: var(--bg);
+    border-top: 1px solid var(--bg2);
+    border-bottom: 1px solid var(--bg2);
+    position: sticky;
+    top: calc(48px + 65px - 1px);
+    z-index: 10;
+  }
+
+  & .scoring-events {
+    padding: 1rem 1rem 0;
   }
 
   & .scoring-event {

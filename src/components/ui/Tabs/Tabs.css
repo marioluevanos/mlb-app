@@ -7,12 +7,10 @@
   display: flex;
   padding: 1rem 1rem 1rem;
   gap: 1rem;
-
   position: sticky;
-  top: 104px;
+  top: 48px;
   background: var(--bg);
-  z-index: 9;
-  border-bottom: 1px dotted var(--bg2);
+  z-index: 100;
 
   &:empty {
     display: none;

@@ -9,7 +9,7 @@
   justify-content: space-between;
   background: var(--bg);
   border-bottom: 1px solid var(--bg2);
-  z-index: 100;
+  z-index: 200;
 
   & h1 {
     display: flex;

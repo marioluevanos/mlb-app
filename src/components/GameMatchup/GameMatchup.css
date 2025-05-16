@@ -4,7 +4,6 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding-bottom: 1.5rem;
 
   & h3 {
     flex: 1 0 100%;

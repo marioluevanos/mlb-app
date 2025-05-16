@@ -21,8 +21,8 @@ type LiveGameProps = {
 };
 
 export const LiveGame: FC<LiveGameProps> = (props) => {
-  const { className, gamePreview } = props;
-  const [game, setGame] = useState<GameToday | undefined>(props.liveGame);
+  const { className, gamePreview, liveGame } = props;
+  const [game, setGame] = useState<GameToday | undefined>(liveGame);
   const isTopInning = game?.currentInning.split(" ")[0] === "TOP";
 
   /**
@@ -41,10 +41,10 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
    * Check if game is in progress and update
    */
   useEffect(() => {
-    if (game?.status === "In Progress") {
-      const intervalId = setInterval(updateGameInProgress, 15000);
-      return () => clearInterval(intervalId);
-    }
+    // if (game?.status === "In Progress") {
+    //   const intervalId = setInterval(updateGameInProgress, 15000);
+    //   return () => clearInterval(intervalId);
+    // }
   }, [game?.status, updateGameInProgress]);
 
   return !game ? (
@@ -63,6 +63,7 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
           isTopInning={isTopInning}
         />
       ) : null}
+
       <GameMatchup matchup={game.currentPlay?.matchup}>
         <GameBug
           count={game.currentPlay?.count}
@@ -70,7 +71,9 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
           runners={game.currentPlay?.runners}
         />
       </GameMatchup>
+
       <PlayEvents events={game.currentPlay?.events} />
+
       <InningPlays
         status={game.status}
         currentInning={game.currentInning}

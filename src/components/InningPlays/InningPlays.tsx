@@ -1,4 +1,6 @@
-import { GameStatus, InningPlay, ScoringPlay } from "@/types";
+import "./InningPlays.css";
+
+import { GameStatus, GameToday, InningPlay } from "@/types";
 import { BaseSyntheticEvent, FC } from "react";
 import { Tabs } from "../ui/Tabs/Tabs";
 import { cn } from "@/utils/cn";
@@ -10,7 +12,7 @@ type InningPlaysProps = {
   className?: string;
   currentInning?: string;
   playsByInning?: InningPlay[];
-  scoringPlays?: ScoringPlay[];
+  scoringPlays?: GameToday["scoringPlays"];
   onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };
 

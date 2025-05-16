@@ -1,6 +1,6 @@
 import { LiveGame } from "@/components/LiveGame/LiveGame";
 import { mapToLiveGame } from "@/utils/mlb";
-import RAW from "../../../_mockdata/RAW-1ST.json";
+import RAW from "../../../_mockdata/RAW-XINN.json";
 import { MLBLive } from "@/types.mlb";
 
 export default async function Live({
@@ -13,6 +13,8 @@ export default async function Live({
   // const game = await fetch(api);
   // const json = await game.json();
   const liveGame = mapToLiveGame(RAW as unknown as MLBLive);
+
+  console.log(liveGame.scoringPlays);
 
   return (
     <main className="live">

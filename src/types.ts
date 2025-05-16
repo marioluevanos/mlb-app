@@ -117,7 +117,9 @@ export type GameToday = {
   topPerformers: GamePlayer[];
   innings: GameInnings[];
   currentPlay?: CurrentPlay;
-  scoringPlays?: ScoringPlay[];
+  scoringPlays?: {
+    [inning: string | number]: ScoringPlay[];
+  };
   playsByInning?: InningPlay[];
   decisions: GameDecision | undefined;
 };
