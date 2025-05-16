@@ -1,5 +1,6 @@
 .live-game {
   position: relative;
+  padding-bottom: 4rem;
 }
 
 .live-game .scoreboard {

@@ -2,7 +2,7 @@
   border-bottom: 1px dotted var(--bg2);
 
   & ol {
-    padding: 0;
+    padding: 1rem 0 0;
     margin: 0;
     line-height: 1;
     list-style: none;
@@ -11,20 +11,32 @@
     flex-direction: column-reverse;
   }
 
+  & .scoring-event-inning {
+    display: flex;
+  }
+
   & .scoring-event-inning h3 {
-    padding: 1rem;
+    padding: 0 1rem;
     margin: 0;
-    color: var(--accent);
-    background: var(--bg);
-    border-top: 1px solid var(--bg2);
-    border-bottom: 1px solid var(--bg2);
     position: sticky;
-    top: calc(48px + 65px - 1px);
+    top: calc(48px + 65px + 1rem);
     z-index: 10;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    align-self: flex-start;
+  }
+
+  & h3.scoring-plays-title {
+    padding: 0 1rem;
+  }
+
+  &.is-final .scoring-event-inning h3 {
+    top: calc(48px + 1rem);
   }
 
   & .scoring-events {
-    padding: 1rem 1rem 0;
+    padding: 0 1rem 0;
   }
 
   & .scoring-event {
@@ -113,4 +125,13 @@
   & .abbreviation {
     color: var(--accent);
   }
+}
+
+.scoring-plays-no-score {
+  font-family: var(--font-sans);
+  color: var(--text1);
+  text-align: center;
+  font-size: 12px;
+  margin: 2rem auto;
+  text-transform: capitalize;
 }

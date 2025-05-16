@@ -1,4 +1,16 @@
 .inning-plays {
   margin-top: 1rem;
   border-top: 1px solid var(--bg2);
+
+  & .tabs-actions {
+    border-bottom: 1px solid var(--bg2);
+    position: sticky;
+    top: 48px;
+    margin-bottom: -1px;
+    background: var(--bg);
+
+    & .button {
+      font-family: var(--font-sans);
+    }
+  }
 }

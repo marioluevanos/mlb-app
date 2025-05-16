@@ -13,6 +13,9 @@ import { GameMatchup } from "../GameMatchup/GameMatchup";
 import { GameBug } from "../GameBug/GameBug";
 import { PlayEvents } from "../PlayEvents/PlayEvents";
 import { InningPlays } from "../InningPlays/InningPlays";
+import { GameDecisions } from "../GameDecisions/GameDecisions";
+import { TopPerformers } from "../TopPerformers/TopPerformers";
+import { TeamCompare } from "../TeamCompare/TeamCompare";
 
 type LiveGameProps = {
   className?: string;
@@ -24,6 +27,8 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
   const { className, gamePreview, liveGame } = props;
   const [game, setGame] = useState<GameToday | undefined>(liveGame);
   const isTopInning = game?.currentInning.split(" ")[0] === "TOP";
+  const isFinal = ["Final", "Game Over"].includes(String(game?.status));
+  const isInProgress = game?.status === "In Progress";
 
   /**
    * Fetch and update the game in progress
@@ -41,15 +46,13 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
    * Check if game is in progress and update
    */
   useEffect(() => {
-    // if (game?.status === "In Progress") {
-    //   const intervalId = setInterval(updateGameInProgress, 15000);
-    //   return () => clearInterval(intervalId);
-    // }
+    if (game?.status === "In Progress") {
+      const intervalId = setInterval(updateGameInProgress, 15000);
+      return () => clearInterval(intervalId);
+    }
   }, [game?.status, updateGameInProgress]);
 
-  return !game ? (
-    gamePreview && <GamePreview gamePreview={gamePreview} />
-  ) : (
+  return !game ? null : (
     <section
       id={game.id.toString()}
       data-status={toKebabCase(game.status)}
@@ -62,17 +65,23 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
           teams={[game.away, game.home]}
           isTopInning={isTopInning}
         />
-      ) : null}
+      ) : (
+        gamePreview && <GamePreview gamePreview={gamePreview} />
+      )}
 
-      <GameMatchup matchup={game.currentPlay?.matchup}>
-        <GameBug
-          count={game.currentPlay?.count}
-          currentInning={game.currentInning}
-          runners={game.currentPlay?.runners}
-        />
-      </GameMatchup>
+      {!isFinal && isInProgress ? (
+        <GameMatchup matchup={game.currentPlay?.matchup}>
+          <GameBug
+            count={game.currentPlay?.count}
+            currentInning={game.currentInning}
+            runners={game.currentPlay?.runners}
+          />
+        </GameMatchup>
+      ) : (
+        <GameDecisions decisions={game.decisions} />
+      )}
 
-      <PlayEvents events={game.currentPlay?.events} />
+      <PlayEvents events={game.currentPlay?.events} status={game.status} />
 
       <InningPlays
         status={game.status}
@@ -80,11 +89,11 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
         playsByInning={game.playsByInning}
         scoringPlays={game.scoringPlays}
       />
-      {/* <GameDecisions decisions={decisions} />
-      {topPerformers?.length > 0 ? (
-        <TopPerformers topPerformers={topPerformers} />
+
+      {game.topPerformers?.length > 0 ? (
+        <TopPerformers topPerformers={game.topPerformers} />
       ) : null}
-      <TeamCompare away={teams[0]} home={teams[1]} /> */}
+      <TeamCompare away={game.away} home={game.home} />
     </section>
   );
 };

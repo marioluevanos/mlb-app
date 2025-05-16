@@ -86,6 +86,7 @@ main {
 
 h3 {
   font: 700 0.875rem/1 var(--font-sans);
+  margin-bottom: 1.5rem;
 }
 
 /* Global loading gradient */

@@ -1,24 +1,24 @@
 import { LiveGame } from "@/components/LiveGame/LiveGame";
-import { mapToLiveGame } from "@/utils/mlb";
-import RAW from "../../../_mockdata/RAW-XINN.json";
 import { MLBLive } from "@/types.mlb";
+import { fetchScheduledGames, mapToLiveGame } from "@/utils/mlb";
 
 export default async function Live({
-  params: _,
+  params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  // const { id } = await params;
-  // const api = `https://statsapi.mlb.com/api/v1.1/game/${id}/feed/live`;
-  // const game = await fetch(api);
-  // const json = await game.json();
-  const liveGame = mapToLiveGame(RAW as unknown as MLBLive);
-
-  console.log(liveGame.scoringPlays);
+  const { id } = await params;
+  const apiLive = `https://statsapi.mlb.com/api/v1.1/game/${id}/feed/live`;
+  const game = await fetch(apiLive);
+  const jsonG: MLBLive = await game.json();
+  const liveGame = mapToLiveGame(jsonG);
+  const [yyyy, mm, dd] = jsonG.gameData.datetime.officialDate.split("-");
+  const gamePreviews = await fetchScheduledGames(yyyy, mm, dd);
+  const gamePreview = gamePreviews?.games.find((g) => g.id === jsonG.gamePk);
 
   return (
     <main className="live">
-      <LiveGame liveGame={liveGame} />
+      <LiveGame liveGame={liveGame} gamePreview={gamePreview} />
     </main>
   );
 }

@@ -1,12 +1,22 @@
 .top-performers {
-  padding: 0 1rem 1rem;
+  padding: 1rem;
 }
 
 .top-performers .player {
   margin: 0 0 1rem;
   flex: 1 0 calc(100% - 1rem);
+  grid-template-areas:
+    "avatar name name"
+    "avatar summary summary"
+    "avatar note note";
 
   &:last-child {
     margin-bottom: 0;
+  }
+
+  & .player-avatar {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 4rem;
   }
 }

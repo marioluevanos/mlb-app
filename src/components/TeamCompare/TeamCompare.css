@@ -1,7 +1,7 @@
 .team-compare {
-  padding: 0 1rem 1rem;
+  padding: 1rem;
 
-  & .team-logo,
+  & .team-name,
   & .team-record {
     display: none;
   }
@@ -21,8 +21,10 @@
   align-items: center;
   text-align: center;
   gap: 0.25rem 0;
+  color: var(--text1);
 
   &.teams {
+    color: var(--text);
     align-items: flex-start;
     text-align: left;
   }
@@ -33,16 +35,22 @@
   }
 
   &.away {
-    span:first-child {
+    & span:first-child {
       color: var(--text);
       font-weight: 600;
     }
   }
   &.home {
-    span:last-child {
+    & span:last-child {
       color: var(--text);
       font-weight: 600;
     }
+  }
+
+  & span {
+    display: flex;
+    align-items: center;
+    height: 24px;
   }
 }
 

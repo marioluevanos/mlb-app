@@ -3,15 +3,18 @@ import { FC } from "react";
 import { PlayEvent, PlayResult } from "@/types.mlb";
 import { cn } from "@/utils/cn";
 import { AtBatIcon, CapIcon, HourglassIcon, SwitchIcon } from "../ui/Icon";
+import { GameStatus } from "@/types";
 
 type PlayEventsProps = {
   events?: Partial<PlayEvent>[];
   result?: Partial<PlayResult>;
+  status?: GameStatus;
   className?: string;
 };
 
 export const PlayEvents: FC<PlayEventsProps> = (props) => {
-  const { className, events = [], result } = props;
+  const { status = "", className, events = [], result } = props;
+  const isFinal = ["Final", "Game Over"].includes(status);
 
   const isSub = (event: Partial<PlayEvent>) => {
     return (
@@ -25,7 +28,7 @@ export const PlayEvents: FC<PlayEventsProps> = (props) => {
     return event.isPitch && event.details?.isInPlay;
   };
 
-  return events.length > 0 ? (
+  return events.length > 0 && !isFinal ? (
     <div className={cn("play-events", className)}>
       <ol>
         {events

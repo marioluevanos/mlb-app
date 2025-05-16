@@ -37,8 +37,8 @@ export const Player: FC<PlayerProps> = (props) => {
         onClick={onClick}
       >
         <Image
-          width={32}
-          height={32}
+          width={128}
+          height={128}
           className="player-avatar loading"
           src={avatar}
           alt={fullName}

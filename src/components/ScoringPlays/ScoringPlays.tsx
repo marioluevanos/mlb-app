@@ -4,6 +4,7 @@ import { BaseSyntheticEvent, FC } from "react";
 import { Player } from "../Player/Player";
 import { cn } from "@/utils/cn";
 import { CurrentInning } from "../CurrentInning/CurrentInning";
+import { getOrdinal } from "@/utils/mlb";
 
 type PlayEventsProps = {
   title?: string;
@@ -17,11 +18,11 @@ export const ScoringPlays: FC<PlayEventsProps> = (props) => {
 
   return Object.keys(scoringPlays).length > 0 ? (
     <section className={cn("scoring-plays", className)}>
-      {title && <h3>{title}</h3>}
+      {title && <h3 className="scoring-plays-title">{title}</h3>}
       <ol>
         {Object.entries(scoringPlays).map(([inning, events], i) => (
           <li className={cn("scoring-event-inning")} key={i}>
-            <h3>{inning}</h3>
+            <h3>{getOrdinal(inning)}</h3>
             <div className="scoring-events">
               {events.map((event, index) => (
                 <div className="scoring-event" key={`${event.inning}-${index}`}>
@@ -56,5 +57,7 @@ export const ScoringPlays: FC<PlayEventsProps> = (props) => {
         ))}
       </ol>
     </section>
-  ) : null;
+  ) : (
+    <p className="scoring-plays-no-score">No score</p>
+  );
 };

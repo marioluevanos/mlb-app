@@ -274,6 +274,7 @@ export function mapToLiveGame(data: MLBLive): GameToday {
       (acc, playIndex) => {
         const play = allPlays.find((b) => b.atBatIndex === playIndex);
         const currentInning = play?.about.inning;
+
         if (currentInning) {
           acc[`${currentInning}`] = scoringPlays.reduce<ScoringPlay[]>(
             scoringPlay.bind(null, {
@@ -481,17 +482,17 @@ function topPerformers(payload: Performer): GamePlayer {
 
   let summary = "";
   if (type === "hitter" && stats.batting.summary) {
-    summary = stats.batting.summary;
+    summary = `(G) ${stats.batting.summary}`;
   }
 
   if (type === "starter" && stats.pitching.summary) {
-    summary = stats.pitching.summary;
+    summary = `(G) ${stats.pitching.summary}`;
   }
-  const seasonBatting = `${seasonStats.batting.hits} H, ${seasonStats.batting.baseOnBalls} BB, ${seasonStats.batting.homeRuns} HR`;
-  const seasonPitching = `${seasonStats.pitching.era} ERA`;
+  const seasonBatting = `(S) ${seasonStats.batting.hits} H, ${seasonStats.batting.baseOnBalls} BB, ${seasonStats.batting.homeRuns} HR, ${seasonStats.batting.totalBases} TB`;
+  const seasonPitching = `(S) ${seasonStats.pitching.era} ERA, ${seasonStats.pitching.whip} WHIP`;
 
   return {
-    avatar: avatar(person.id),
+    avatar: avatar(person.id, 128),
     jerseyNumber: player.jerseyNumber,
     id: person.id,
     fullName: person.fullName,
@@ -533,8 +534,17 @@ export function isWinner(
   }
 }
 
-export function avatar(id: string | number) {
-  return `https://midfield.mlbstatic.com/v1/people/${id}/spots/64`;
+export function getOrdinal(n: number | string): string {
+  const suffixes = ["th", "st", "nd", "rd"];
+  const v = Number(n) % 100;
+
+  const suffix = v >= 11 && v <= 13 ? "th" : suffixes[v % 10] || "th";
+
+  return `${n}${suffix}`;
+}
+
+export function avatar(id: string | number, size: number = 64) {
+  return `https://midfield.mlbstatic.com/v1/people/${id}/spots/${size}`;
 }
 
 export function logo(teamId: string | number) {

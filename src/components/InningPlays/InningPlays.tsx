@@ -25,19 +25,33 @@ export const InningPlays: FC<InningPlaysProps> = (props) => {
     scoringPlays,
     onPlayerClick,
   } = props;
-  const isFinal = status === "Final" || status === "Game Over";
   const isPreGame = status === "Pre-Game";
   const isScheduled = status === "Scheduled";
   const isWarmup = status === "Warmup";
+  const isFinal = ["Final", "Game Over"].includes(status);
 
-  if (isFinal || isPreGame || isScheduled || isWarmup) {
+  if (isPreGame || isScheduled || isWarmup) {
     return null;
   }
 
-  const tabs = [<>{currentInning.toLowerCase()} Plays</>, <>Scoring Plays</>];
+  if (isFinal) {
+    return (
+      <>
+        <ScoringPlays
+          className="is-final"
+          title="Scoring Plays"
+          scoringPlays={scoringPlays}
+          onPlayerClick={onPlayerClick}
+        />
+      </>
+    );
+  }
 
   return (
-    <Tabs className={cn("inning-plays", className)} tabs={tabs}>
+    <Tabs
+      className={cn("inning-plays", className)}
+      tabs={[<>{currentInning.toLowerCase()} Plays</>, <>Scoring Plays</>]}
+    >
       <PlaysByInning
         playsByInning={playsByInning}
         onPlayerClick={onPlayerClick}
