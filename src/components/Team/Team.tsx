@@ -1,7 +1,6 @@
-import "./Team.css";
-import { FC, ReactNode } from "react";
-import { cn } from "@/utils/cn";
-import Image from "next/image";
+import './Team.css';
+import type { FC, ReactNode } from 'react';
+import { cn } from '@/utils/cn';
 
 export type TeamProps = {
   className?: string;
@@ -17,10 +16,10 @@ export const Team: FC<TeamProps> = (props) => {
   const { team, className, children } = props;
 
   return (
-    <div className={cn("team", className)} data-team-id={team.id}>
+    <div className={cn('team', className)} data-team-id={team.id}>
       <span className="team-logo">
         {team.logo && (
-          <Image src={team.logo} width={32} height={32} alt={team.name} />
+          <img src={team.logo} width={32} height={32} alt={team.name} />
         )}
       </span>
       <span className="team-name">{team.name}</span>

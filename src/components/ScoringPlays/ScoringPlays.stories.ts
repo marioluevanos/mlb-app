@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { ScoringPlays } from "./ScoringPlays";
-import { GAME_XINN } from "@/_mockdata/mockdata";
+import type { Meta, StoryObj } from '@storybook/react';
+import { ScoringPlays } from './ScoringPlays';
+import { GAME_XINN } from '@/_mockdata/mockdata';
 
 const meta = {
-  title: "Components/ScoringPlays",
+  title: 'Components/ScoringPlays',
   component: ScoringPlays,
   parameters: {},
   argTypes: {},

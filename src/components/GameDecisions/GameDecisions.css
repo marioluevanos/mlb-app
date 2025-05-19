@@ -20,7 +20,7 @@
   }
 
   & .player.winner::after {
-    content: "";
+    content: '';
     background: var(--accent);
     border-radius: 6px;
     width: 6px;

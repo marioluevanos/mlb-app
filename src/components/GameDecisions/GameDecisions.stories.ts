@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { GameDecisions } from "./GameDecisions";
-import { GAME_FINAL } from "@/_mockdata/mockdata";
+import { GameDecisions } from './GameDecisions';
+import type { Meta, StoryObj } from '@storybook/react';
+import { GAME_FINAL } from '@/_mockdata/mockdata';
 
 const meta = {
-  title: "Components/GameDecisions",
+  title: 'Components/GameDecisions',
   component: GameDecisions,
   parameters: {},
   argTypes: {},

@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { LiveGame } from "./LiveGame";
+import type { Meta, StoryObj } from '@storybook/react';
+import { LiveGame } from './LiveGame';
 
 const meta = {
-  title: "Components/LiveGame",
+  title: 'Components/LiveGame',
   component: LiveGame,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
   argTypes: {},
 } satisfies Meta<typeof LiveGame>;

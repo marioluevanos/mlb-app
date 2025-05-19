@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { TeamCompare } from "./TeamCompare";
-import { GAME_FINAL } from "@/_mockdata/mockdata";
+import type { Meta, StoryObj } from '@storybook/react';
+import { TeamCompare } from './TeamCompare';
+import { GAME_FINAL } from '@/_mockdata/mockdata';
 
 const meta = {
-  title: "Components/TeamCompare",
+  title: 'Components/TeamCompare',
   component: TeamCompare,
   parameters: {},
   argTypes: {},

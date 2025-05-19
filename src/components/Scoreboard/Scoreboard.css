@@ -20,7 +20,7 @@
   &::before {
     font-size: 10px;
     font-weight: 400;
-    content: "TEAMS";
+    content: 'TEAMS';
     display: inline-flex;
     color: transparent;
   }
@@ -84,7 +84,7 @@
 }
 
 .scoreboard .scoreboard-inning .runs::after {
-  content: "";
+  content: '';
   border-radius: 4px;
   position: absolute;
   z-index: -1;
@@ -146,13 +146,13 @@
   }
 
   &.runs::before {
-    content: "R";
+    content: 'R';
   }
   &.hits::before {
-    content: "H";
+    content: 'H';
   }
   &.errors::before {
-    content: "E";
+    content: 'E';
   }
 }
 
@@ -176,7 +176,7 @@
 .scoreboard.final,
 .scoreboard.game-over {
   & .team.winner .team-logo::after {
-    content: "";
+    content: '';
     width: 6px;
     height: 6px;
     border-radius: 6px;

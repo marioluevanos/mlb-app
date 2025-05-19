@@ -1,21 +1,20 @@
-"use client";
-
-import "./LiveGame.css";
-import { FC, useCallback, useEffect, useState } from "react";
-import { cn } from "@/utils/cn";
-import { toKebabCase } from "@/utils/toKebabCase";
-import { Scoreboard } from "../Scoreboard/Scoreboard";
-import { GamePreview } from "../GamePreview/GamePreview";
-import { GamePreview as GamePreviewType, GameToday } from "@/types";
-import { MLBLive } from "@/types.mlb";
-import { mapToLiveGame } from "@/utils/mlb";
-import { GameMatchup } from "../GameMatchup/GameMatchup";
-import { GameBug } from "../GameBug/GameBug";
-import { PlayEvents } from "../PlayEvents/PlayEvents";
-import { InningPlays } from "../InningPlays/InningPlays";
-import { GameDecisions } from "../GameDecisions/GameDecisions";
-import { TopPerformers } from "../TopPerformers/TopPerformers";
-import { TeamCompare } from "../TeamCompare/TeamCompare";
+import './LiveGame.css';
+import { useCallback, useEffect, useState } from 'react';
+import { Scoreboard } from '../Scoreboard/Scoreboard';
+import { GamePreview } from '../GamePreview/GamePreview';
+import { GameMatchup } from '../GameMatchup/GameMatchup';
+import { GameBug } from '../GameBug/GameBug';
+import { PlayEvents } from '../PlayEvents/PlayEvents';
+import { InningPlays } from '../InningPlays/InningPlays';
+import { GameDecisions } from '../GameDecisions/GameDecisions';
+import { TopPerformers } from '../TopPerformers/TopPerformers';
+import { TeamCompare } from '../TeamCompare/TeamCompare';
+import type { MLBLive } from '@/types.mlb';
+import type { GamePreview as GamePreviewType, GameToday } from '@/types';
+import type { FC } from 'react';
+import { mapToLiveGame } from '@/utils/mlb';
+import { toKebabCase } from '@/utils/toKebabCase';
+import { cn } from '@/utils/cn';
 
 type LiveGameProps = {
   className?: string;
@@ -26,9 +25,9 @@ type LiveGameProps = {
 export const LiveGame: FC<LiveGameProps> = (props) => {
   const { className, gamePreview, liveGame } = props;
   const [game, setGame] = useState<GameToday | undefined>(liveGame);
-  const isTopInning = game?.currentInning.split(" ")[0] === "TOP";
-  const isFinal = ["Final", "Game Over"].includes(String(game?.status));
-  const isInProgress = game?.status === "In Progress";
+  const isTopInning = game?.currentInning.split(' ')[0] === 'TOP';
+  const isFinal = ['Final', 'Game Over'].includes(String(game?.status));
+  const isInProgress = game?.status === 'In Progress';
 
   /**
    * Fetch and update the game in progress
@@ -46,7 +45,7 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
    * Check if game is in progress and update
    */
   useEffect(() => {
-    if (game?.status === "In Progress") {
+    if (game?.status === 'In Progress') {
       const intervalId = setInterval(updateGameInProgress, 15000);
       return () => clearInterval(intervalId);
     }
@@ -56,9 +55,9 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
     <section
       id={game.id.toString()}
       data-status={toKebabCase(game.status)}
-      className={cn("live-game", toKebabCase(game.status), className)}
+      className={cn('live-game', toKebabCase(game.status), className)}
     >
-      {game.innings.length > 0 ? (
+      {game.status === 'In Progress' && game.innings.length > 0 ? (
         <Scoreboard
           innings={game.innings}
           status={game.status}

@@ -1,18 +1,18 @@
-import "./InningPlays.css";
+import './InningPlays.css';
 
-import { GameStatus, GameToday, InningPlay } from "@/types";
-import { BaseSyntheticEvent, FC } from "react";
-import { Tabs } from "../ui/Tabs/Tabs";
-import { cn } from "@/utils/cn";
-import { PlaysByInning } from "../PlaysByInning/PlaysByInning";
-import { ScoringPlays } from "../ScoringPlays/ScoringPlays";
+import { Tabs } from '../ui/Tabs/Tabs';
+import { PlaysByInning } from '../PlaysByInning/PlaysByInning';
+import { ScoringPlays } from '../ScoringPlays/ScoringPlays';
+import type { GameStatus, GameToday, InningPlay } from '@/types';
+import type { BaseSyntheticEvent, FC } from 'react';
+import { cn } from '@/utils/cn';
 
 type InningPlaysProps = {
   status: GameStatus;
   className?: string;
   currentInning?: string;
-  playsByInning?: InningPlay[];
-  scoringPlays?: GameToday["scoringPlays"];
+  playsByInning?: Array<InningPlay>;
+  scoringPlays?: GameToday['scoringPlays'];
   onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };
 
@@ -20,15 +20,15 @@ export const InningPlays: FC<InningPlaysProps> = (props) => {
   const {
     className,
     status,
-    currentInning = "",
+    currentInning = '',
     playsByInning,
     scoringPlays,
     onPlayerClick,
   } = props;
-  const isPreGame = status === "Pre-Game";
-  const isScheduled = status === "Scheduled";
-  const isWarmup = status === "Warmup";
-  const isFinal = ["Final", "Game Over"].includes(status);
+  const isPreGame = status === 'Pre-Game';
+  const isScheduled = status === 'Scheduled';
+  const isWarmup = status === 'Warmup';
+  const isFinal = ['Final', 'Game Over'].includes(status);
 
   if (isPreGame || isScheduled || isWarmup) {
     return null;
@@ -49,7 +49,7 @@ export const InningPlays: FC<InningPlaysProps> = (props) => {
 
   return (
     <Tabs
-      className={cn("inning-plays", className)}
+      className={cn('inning-plays', className)}
       tabs={[<>{currentInning.toLowerCase()} Plays</>, <>Scoring Plays</>]}
     >
       <PlaysByInning

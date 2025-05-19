@@ -1,12 +1,11 @@
-"use client";
-
-import { cn } from "@/utils/cn";
-import "./GamePreviews.css";
-import { FC, useCallback, useEffect } from "react";
-import { useMLB } from "../ui/MLBProvider";
-import { GamePreview } from "../GamePreview/GamePreview";
-import { formatDateInput } from "@/utils/date";
-import { fetchScheduledGames } from "@/utils/mlb";
+import './GamePreviews.css';
+import { useCallback, useEffect } from 'react';
+import { useMLB } from '../ui/MLBProvider';
+import { GamePreview } from '../GamePreview/GamePreview';
+import type { FC } from 'react';
+import { cn } from '@/utils/cn';
+import { formatDateInput } from '@/utils/date';
+import { fetchScheduledGames } from '@/utils/mlb';
 
 type GamePreviewProps = {
   className?: string;
@@ -25,7 +24,7 @@ export const GamePreviews: FC<GamePreviewProps> = (props) => {
       const gamePreviews = await fetchScheduledGames(year, month, day);
       setGamePreviews(gamePreviews);
     },
-    [setGamePreviews, date]
+    [setGamePreviews, date],
   );
 
   useEffect(() => {
@@ -33,7 +32,7 @@ export const GamePreviews: FC<GamePreviewProps> = (props) => {
   }, [getGamePreviews]);
 
   return (
-    <section className={cn("game-previews", className)}>
+    <section className={cn('game-previews', className)}>
       {gamePreviews?.games.map((g) => (
         <GamePreview gamePreview={g} key={g.id} />
       ))}

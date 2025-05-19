@@ -15,6 +15,12 @@
     display: flex;
     gap: 0.5rem;
     align-items: center;
+  }
+
+  & .logo-button {
+    padding: 0;
+    background: none;
+    border: none;
     font: 700 0px/1 var(--font-sans);
   }
 

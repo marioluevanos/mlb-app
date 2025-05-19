@@ -1,13 +1,14 @@
-import "./GameDecisions.css";
-import { GameDecision } from "@/types";
-import { FC, ReactNode } from "react";
-import { Player, PlayerProps } from "../Player/Player";
+import './GameDecisions.css';
+import { Player } from '../Player/Player';
+import type { FC, ReactNode } from 'react';
+import type { PlayerProps } from '../Player/Player';
+import type { GameDecision } from '@/types';
 
 export type GameDecisionsProps = {
   className?: string;
   decisions?: GameDecision;
   children?: ReactNode;
-  onPlayerClick?: PlayerProps["onClick"];
+  onPlayerClick?: PlayerProps['onClick'];
 };
 
 export const GameDecisions: FC<GameDecisionsProps> = (props) => {

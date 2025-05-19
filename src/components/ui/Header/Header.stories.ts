@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { Header } from "./Header";
-import { createElement } from "react";
-import { MLBProvider } from "../MLBProvider";
+import { createElement } from 'react';
+import { MLBProvider } from '../MLBProvider';
+import { Header } from './Header';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
-  title: "UI/Header",
+  title: 'UI/Header',
   component: Header,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
   args: {},
 } satisfies Meta<typeof Header>;

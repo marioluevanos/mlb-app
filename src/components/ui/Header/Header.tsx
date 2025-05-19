@@ -1,23 +1,21 @@
-"use client";
-
-import "./Header.css";
-import Image from "next/image";
-import { BaseSyntheticEvent, FC, useCallback } from "react";
-import { LeftIcon, RefreshIcon, RightIcon } from "../Icon";
-import { Button } from "../Button/Button";
-import { useMLB } from "@/components/ui/MLBProvider";
-import { DateNavigator, getLocalDate, toLegibleDate } from "@/utils/date";
-import { cn } from "@/utils/cn";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import './Header.css';
+import { useCallback } from 'react';
+import { useRouter, useRouterState } from '@tanstack/react-router';
+import { LeftIcon, RefreshIcon, RightIcon } from '../Icon';
+import { Button } from '../Button/Button';
+import type { BaseSyntheticEvent, FC } from 'react';
+import { useMLB } from '@/components/ui/MLBProvider';
+import { DateNavigator, getLocalDate, toLegibleDate } from '@/utils/date';
+import { cn } from '@/utils/cn';
 
 const dateNavigator = new DateNavigator();
 
 export const Header: FC = () => {
   const { date, setDate } = useMLB();
-  const isToday = date.split("T")[0] === getLocalDate();
-  const pathname = usePathname();
-  const isLiveGame = pathname.startsWith("/live/");
+  const isToday = date.split('T')[0] === getLocalDate();
+  const router = useRouter();
+  const { location } = useRouterState();
+  const isLiveGame = location.pathname.startsWith('/live/');
 
   /**
    * Previous Day click
@@ -28,7 +26,7 @@ export const Header: FC = () => {
       dateNavigator.goBackOneDay();
       setDate(dateNavigator.getCurrentDate().toISOString());
     },
-    [setDate]
+    [setDate],
   );
 
   /**
@@ -42,7 +40,7 @@ export const Header: FC = () => {
       dateNavigator.setCurrentDay(today);
       setDate(localDate);
     },
-    [setDate]
+    [setDate],
   );
 
   /**
@@ -54,15 +52,21 @@ export const Header: FC = () => {
       dateNavigator.goForwardOneDay();
       setDate(dateNavigator.getCurrentDate().toISOString());
     },
-    [setDate]
+    [setDate],
   );
 
   return (
     <header id="header">
       <h1>
-        <Link href="/">
-          <Image
-            priority
+        <button
+          className="logo-button"
+          onClick={(e) => {
+            e.preventDefault();
+            router.navigate({ href: '/' });
+            return false;
+          }}
+        >
+          <img
             className="logo"
             width={256}
             height={256}
@@ -70,7 +74,7 @@ export const Header: FC = () => {
             alt="logo"
           />
           MLB
-        </Link>
+        </button>
       </h1>
       <nav className="header-nav">
         {isLiveGame ? (
@@ -97,9 +101,9 @@ export const Header: FC = () => {
               title={dateNavigator.getCurrentDate().toISOString()}
               onClick={onTodayClick}
               key="Today"
-              className={cn(isToday && "is-today", "current-day")}
+              className={cn(isToday && 'is-today', 'current-day')}
             >
-              {isToday ? "Today" : toLegibleDate(date)}
+              {isToday ? 'Today' : toLegibleDate(date)}
             </Button>
             <Button key="Next" title="Next date" onClick={onNextDayClick}>
               <RightIcon />

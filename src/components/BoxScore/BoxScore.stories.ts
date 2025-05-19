@@ -1,19 +1,19 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { BoxScore } from "./BoxScore";
-import { GAME_XINN } from "@/_mockdata/mockdata";
+import { BoxScore } from './BoxScore'
+import type { Meta, StoryObj } from '@storybook/react'
+import { GAME_XINN } from '@/_mockdata/mockdata'
 
 const meta = {
-  title: "Components/BoxScore",
+  title: 'Components/BoxScore',
   component: BoxScore,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
   argTypes: {},
-} satisfies Meta<typeof BoxScore>;
+} satisfies Meta<typeof BoxScore>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
@@ -25,4 +25,4 @@ export const Default: Story = {
       pitcherId: GAME_XINN.currentPlay?.matchup.pitcher.id,
     },
   },
-};
+}

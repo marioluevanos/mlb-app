@@ -1,7 +1,7 @@
-import "./TeamScore.css";
-import { TeamScore as Score } from "@/types";
-import { cn } from "@/utils/cn";
-import { FC } from "react";
+import './TeamScore.css';
+import type { TeamScore as Score } from '@/types';
+import type { FC } from 'react';
+import { cn } from '@/utils/cn';
 
 type TeamScoreProps = {
   score?: Score;
@@ -14,7 +14,7 @@ export const TeamScore: FC<TeamScoreProps> = (props) => {
   if (!score) return null;
 
   return (
-    <span className={cn("team-score")}>
+    <span className={cn('team-score')}>
       <span className={className}>{score.runs}</span>
       <span className={className}>{score.hits}</span>
       <span className={className}>{score.errors}</span>

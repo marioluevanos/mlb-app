@@ -1,11 +1,11 @@
-import "./PlaysByInning.css";
-import { InningPlay } from "@/types";
-import { BaseSyntheticEvent, FC } from "react";
-import { cn } from "@/utils/cn";
-import { Player } from "../Player/Player";
+import './PlaysByInning.css';
+import { Player } from '../Player/Player';
+import type { BaseSyntheticEvent, FC } from 'react';
+import type { InningPlay } from '@/types';
+import { cn } from '@/utils/cn';
 
 type PlaysByInningProps = {
-  playsByInning?: InningPlay[];
+  playsByInning?: Array<InningPlay>;
   className?: string;
   onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };
@@ -14,17 +14,17 @@ export const PlaysByInning: FC<PlaysByInningProps> = (props) => {
   const { className, playsByInning = [], onPlayerClick } = props;
 
   return playsByInning.length > 0 ? (
-    <section className={cn("plays-by-inning", className)}>
+    <section className={cn('plays-by-inning', className)}>
       <ol>
         {playsByInning.map(
           (event, i) =>
             event.result?.description &&
-            !["game_advisory"].includes(event.result.eventType) && (
+            !['game_advisory'].includes(event.result.eventType) && (
               <li
                 className={cn(
-                  "play-event-by-inning",
-                  event.result.isOut && "is-out",
-                  !event.result.isOut && event.result.rbi && "is-rbi"
+                  'play-event-by-inning',
+                  event.result.isOut && 'is-out',
+                  !event.result.isOut && event.result.rbi && 'is-rbi',
                 )}
                 key={i}
               >
@@ -43,13 +43,13 @@ export const PlaysByInning: FC<PlaysByInningProps> = (props) => {
                     position: event.matchup.batter.position,
                     summary: event.result?.rbi
                       ? `(${event.result?.rbi} RBI)`
-                      : "",
+                      : '',
                   }}
                 />
 
                 <span className="description">{event.result?.description}</span>
               </li>
-            )
+            ),
         )}
       </ol>
     </section>

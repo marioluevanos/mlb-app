@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { Team } from "./Team";
+import type { Meta, StoryObj } from '@storybook/react';
+import { Team } from './Team';
 
 const meta = {
-  title: "Components/Team",
+  title: 'Components/Team',
   component: Team,
   parameters: {},
   argTypes: {},
@@ -15,9 +15,9 @@ type Story = StoryObj<typeof meta>;
 export const LAD: Story = {
   args: {
     team: {
-      name: "Los Angeles Dodgers",
+      name: 'Los Angeles Dodgers',
       id: 119,
-      logo: "https://midfield.mlbstatic.com/v1/team/119/spots/64",
+      logo: 'https://midfield.mlbstatic.com/v1/team/119/spots/64',
     },
   },
 };

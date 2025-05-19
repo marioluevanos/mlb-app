@@ -1,15 +1,16 @@
-import "./GamePreview.css";
-import { GamePreview as GamePreviewType } from "@/types";
-import { FC, useCallback, useEffect } from "react";
-import { cn } from "@/utils/cn";
-import { Team } from "../Team/Team";
-import { toKebabCase } from "@/utils/toKebabCase";
-import { GamePreviewDetails } from "./GamePreviewDetails";
-import { TeamScore } from "../TeamScore/TeamScore";
-import { MLBLive } from "@/types.mlb";
-import { useMLB } from "../ui/MLBProvider";
-import { isWinner, mapCurrentInning } from "@/utils/mlb";
-import Link from "next/link";
+import './GamePreview.css';
+import { useCallback, useEffect } from 'react';
+import { Link } from '@tanstack/react-router';
+import { Team } from '../Team/Team';
+import { TeamScore } from '../TeamScore/TeamScore';
+import { useMLB } from '../ui/MLBProvider';
+import { GamePreviewDetails } from './GamePreviewDetails';
+import type { FC } from 'react';
+import type { MLBLive } from '@/types.mlb';
+import type { GamePreview as GamePreviewType } from '@/types';
+import { cn } from '@/utils/cn';
+import { toKebabCase } from '@/utils/toKebabCase';
+import { isWinner, mapCurrentInning } from '@/utils/mlb';
 
 export type GamePreviewProps = {
   className?: string;
@@ -19,10 +20,10 @@ export type GamePreviewProps = {
 export const GamePreview: FC<GamePreviewProps> = (props) => {
   const { className, gamePreview } = props;
   const { away, home, status, id, feed } = gamePreview;
-  const isScheduled = status === "Scheduled";
-  const isPregame = status === "Pre-Game";
-  const isPostponed = status === "Postponed";
-  const isWarmup = status === "Warmup";
+  const isScheduled = status === 'Scheduled';
+  const isPregame = status === 'Pre-Game';
+  const isPostponed = status === 'Postponed';
+  const isWarmup = status === 'Warmup';
   const isPre = isScheduled || isPregame || isPostponed || isWarmup;
   const winner = isWinner(away.score, home.score);
   const { setGamePreviews, gamePreviews } = useMLB();
@@ -46,7 +47,7 @@ export const GamePreview: FC<GamePreviewProps> = (props) => {
       }
       return game;
     },
-    []
+    [],
   );
 
   /**
@@ -65,7 +66,7 @@ export const GamePreview: FC<GamePreviewProps> = (props) => {
    * Check if game is in progress and update
    */
   useEffect(() => {
-    if (status === "In Progress") {
+    if (status === 'In Progress') {
       const intervalId = setInterval(updateGameInProgress, 15000);
       return () => clearInterval(intervalId);
     }
@@ -76,20 +77,26 @@ export const GamePreview: FC<GamePreviewProps> = (props) => {
       id={id.toString()}
       data-status={toKebabCase(status)}
       className={cn(
-        "game-preview",
+        'game-preview',
         toKebabCase(status),
-        isPre && "is-pre",
-        className
+        isPre && 'is-pre',
+        className,
       )}
     >
-      <Link className="game-preview-link" href={`/live/${id}`}>
+      <Link
+        className="game-preview-link"
+        to="/live/$id"
+        params={{
+          id: id.toString(),
+        }}
+      >
         {away.name} vs {home.name}
       </Link>
       <div className="game-preview-teams">
         <Team
           key={away.id}
           team={away}
-          className={cn("game-preview-away", winner === "away" && "winner")}
+          className={cn('game-preview-away', winner === 'away' && 'winner')}
         >
           <span className="game-preview-record">
             ({away.record.wins} &ndash; {away.record.losses})
@@ -99,7 +106,7 @@ export const GamePreview: FC<GamePreviewProps> = (props) => {
         <Team
           key={home.id}
           team={home}
-          className={cn("game-preview-home", winner === "home" && "winner")}
+          className={cn('game-preview-home', winner === 'home' && 'winner')}
         >
           <span className="game-preview-record">
             ({home.record.wins} &ndash; {home.record.losses})

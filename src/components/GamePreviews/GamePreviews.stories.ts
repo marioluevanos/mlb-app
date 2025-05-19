@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { GamePreviews } from "./GamePreviews";
-import { createElement } from "react";
-import { MLBProvider } from "../ui/MLBProvider";
+import { createElement } from 'react';
+import { MLBProvider } from '../ui/MLBProvider';
+import { GamePreviews } from './GamePreviews';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
-  title: "Components/GamePreviews",
+  title: 'Components/GamePreviews',
   component: GamePreviews,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
   argTypes: {},
 } satisfies Meta<typeof GamePreviews>;

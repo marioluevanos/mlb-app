@@ -1,15 +1,20 @@
-import { GameInnings, GameStatus, ScoreboardTeam, TeamScore } from "@/types";
-import "./Scoreboard.css";
-import { FC } from "react";
-import { cn } from "@/utils/cn";
-import { Team } from "../Team/Team";
-import { toKebabCase } from "@/utils/toKebabCase";
-import { isWinner } from "@/utils/mlb";
+import './Scoreboard.css';
+import { Team } from '../Team/Team';
+import type {
+  GameInnings,
+  GameStatus,
+  ScoreboardTeam,
+  TeamScore,
+} from '@/types';
+import type { FC } from 'react';
+import { cn } from '@/utils/cn';
+import { toKebabCase } from '@/utils/toKebabCase';
+import { isWinner } from '@/utils/mlb';
 
 export type ScoreboardProps = {
   className?: string;
   status: GameStatus;
-  innings: GameInnings[];
+  innings: Array<GameInnings>;
   isTopInning?: boolean;
   teams: [ScoreboardTeam, ScoreboardTeam];
 };
@@ -17,16 +22,16 @@ export type ScoreboardProps = {
 export const Scoreboard: FC<ScoreboardProps> = (props) => {
   const { className, teams = [], isTopInning, innings = [], status } = props;
   const winner = isWinner(teams[0]?.score, teams[1]?.score);
-  const inProgress = status === "In Progress";
+  const inProgress = status === 'In Progress';
 
   return (
     <section
       className={cn(
-        "scoreboard",
+        'scoreboard',
         cn(toKebabCase(status)),
-        inProgress ? (isTopInning ? "is-top" : "is-bottom") : undefined,
-        !innings.length && "no-innings",
-        className
+        inProgress ? (isTopInning ? 'is-top' : 'is-bottom') : undefined,
+        !innings.length && 'no-innings',
+        className,
       )}
     >
       <div className="scoreboard-teams">
@@ -35,8 +40,8 @@ export const Scoreboard: FC<ScoreboardProps> = (props) => {
             key={team.id}
             team={team}
             className={cn(
-              winner === "away" && index === 0 && "winner",
-              winner === "home" && index === 1 && "winner"
+              winner === 'away' && index === 0 && 'winner',
+              winner === 'home' && index === 1 && 'winner',
             )}
           />
         ))}
@@ -51,16 +56,16 @@ export const Scoreboard: FC<ScoreboardProps> = (props) => {
             >
               <span
                 className={cn(
-                  "away runs",
-                  (inning.away.runs || 0) > 0 ? "scored" : ""
+                  'away runs',
+                  (inning.away.runs || 0) > 0 ? 'scored' : '',
                 )}
               >
                 {inning.away.runs}
               </span>
               <span
                 className={cn(
-                  "home runs",
-                  (inning.home.runs || 0) > 0 ? "scored" : ""
+                  'home runs',
+                  (inning.home.runs || 0) > 0 ? 'scored' : '',
                 )}
               >
                 {inning.home.runs}
@@ -70,12 +75,12 @@ export const Scoreboard: FC<ScoreboardProps> = (props) => {
         </div>
         {innings.length > 0 ? (
           <div className="scoreboard-score">
-            {(["runs", "hits", "errors"] as const).map((key) => (
-              <span className={cn("scoreboard-score-column", key)} key={key}>
-                <span className={cn("away", winner === "away" && "winner")}>
+            {(['runs', 'hits', 'errors'] as const).map((key) => (
+              <span className={cn('scoreboard-score-column', key)} key={key}>
+                <span className={cn('away', winner === 'away' && 'winner')}>
                   {getTeamScore(teams[0], key)}
                 </span>
-                <span className={cn("home", winner === "home" && "winner")}>
+                <span className={cn('home', winner === 'home' && 'winner')}>
                   {getTeamScore(teams[1], key)}
                 </span>
               </span>
@@ -88,5 +93,5 @@ export const Scoreboard: FC<ScoreboardProps> = (props) => {
 };
 
 function getTeamScore(team: ScoreboardTeam | undefined, key: keyof TeamScore) {
-  return team?.score ? team?.score[key] : "0";
+  return team?.score ? team?.score[key] : '0';
 }

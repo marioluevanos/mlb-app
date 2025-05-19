@@ -1,12 +1,12 @@
-import {
+import type {
   BattingRecord,
   FieldingRecord,
   ImageCut,
   PitchingRecord,
-  Playback,
   PlayEvent,
   PlayResult,
-} from "./types.mlb";
+  Playback,
+} from './types.mlb';
 
 export type TeamRecord = {
   wins: number;
@@ -29,12 +29,12 @@ export type TeamClub = {
   id: number;
   score?: TeamScore;
   startingPitcher?: GamePlayer;
-  players?: GamePlayer[];
+  players?: Array<GamePlayer>;
 } & Partial<TeamStats>;
 
 export type ScoreboardTeam = Omit<
   TeamClub,
-  "players" | "batting" | "fielding" | "pitching"
+  'players' | 'batting' | 'fielding' | 'pitching'
 >;
 
 export type TeamRoster = GamePlayer;
@@ -93,7 +93,7 @@ export type GamePreview = {
 };
 
 export type GamePreviews = {
-  games: GamePreview[];
+  games: Array<GamePreview>;
   date: string | undefined;
 };
 
@@ -114,21 +114,21 @@ export type GameToday = {
   home: TeamClub;
   time: string;
   currentInning: string;
-  topPerformers: GamePlayer[];
-  innings: GameInnings[];
+  topPerformers: Array<GamePlayer>;
+  innings: Array<GameInnings>;
   currentPlay?: CurrentPlay;
   scoringPlays?: {
-    [inning: string | number]: ScoringPlay[];
+    [inning: string | number]: Array<ScoringPlay>;
   };
-  playsByInning?: InningPlay[];
+  playsByInning?: Array<InningPlay>;
   decisions: GameDecision | undefined;
 };
 
-export type InningPlay = Omit<CurrentPlay, "runners" | "count" | "events"> & {
+export type InningPlay = Omit<CurrentPlay, 'runners' | 'count' | 'events'> & {
   teamAbbreviation: string;
 };
 
-export type ScoringPlay = Omit<CurrentPlay, "runners" | "count" | "events"> & {
+export type ScoringPlay = Omit<CurrentPlay, 'runners' | 'count' | 'events'> & {
   inning: string;
   teamAbbreviation: string;
 };
@@ -165,7 +165,7 @@ export type CurrentCount = {
 
 export type CurrentPlay = {
   matchup: CurrentMatchup;
-  events: PlayEvent[];
+  events: Array<PlayEvent>;
   result?: PlayResult;
   count: CurrentCount;
   runners: {

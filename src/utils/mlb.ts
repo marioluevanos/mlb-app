@@ -1,30 +1,30 @@
-import {
+import type {
   AtBat,
   Decisions,
   HighlightItem,
-  Matchup,
-  MLBLive,
-  Performer,
-  Player,
   Linescore,
-  MLBGames,
-  PersonRef,
   MLBGamePreview,
-} from "../types.mlb";
-import {
+  MLBGames,
+  MLBLive,
+  Matchup,
+  Performer,
+  PersonRef,
+  Player,
+} from '../types.mlb';
+import type {
   CurrentMatchup,
   GamePlayer,
+  GamePreview,
+  GamePreviews,
   GameStatus,
   GameToday,
   InningPlay,
   ScoringPlay,
   TeamClub,
-  GamePreview,
-  GamePreviews,
   TeamScore,
-} from "../types";
+} from '../types';
 
-export const MLB_API = "https://statsapi.mlb.com";
+export const MLB_API = 'https://statsapi.mlb.com';
 
 /**
  * Fetch scheduled games
@@ -32,7 +32,7 @@ export const MLB_API = "https://statsapi.mlb.com";
 export async function fetchScheduledGames(
   yyyy: string | number,
   mm: string | number,
-  dd: string | number
+  dd: string | number,
 ) {
   const api =
     MLB_API + `/api/v1/schedule/games/?sportId=1&date=${yyyy}-${mm}-${dd}`;
@@ -52,14 +52,14 @@ export async function fetchScheduledGames(
    * Fetch live game data and append to sheduled games
    */
   function createGamePreviews(json: MLBGames): GamePreviews {
-    return json.dates.reduce<{ games: GamePreview[]; date: string }>(
+    return json.dates.reduce<{ games: Array<GamePreview>; date: string }>(
       (acc, date) => {
         acc.date = date.date;
         acc.games = date.games.map(mapToGamePreview);
 
         return acc;
       },
-      { games: [], date: "" }
+      { games: [], date: '' },
     );
   }
 }
@@ -96,7 +96,7 @@ export function mapToGamePreview(g: MLBGamePreview) {
  * Take scheduled games and append live game data
  */
 async function mergePreviewWithLive(
-  previews: GamePreviews
+  previews: GamePreviews,
 ): Promise<GamePreviews> {
   const out = await Promise.all(
     (
@@ -105,7 +105,7 @@ async function mergePreviewWithLive(
           const response = await fetch(game.feed);
           const live: MLBLive = await response.json();
           return { live, game };
-        })
+        }),
       )
     ).map(({ live, game }) => {
       const { teams, datetime } = live.gameData;
@@ -135,7 +135,7 @@ async function mergePreviewWithLive(
           score: linescore.teams.away,
         },
       };
-    })
+    }),
   );
 
   return {
@@ -148,7 +148,7 @@ async function mergePreviewWithLive(
  * Get the current inning from the linescore
  */
 export function mapCurrentInning(linescore: Linescore) {
-  return `${linescore?.inningHalf?.slice(0, 3).toUpperCase() || ""} ${
+  return `${linescore?.inningHalf?.slice(0, 3).toUpperCase() || ''} ${
     linescore?.currentInningOrdinal || 0
   }`;
 }
@@ -158,7 +158,7 @@ export function mapCurrentInning(linescore: Linescore) {
  */
 function mapStartingPitcher(
   probablePitchers: PersonRef | undefined,
-  players: GamePlayer[]
+  players: Array<GamePlayer>,
 ): GamePlayer {
   const pitcher = players.find((p) => p.id === probablePitchers?.id);
   const pitching = pitcher?.season?.pitching;
@@ -167,8 +167,8 @@ function mapStartingPitcher(
     fullName: probablePitchers?.fullName,
     id: probablePitchers?.id,
     avatar: probablePitchers ? avatar(probablePitchers?.id) : undefined,
-    position: pitching ? `${pitching?.wins} — ${pitching?.losses}` : "0-0",
-    summary: pitching ? `${pitching?.era} ERA, ${pitching?.whip} WHIP` : "",
+    position: pitching ? `${pitching?.wins} — ${pitching?.losses}` : '0-0',
+    summary: pitching ? `${pitching?.era} ERA, ${pitching?.whip} WHIP` : '',
   };
 }
 
@@ -197,14 +197,14 @@ export function toGamePlayer(p: Player): GamePlayer {
 /**
  * Maps to a team
  */
-function mapToTeam(team: "home" | "away", data: MLBLive): TeamClub {
+function mapToTeam(team: 'home' | 'away', data: MLBLive): TeamClub {
   const { gameData, liveData } = data;
   const { linescore, boxscore } = liveData;
   const { teams, probablePitchers } = gameData;
   const players = Object.values(boxscore.teams[team].players).map(toGamePlayer);
   const startingPitcher: GamePlayer = mapStartingPitcher(
     probablePitchers[team],
-    players
+    players,
   );
 
   return {
@@ -228,8 +228,8 @@ export function mapToLiveGame(data: MLBLive): GameToday {
   const { linescore, boxscore, plays, decisions } = liveData;
   const { currentPlay, scoringPlays, allPlays, playsByInning } = plays;
   const { offense } = linescore;
-  const awayTeam = mapToTeam("away", data);
-  const homeTeam = mapToTeam("home", data);
+  const awayTeam = mapToTeam('away', data);
+  const homeTeam = mapToTeam('home', data);
   const status = gameData.status.detailedState;
   const allPlayers = [
     ...(awayTeam?.players || []),
@@ -269,26 +269,26 @@ export function mapToLiveGame(data: MLBLive): GameToday {
     decisions: getDecision(status, decisions, awayTeam, homeTeam),
   };
 
-  function getScoringPlays(): GameToday["scoringPlays"] {
-    return scoringPlays.reduce<NonNullable<GameToday["scoringPlays"]>>(
+  function getScoringPlays(): GameToday['scoringPlays'] {
+    return scoringPlays.reduce<NonNullable<GameToday['scoringPlays']>>(
       (acc, playIndex) => {
         const play = allPlays.find((b) => b.atBatIndex === playIndex);
         const currentInning = play?.about.inning;
 
         if (currentInning) {
-          acc[`${currentInning}`] = scoringPlays.reduce<ScoringPlay[]>(
+          acc[`${currentInning}`] = scoringPlays.reduce<Array<ScoringPlay>>(
             scoringPlay.bind(null, {
               allPlays,
               allPlayers,
               currentInning,
               teamAbbreviation: [awayTeam.abbreviation, homeTeam.abbreviation],
             }),
-            []
+            [],
           );
         }
         return acc;
       },
-      {}
+      {},
     );
   }
 
@@ -298,25 +298,25 @@ export function mapToLiveGame(data: MLBLive): GameToday {
       (linescore.isTopInning ? currentInning?.top : currentInning?.bottom) ||
       [];
 
-    return currentPlays.reduce<InningPlay[]>(
+    return currentPlays.reduce<Array<InningPlay>>(
       playByInning.bind(null, {
         allPlays,
         allPlayers,
         teamAbbreviation: [awayTeam.abbreviation, homeTeam.abbreviation],
       }),
-      []
+      [],
     );
   }
 }
 
 function playByInning(
   args: {
-    allPlays: AtBat[];
-    allPlayers: GamePlayer[];
-    teamAbbreviation: string[];
+    allPlays: Array<AtBat>;
+    allPlayers: Array<GamePlayer>;
+    teamAbbreviation: Array<string>;
   },
-  acc: InningPlay[],
-  playIndex: number
+  acc: Array<InningPlay>,
+  playIndex: number,
 ) {
   const { allPlayers, allPlays, teamAbbreviation } = args;
   const play = allPlays[playIndex];
@@ -341,26 +341,26 @@ function playByInning(
 
   return acc;
 
-  function mapToBatter(player?: GamePlayer, result?: AtBat["result"]) {
+  function mapToBatter(player?: GamePlayer, result?: AtBat['result']) {
     return {
       id: player?.id,
       avatar: player?.avatar,
       fullName: player?.fullName,
       position: player?.position,
-      summary: result?.rbi ? `(${result?.rbi} RBI)` : "",
+      summary: result?.rbi ? `(${result?.rbi} RBI)` : '',
     };
   }
 }
 
 function scoringPlay(
   args: {
-    allPlays: AtBat[];
-    allPlayers: GamePlayer[];
+    allPlays: Array<AtBat>;
+    allPlayers: Array<GamePlayer>;
     currentInning: number;
-    teamAbbreviation: string[];
+    teamAbbreviation: Array<string>;
   },
-  acc: ScoringPlay[],
-  playIndex: number
+  acc: Array<ScoringPlay>,
+  playIndex: number,
 ) {
   const { allPlayers, allPlays, currentInning, teamAbbreviation = [] } = args;
   const play = allPlays.find((b) => b.atBatIndex === playIndex);
@@ -372,7 +372,7 @@ function scoringPlay(
     });
 
     acc.push({
-      inning: `${play.about.isTopInning ? "TOP" : "BOT"} ${play.about.inning}`,
+      inning: `${play.about.isTopInning ? 'TOP' : 'BOT'} ${play.about.inning}`,
       teamAbbreviation: play.about.isTopInning
         ? teamAbbreviation[0]
         : teamAbbreviation[1],
@@ -388,8 +388,8 @@ function scoringPlay(
 }
 
 function getCurrentMatchup(args: {
-  players: GamePlayer[];
-  matchup: Omit<Matchup, "batterHotColdZoneStats">;
+  players: Array<GamePlayer>;
+  matchup: Omit<Matchup, 'batterHotColdZoneStats'>;
 }): CurrentMatchup {
   const { players, matchup } = args;
 
@@ -426,7 +426,7 @@ function getDecision(
   state: GameStatus,
   decisions: Decisions,
   away: TeamClub,
-  home: TeamClub
+  home: TeamClub,
 ):
   | {
       winner: GamePlayer;
@@ -434,7 +434,7 @@ function getDecision(
       save?: GamePlayer;
     }
   | undefined {
-  const final = state === "Final" || state === "Game Over";
+  const final = state === 'Final' || state === 'Game Over';
 
   if (!final) return;
 
@@ -442,15 +442,15 @@ function getDecision(
     away.score &&
     home.score &&
     Number(away.score.runs) > Number(home.score.runs)
-      ? "away"
-      : "home";
+      ? 'away'
+      : 'home';
 
   const looser =
     away.score &&
     home.score &&
     Number(away.score.runs) < Number(home.score.runs)
-      ? "away"
-      : "home";
+      ? 'away'
+      : 'home';
   const teams = { home, away };
 
   const wp = teams[winner]?.players?.find((p) => p.id === decisions.winner.id);
@@ -480,12 +480,12 @@ function topPerformers(payload: Performer): GamePlayer {
   const { type, player } = payload;
   const { stats, person, position, seasonStats } = player;
 
-  let summary = "";
-  if (type === "hitter" && stats.batting.summary) {
+  let summary = '';
+  if (type === 'hitter' && stats.batting.summary) {
     summary = `(G) ${stats.batting.summary}`;
   }
 
-  if (type === "starter" && stats.pitching.summary) {
+  if (type === 'starter' && stats.pitching.summary) {
     summary = `(G) ${stats.pitching.summary}`;
   }
   const seasonBatting = `(S) ${seasonStats.batting.hits} H, ${seasonStats.batting.baseOnBalls} BB, ${seasonStats.batting.homeRuns} HR, ${seasonStats.batting.totalBases} TB`;
@@ -498,12 +498,12 @@ function topPerformers(payload: Performer): GamePlayer {
     fullName: person.fullName,
     position: position.abbreviation,
     summary,
-    note: type === "hitter" ? seasonBatting : seasonPitching,
+    note: type === 'hitter' ? seasonBatting : seasonPitching,
   };
 }
 
 export function mapHighlight(item: HighlightItem) {
-  const [_, m, s] = item.duration.split(":");
+  const [_, m, s] = item.duration.split(':');
 
   return {
     type: item.type,
@@ -515,30 +515,30 @@ export function mapHighlight(item: HighlightItem) {
       lg: item.image?.cuts.find((img) => img.width < 1400),
     },
     video:
-      item.playbacks.find((vid) => vid.name === "mp4Avc") || item.playbacks[0],
+      item.playbacks.find((vid) => vid.name === 'mp4Avc') || item.playbacks[0],
   };
 }
 
 export function isWinner(
   away: TeamScore | undefined,
-  home: TeamScore | undefined
+  home: TeamScore | undefined,
 ) {
   if (home && away) {
     if ((home.runs || 0) > (away.runs || 0)) {
-      return "home";
+      return 'home';
     }
 
     if ((home.runs || 0) < (away.runs || 0)) {
-      return "away";
+      return 'away';
     }
   }
 }
 
 export function getOrdinal(n: number | string): string {
-  const suffixes = ["th", "st", "nd", "rd"];
+  const suffixes = ['th', 'st', 'nd', 'rd'];
   const v = Number(n) % 100;
 
-  const suffix = v >= 11 && v <= 13 ? "th" : suffixes[v % 10] || "th";
+  const suffix = v >= 11 && v <= 13 ? 'th' : suffixes[v % 10] || 'th';
 
   return `${n}${suffix}`;
 }

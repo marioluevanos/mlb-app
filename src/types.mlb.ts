@@ -1,5 +1,5 @@
 export interface MLBGames {
-  dates: MLBDates[];
+  dates: Array<MLBDates>;
 }
 export interface MLBDates {
   date: string;
@@ -7,8 +7,8 @@ export interface MLBDates {
   totalEvents: number;
   totalGames: number;
   totalGamesInProgress: number;
-  games: MLBGamePreview[];
-  events: unknown[];
+  games: Array<MLBGamePreview>;
+  events: Array<unknown>;
 }
 
 export interface MLBGamePreview {
@@ -74,10 +74,10 @@ export type MLBLive = {
   gameData: GameData;
   liveData: {
     plays: {
-      allPlays: AtBat[];
+      allPlays: Array<AtBat>;
       currentPlay: CurrentPlay;
       scoringPlays: ScoringPlays;
-      playsByInning: PlaysByInning[];
+      playsByInning: Array<PlaysByInning>;
     };
     linescore: Linescore;
     boxscore: Boxscore;
@@ -86,8 +86,8 @@ export type MLBLive = {
 };
 
 export type PlaysByInning = {
-  bottom: number[];
-  top: number[];
+  bottom: Array<number>;
+  top: Array<number>;
   startIndex: number;
   endIndex: number;
 };
@@ -104,7 +104,7 @@ export interface HighlightsData {
 }
 
 export interface HighlightCollection {
-  items: HighlightItem[];
+  items: Array<HighlightItem>;
 }
 
 export interface HighlightItem {
@@ -123,14 +123,14 @@ export interface HighlightItem {
   description: string;
   duration: string;
   mediaPlaybackUrl: string;
-  playbacks: Playback[];
+  playbacks: Array<Playback>;
 }
 
 export interface HighlightImage {
   title: string;
   altText: string | null;
   templateUrl: string;
-  cuts: ImageCut[];
+  cuts: Array<ImageCut>;
 }
 
 export interface ImageCut {
@@ -167,7 +167,7 @@ export interface GameData {
   gameInfo: GameInfoSummary;
   review: Review;
   flags: Flags;
-  alerts: Record<string, unknown>[];
+  alerts: Array<Record<string, unknown>>;
   probablePitchers: {
     away: PersonRef;
     home: PersonRef;
@@ -426,11 +426,11 @@ export interface AtBat {
   about: PlayAbout;
   count: Count;
   matchup: PlayMatchup;
-  pitchIndex: number[];
-  actionIndex: number[];
-  runnerIndex: number[];
-  runners: RunnerMovementRecord[];
-  playEvents: PlayEvent[];
+  pitchIndex: Array<number>;
+  actionIndex: Array<number>;
+  runnerIndex: Array<number>;
+  runners: Array<RunnerMovementRecord>;
+  playEvents: Array<PlayEvent>;
   playEndTime: string;
   atBatIndex: number;
 }
@@ -442,8 +442,8 @@ export interface PlayMatchup {
   pitchHand: CodeDescription;
   postOnFirst?: PersonRef;
   postOnSecond?: PersonRef;
-  batterHotColdZones: ZoneValue[];
-  pitcherHotColdZones: ZoneValue[];
+  batterHotColdZones: Array<ZoneValue>;
+  pitcherHotColdZones: Array<ZoneValue>;
   splits: {
     batter: string;
     pitcher: string;
@@ -453,7 +453,7 @@ export interface PlayMatchup {
 
 export interface PickoffEvent extends BasePlayEvent<PickoffDetails> {
   isPitch: false;
-  type: "pickoff";
+  type: 'pickoff';
   playId: string;
 }
 
@@ -475,11 +475,11 @@ export interface CurrentPlay {
   about: PlayAbout;
   count: Count;
   matchup: Matchup;
-  pitchIndex: number[];
-  actionIndex: number[];
-  runnerIndex: number[];
-  runners: RunnerMovementRecord[];
-  playEvents: PlayEvent[];
+  pitchIndex: Array<number>;
+  actionIndex: Array<number>;
+  runnerIndex: Array<number>;
+  runners: Array<RunnerMovementRecord>;
+  playEvents: Array<PlayEvent>;
   playEndTime: string;
   atBatIndex: number;
 }
@@ -521,8 +521,8 @@ export interface Matchup {
   pitcher: PersonRef;
   pitchHand: CodeDescription;
   batterHotColdZoneStats: HotColdZoneStats;
-  batterHotColdZones: ZoneValue[];
-  pitcherHotColdZones: ZoneValue[];
+  batterHotColdZones: Array<ZoneValue>;
+  pitcherHotColdZones: Array<ZoneValue>;
   splits: {
     batter: string;
     pitcher: string;
@@ -542,19 +542,19 @@ export interface CodeDescription {
 }
 
 export interface HotColdZoneStats {
-  stats: HotColdZoneStatBlock[];
+  stats: Array<HotColdZoneStatBlock>;
 }
 
 export interface HotColdZoneStatBlock {
   type: { displayName: string };
   group: { displayName: string };
-  exemptions: unknown[];
-  splits: {
+  exemptions: Array<unknown>;
+  splits: Array<{
     stat: {
       name: string;
-      zones: ZoneValue[];
+      zones: Array<ZoneValue>;
     };
-  }[];
+  }>;
 }
 
 export interface ZoneValue {
@@ -574,7 +574,7 @@ export interface RunnerMovementRecord {
     outNumber: number;
   };
   details: RunnerDetails;
-  credits: Credit[];
+  credits: Array<Credit>;
 }
 
 export interface RunnerDetails {
@@ -607,8 +607,8 @@ export type PlayEvent =
   | PitchEvent
   | PickoffEvent;
 
-interface BasePlayEvent<D> {
-  details: D;
+interface BasePlayEvent<PickoffDetails> {
+  details: PickoffDetails;
   count: Count;
   index: number;
   startTime: string;
@@ -733,7 +733,7 @@ export interface Linescore {
   inningHalf: string;
   isTopInning: boolean;
   scheduledInnings: number;
-  innings: Inning[];
+  innings: Array<Inning>;
   teams: {
     home: TeamTotals;
     away: TeamTotals;
@@ -816,9 +816,9 @@ export interface Boxscore {
     away: TeamBox;
     home: TeamBox;
   };
-  officials: Official[];
-  info: LabelValue[];
-  topPerformers: Performer[];
+  officials: Array<Official>;
+  info: Array<LabelValue>;
+  topPerformers: Array<Performer>;
 }
 
 export interface TeamBox {
@@ -829,13 +829,13 @@ export interface TeamBox {
     fielding: FieldingRecord;
   };
   players: Record<string, Player>;
-  batters: number[];
-  pitchers: number[];
-  bench: number[];
-  bullpen: number[];
-  battingOrder: number[];
-  info: InfoSection[];
-  note: Note[];
+  batters: Array<number>;
+  pitchers: Array<number>;
+  bench: Array<number>;
+  bullpen: Array<number>;
+  battingOrder: Array<number>;
+  info: Array<InfoSection>;
+  note: Array<Note>;
 }
 
 export interface TeamInfo {
@@ -996,7 +996,7 @@ export interface Player {
     isOnBench: boolean;
     isSubstitute: boolean;
   };
-  allPositions?: Position[];
+  allPositions?: Array<Position>;
   battingOrder?: string;
 }
 
@@ -1021,7 +1021,7 @@ export interface Status {
 
 export interface InfoSection {
   title: string;
-  fieldList: FieldListItem[];
+  fieldList: Array<FieldListItem>;
 }
 
 export interface FieldListItem {
@@ -1065,4 +1065,4 @@ export interface Decisions {
   save?: PersonRef;
 }
 
-export type ScoringPlays = number[];
+export type ScoringPlays = Array<number>;

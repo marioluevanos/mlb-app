@@ -4,21 +4,21 @@
 export function toLegibleDate(date: string) {
   const [d, m, y] = formatDateInput(date);
   return new Date(d, m - 1, y).toLocaleDateString(undefined, {
-    weekday: "short",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
   });
 }
 
 /**
  * Get date in a `[yyyy, mm, dd]` number format
  */
-export function formatDateInput(date = ""): [number, number, number] {
-  const [year, month, end] = date.split("-").map((v) => v);
+export function formatDateInput(date = ''): [number, number, number] {
+  const [year, month, end] = date.split('-').map((v) => v);
   if (!year && !month && !end) return [0, 0, 0];
 
-  const [day = "0"] = end.split("T") || [];
+  const [day = '0'] = end.split('T') || [];
   return [Number(year), Number(month), Number(day)];
 }
 
@@ -26,14 +26,14 @@ export function formatDateInput(date = ""): [number, number, number] {
  * Get the local time, and not the UTC
  * https://stackoverflow.com/questions/18554360/toisostring-return-wrong-date
  */
-export function getLocalDate(d: string | number = "") {
+export function getLocalDate(d: string | number = '') {
   const date = !d ? new Date() : new Date(d);
   const tzoffset = date.getTimezoneOffset() * 60000; //offset in milliseconds
   const localISOTime = new Date(Date.now() - tzoffset)
     .toISOString()
     .slice(0, -1);
 
-  return localISOTime.split("T")[0];
+  return localISOTime.split('T')[0];
 }
 
 type DayInfo = {
@@ -83,8 +83,8 @@ export class DateNavigator {
   }
 
   private formatDate(date: Date): string {
-    const weekday = date.toLocaleDateString(undefined, { weekday: "short" }); // e.g., "Mon"
-    const month = date.toLocaleDateString(undefined, { month: "short" }); // e.g., "Apr"
+    const weekday = date.toLocaleDateString(undefined, { weekday: 'short' }); // e.g., "Mon"
+    const month = date.toLocaleDateString(undefined, { month: 'short' }); // e.g., "Apr"
     const day = date.getDate(); // e.g., 29
     return `${weekday}, ${month} ${day}`;
   }

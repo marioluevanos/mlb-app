@@ -1,6 +1,6 @@
 :root {
-  --font-sans: "IBM Plex Sans", sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
   --accent: hsl(110deg 100% 30%);
   --accent-text: hsl(0deg 80% 100%);
   --secondary: hsl(161deg 40% 87%);

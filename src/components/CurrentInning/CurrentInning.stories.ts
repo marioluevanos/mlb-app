@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { CurrentInning } from "./CurrentInning";
+import type { Meta, StoryObj } from '@storybook/react';
+import { CurrentInning } from './CurrentInning';
 
 const meta = {
-  title: "Components/CurrentInning",
+  title: 'Components/CurrentInning',
   component: CurrentInning,
   parameters: {},
   argTypes: {},
@@ -14,6 +14,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    currentInning: "BOT 9th",
+    currentInning: 'BOT 9th',
   },
 };

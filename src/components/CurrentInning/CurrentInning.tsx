@@ -1,21 +1,22 @@
-import "./CurrentInning.css";
-import { GameToday } from "@/types";
-import { FC } from "react";
-import { TriangleDown, TriangleUp } from "../ui/Icon";
-import { cn } from "@/utils/cn";
+import './CurrentInning.css';
+
+import { TriangleDown, TriangleUp } from '../ui/Icon';
+import type { GameToday } from '@/types';
+import type { FC } from 'react';
+import { cn } from '@/utils/cn';
 
 export type CurrentInningProps = {
   className?: string;
-  currentInning: GameToday["currentInning"];
+  currentInning: GameToday['currentInning'];
 };
 
 export const CurrentInning: FC<CurrentInningProps> = (props) => {
-  const { currentInning = "", className } = props;
-  const [pos, inning] = currentInning.split(" ");
+  const { currentInning = '', className } = props;
+  const [pos, inning] = currentInning.split(' ');
 
   return (
-    <span className={cn("current-inning", className)}>
-      {pos === "TOP" ? <TriangleUp /> : <TriangleDown />}
+    <span className={cn('current-inning', className)}>
+      {pos === 'TOP' ? <TriangleUp /> : <TriangleDown />}
       {inning}
     </span>
   );

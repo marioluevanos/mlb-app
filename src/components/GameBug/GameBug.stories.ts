@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { GameBug } from "./GameBug";
-import { Batter } from "../Player/Player.stories";
+import { Batter } from '../Player/Player.stories';
+import { GameBug } from './GameBug';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
-  title: "Components/GameBug",
+  title: 'Components/GameBug',
   component: GameBug,
   parameters: {},
   argTypes: {},
@@ -23,6 +23,6 @@ export const Default: Story = {
     runners: {
       third: Batter.args?.player,
     },
-    currentInning: "BOT 9th",
+    currentInning: 'BOT 9th',
   },
 };

@@ -1,10 +1,10 @@
-import "./TopPerformers.css";
-import { GamePlayer } from "@/types";
-import { BaseSyntheticEvent, FC } from "react";
-import { Player } from "../Player/Player";
+import './TopPerformers.css';
+import { Player } from '../Player/Player';
+import type { BaseSyntheticEvent, FC } from 'react';
+import type { GamePlayer } from '@/types';
 
 export type TopPerformersProps = {
-  topPerformers?: GamePlayer[];
+  topPerformers?: Array<GamePlayer>;
   onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };
 

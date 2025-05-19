@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { GameMatchup } from "./GameMatchup";
-import { Batter } from "../Player/Player.stories";
-import { createElement } from "react";
-import { GameBug } from "../GameBug/GameBug";
-import { GAME_XINN } from "@/_mockdata/mockdata";
+import { createElement } from 'react';
+import { Batter } from '../Player/Player.stories';
+import { GameBug } from '../GameBug/GameBug';
+import { GameMatchup } from './GameMatchup';
+import type { Meta, StoryObj } from '@storybook/react';
+import { GAME_XINN } from '@/_mockdata/mockdata';
 
 const meta = {
-  title: "Components/GameMatchup",
+  title: 'Components/GameMatchup',
   component: GameMatchup,
   parameters: {},
   argTypes: {},
@@ -32,8 +32,8 @@ export const Default: Story = {
         runners: {
           third: Batter.args?.player,
         },
-        currentInning: "BOT 9th",
-      })
+        currentInning: 'BOT 9th',
+      }),
     );
   },
 };

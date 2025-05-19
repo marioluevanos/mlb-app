@@ -17,9 +17,9 @@
     display: grid;
     grid-template-columns: auto 1fr auto;
     grid-template-areas:
-      "avatar name name"
-      "avatar summary summary"
-      "avatar note note";
+      'avatar name name'
+      'avatar summary summary'
+      'avatar note note';
     margin-bottom: 1rem;
 
     &:last-of-type {
@@ -28,11 +28,11 @@
   }
 
   & .player-summary::before {
-    content: "(G) ";
+    content: '(G) ';
   }
 
   & .player-note::before {
-    content: "(S) ";
+    content: '(S) ';
   }
 
   & .player-avatar {

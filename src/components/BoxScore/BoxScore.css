@@ -144,7 +144,7 @@
 }
 
 .ph.batting::before {
-  content: "—";
+  content: '—';
   margin-right: 0.25rem;
 }
 
@@ -160,7 +160,7 @@
 }
 
 .box-player-names .box-name::after {
-  content: "(" attr(data-pos) ")";
+  content: '(' attr(data-pos) ')';
   color: var(--text1);
   margin-left: 0.25rem;
 }

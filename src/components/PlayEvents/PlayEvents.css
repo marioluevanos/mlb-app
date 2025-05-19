@@ -10,9 +10,9 @@
     margin-bottom: 0;
 
     &::before {
-      content: "";
+      content: '';
       position: absolute;
-      content: "";
+      content: '';
       width: 1px;
       top: 0;
       bottom: 12px;
@@ -60,7 +60,7 @@
     border: 2px solid var(--red);
 
     &::before {
-      content: "K";
+      content: 'K';
       font: inherit;
       display: flex;
       align-items: center;
@@ -79,7 +79,7 @@
     align-self: flex-end;
   }
 
-  & .play-event[data-type="action"] {
+  & .play-event[data-type='action'] {
     .description {
       display: flex;
       flex-direction: column;

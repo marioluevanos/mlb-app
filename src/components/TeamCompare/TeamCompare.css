@@ -66,6 +66,6 @@
 }
 
 .team-compare .cols .val.teams::before {
-  content: "MLB";
+  content: 'MLB';
   color: transparent;
 }

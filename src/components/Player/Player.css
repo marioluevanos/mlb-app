@@ -6,8 +6,8 @@
   line-height: 1;
   grid-template-columns: auto 1fr auto;
   grid-template-areas:
-    "avatar name name"
-    "avatar summary note";
+    'avatar name name'
+    'avatar summary note';
 
   &:last-child {
     margin-bottom: 0.25rem;
@@ -42,7 +42,7 @@
   }
 
   &[data-pos]::after {
-    content: "(" attr(data-pos) ")";
+    content: '(' attr(data-pos) ')';
     font-weight: 400;
     color: var(--text1);
     margin-left: 0.25rem;

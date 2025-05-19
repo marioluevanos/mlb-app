@@ -45,13 +45,13 @@
 }
 
 .team:first-child .team-score span:nth-child(1)::before {
-  content: "R";
+  content: 'R';
 }
 
 .team:first-child .team-score span:nth-child(2)::before {
-  content: "H";
+  content: 'H';
 }
 
 .team:first-child .team-score span:nth-child(3)::before {
-  content: "E";
+  content: 'E';
 }

@@ -1,7 +1,7 @@
-import "./GameMatchup.css";
-import { BaseSyntheticEvent, FC, ReactNode } from "react";
-import { CurrentMatchup } from "@/types";
-import { Player } from "../Player/Player";
+import './GameMatchup.css';
+import { Player } from '../Player/Player';
+import type { BaseSyntheticEvent, FC, ReactNode } from 'react';
+import type { CurrentMatchup } from '@/types';
 
 export type GameMatchupProps = {
   className?: string;
