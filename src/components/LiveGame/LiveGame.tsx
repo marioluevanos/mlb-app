@@ -92,7 +92,6 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
     }
   }, [game?.status, updateGameInProgress]);
 
-  console.log({ game });
   return (
     <section
       id={game.id.toString()}
