@@ -1,0 +1,42 @@
+.event-header {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0 0 1rem;
+  border: 1px solid var(--bg2);
+  background: var(--bg);
+  border-radius: 10000rem;
+  padding: 0.25rem 0.75rem 0.25rem 0.5rem;
+  width: max-content;
+  position: relative;
+  left: -2px;
+  gap: 0.5rem;
+}
+
+.event-header .abbreviation,
+.event-header .event {
+  display: inline-flex;
+  color: var(--text);
+}
+
+.event-header .abbreviation {
+  color: var(--text1);
+}
+
+.is-rbi .event-header {
+  border-color: var(--blue);
+  background: var(--blue);
+
+  & .abbreviation,
+  & .current-inning,
+  & .event {
+    color: white;
+  }
+}
+
+.event-header .current-inning {
+  margin: 0;
+  font: inherit;
+  text-transform: none;
+}

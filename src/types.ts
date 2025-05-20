@@ -149,11 +149,13 @@ export type GameToday = {
 export type InningPlay = Omit<CurrentPlay, 'runners' | 'count' | 'events'> & {
   teamAbbreviation: string;
   currentInning?: string;
+  inning?: string;
 };
 
 export type ScoringPlay = Omit<CurrentPlay, 'runners' | 'count' | 'events'> & {
-  inning: string;
   teamAbbreviation: string;
+  currentInning?: string;
+  inning: string;
 };
 
 export type GameDecision = {

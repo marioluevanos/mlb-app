@@ -1,6 +1,7 @@
 import './AllPlays.css';
+
 import { Player } from '../Player/Player';
-import { CurrentInning } from '../CurrentInning/CurrentInning';
+import { EventHeader } from '../EventHeader/EventHeader';
 import type { BaseSyntheticEvent, FC } from 'react';
 import type { GameToday } from '@/types';
 import { cn } from '@/utils/cn';
@@ -31,19 +32,7 @@ export const AllPlays: FC<AllPlaysProps> = (props) => {
                   )}
                   key={`${event.teamAbbreviation}-${index}`}
                 >
-                  <span className="header">
-                    <CurrentInning
-                      currentInning={event.currentInning || getOrdinal(inning)}
-                    />
-                    {event.teamAbbreviation && (
-                      <span className="abbreviation">
-                        {event.teamAbbreviation}
-                      </span>
-                    )}{' '}
-                    {event.result?.event && (
-                      <span className="event">{event.result?.event}</span>
-                    )}
-                  </span>
+                  <EventHeader event={event} />
                   <Player
                     onClick={onPlayerClick}
                     player={{

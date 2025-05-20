@@ -45,7 +45,6 @@ export const InningPlays: FC<InningPlaysProps> = (props) => {
       >
         <ScoringPlays
           className="is-final"
-          title="Scoring Plays"
           scoringPlays={scoringPlays}
           onPlayerClick={onPlayerClick}
         />

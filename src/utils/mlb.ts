@@ -573,7 +573,7 @@ export function isWinner(
   }
 }
 
-export function getOrdinal(n: number | string): string {
+export function getOrdinal(n: number | string | undefined): string {
   const suffixes = ['th', 'st', 'nd', 'rd'];
   const v = Number(n) % 100;
 
