@@ -5,7 +5,7 @@ import { Team } from '../Team/Team';
 import { TeamScore } from '../TeamScore/TeamScore';
 import { useMLB } from '../ui/MLBProvider';
 import { GamePreviewDetails } from './GamePreviewDetails';
-import type { FC } from 'react';
+import type { BaseSyntheticEvent, FC } from 'react';
 import type { MLBLive } from '@/types.mlb';
 import type { GamePreview as GamePreviewType } from '@/types';
 import { cn } from '@/utils/cn';
@@ -15,6 +15,7 @@ import { isWinner, mapCurrentInning } from '@/utils/mlb';
 export type GamePreviewProps = {
   className?: string;
   gamePreview: GamePreviewType;
+  onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };
 
 export const GamePreview: FC<GamePreviewProps> = (props) => {
@@ -114,6 +115,7 @@ export const GamePreview: FC<GamePreviewProps> = (props) => {
           {!isPre && <TeamScore score={home.score} />}
         </Team>
       </div>
+
       <GamePreviewDetails gamePreview={gamePreview} />
     </section>
   );

@@ -13,6 +13,7 @@ export default [
       'vite.config.js',
     ],
     rules: {
+      '@typescript-eslint/array-type': ['error'],
       '@typescript-eslint/naming-convention': ['off'],
       '@typescript-eslint/no-unnecessary-condition': ['off'],
       '@typescript-eslint/prefer-for-of': ['off'],

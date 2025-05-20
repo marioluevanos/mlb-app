@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes } from 'react';
+import type { FC, HTMLAttributes } from 'react';
 import './Button.css';
 import { cn } from '@/utils/cn';
 

@@ -77,7 +77,7 @@
     gap: 0.5rem;
   }
 
-  & .all-event.is-out .header {
+  /* & .all-event.is-out .header {
     border-color: var(--red);
 
     & .abbreviation,
@@ -85,7 +85,7 @@
     & .event {
       color: var(--red);
     }
-  }
+  } */
 
   & .all-event.is-rbi .header {
     border-color: var(--blue);

@@ -1,11 +1,12 @@
 import './Tabs.css';
+import { Fragment, useState } from 'react';
+import type { FC, ReactNode } from 'react';
 import { cn } from '@/utils/cn';
-import { FC, Fragment, ReactNode, useState } from 'react';
 
 export type TabsProps = {
   className?: string;
-  children?: ReactNode[];
-  tabs?: ReactNode[];
+  children?: Array<ReactNode>;
+  tabs?: Array<ReactNode>;
 };
 
 export const Tabs: FC<TabsProps> = (props) => {

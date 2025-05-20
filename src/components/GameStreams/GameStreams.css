@@ -1,0 +1,43 @@
+.game-streams {
+  margin: 0;
+  padding: 1rem;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  position: relative;
+  background: var(--bg);
+  z-index: 10;
+
+  &:last-child {
+    padding-bottom: 1.5rem;
+  }
+
+  &:empty {
+    display: none;
+  }
+
+  & h3 {
+    flex: 1 0 100%;
+  }
+}
+
+.game-link {
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--bg2);
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 0.25rem;
+  transition: all 0.15s ease-out;
+  padding: 0.25rem 0.75rem;
+  letter-spacing: 0.01em;
+  user-select: none;
+
+  &:hover {
+    background: var(--bg3);
+  }
+}

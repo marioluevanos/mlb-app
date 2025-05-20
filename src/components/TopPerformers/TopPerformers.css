@@ -20,3 +20,33 @@
     border-radius: 4rem;
   }
 }
+
+.pre-game.top-performers .player {
+  margin: 0 0 1rem;
+  flex: 1 0 calc(100% - 1rem);
+  grid-template-areas:
+    'avatar name name'
+    'avatar note note';
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  & .player-name {
+    align-self: flex-end;
+  }
+
+  & .player-note {
+    align-self: flex-start;
+  }
+
+  & .player-summary {
+    display: none;
+  }
+
+  & .player-avatar {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 4rem;
+  }
+}

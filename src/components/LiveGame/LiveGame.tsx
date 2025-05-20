@@ -9,9 +9,15 @@ import { InningPlays } from '../InningPlays/InningPlays';
 import { GameDecisions } from '../GameDecisions/GameDecisions';
 import { TopPerformers } from '../TopPerformers/TopPerformers';
 import { TeamCompare } from '../TeamCompare/TeamCompare';
+import { GameStreams } from '../GameStreams/GameStreams';
+import { GameStartingPitchers } from '../GameStartingPitchers/GameStartingPitchers';
 import type { MLBLive } from '@/types.mlb';
-import type { GamePreview as GamePreviewType, GameToday } from '@/types';
-import type { FC } from 'react';
+import type {
+  GamePreview as GamePreviewType,
+  GameStreamLinks,
+  GameToday,
+} from '@/types';
+import type { BaseSyntheticEvent, FC } from 'react';
 import { mapToLiveGame } from '@/utils/mlb';
 import { toKebabCase } from '@/utils/toKebabCase';
 import { cn } from '@/utils/cn';
@@ -20,14 +26,20 @@ type LiveGameProps = {
   className?: string;
   liveGame?: GameToday;
   gamePreview?: GamePreviewType;
+  onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };
 
 export const LiveGame: FC<LiveGameProps> = (props) => {
-  const { className, gamePreview, liveGame } = props;
+  const { className, gamePreview, liveGame, onPlayerClick } = props;
   const [game, setGame] = useState<GameToday | undefined>(liveGame);
-  const isTopInning = game?.currentInning.split(' ')[0] === 'TOP';
+  const isTopInning = game && game.currentInning?.split(' ')[0] === 'TOP';
   const isFinal = ['Final', 'Game Over'].includes(String(game?.status));
   const isInProgress = game?.status === 'In Progress';
+  const isScheduled = game?.status === 'Scheduled';
+  const isPregame = game?.status === 'Pre-Game';
+  const isPostponed = game?.status === 'Postponed';
+  const isWarmup = game?.status === 'Warmup';
+  const isPre = isScheduled || isPregame || isPostponed || isWarmup;
 
   /**
    * Fetch and update the game in progress
@@ -40,6 +52,32 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
 
     setGame(updated);
   }, [game]);
+
+  /**
+   * Fetch and update the game in progress
+   */
+  const getLiveGameLinks = useCallback(async () => {
+    const url = import.meta.env.VITE_API_URL;
+    const response = await fetch(url);
+    const jsonLinks: GameStreamLinks = await response.json();
+
+    if (jsonLinks) {
+      const g = jsonLinks.games.find((g) => g.id === game?.id);
+      if (game && g && g?.streams.length) {
+        setGame({
+          ...game,
+          streams: g.streams,
+        });
+      }
+    }
+  }, [game]);
+
+  /**
+   * Get live game links
+   */
+  useEffect(() => {
+    getLiveGameLinks();
+  }, [getLiveGameLinks]);
 
   /**
    * Check if game is in progress and update
@@ -65,7 +103,16 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
           isTopInning={isTopInning}
         />
       ) : (
-        gamePreview && <GamePreview gamePreview={gamePreview} />
+        <>
+          {gamePreview && <GamePreview gamePreview={gamePreview} />}
+          {isPre && (
+            <GameStartingPitchers
+              home={game.home.startingPitcher}
+              away={game.away.startingPitcher}
+              onPlayerClick={onPlayerClick}
+            />
+          )}
+        </>
       )}
 
       {!isFinal && isInProgress ? (
@@ -91,9 +138,17 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
       />
 
       {game.topPerformers?.length > 0 ? (
-        <TopPerformers topPerformers={game.topPerformers} />
+        <TopPerformers
+          className={cn(isPre && 'pre-game')}
+          topPerformers={game.topPerformers}
+          title={isPre ? 'Who to Watch' : 'Top Performers'}
+        />
       ) : null}
       <TeamCompare away={game.away} home={game.home} />
+
+      {!isFinal && game.streams.length ? (
+        <GameStreams streams={game.streams} />
+      ) : null}
     </section>
   );
 };

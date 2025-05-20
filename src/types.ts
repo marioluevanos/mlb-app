@@ -86,6 +86,7 @@ export type GamePreview = {
     second?: GamePlayer;
     third?: GamePlayer;
   };
+
   time?: string;
   currentInning?: string;
   gameNumber: number;
@@ -97,6 +98,22 @@ export type GamePreviews = {
   date: string | undefined;
 };
 
+export type GameStreamLinks = {
+  games: Array<{
+    id: number;
+    away: {
+      name: string;
+      id: number;
+    };
+    home: {
+      name: string;
+      id: number;
+    };
+    streams: Array<GameStream>;
+  }>;
+  date: string;
+};
+
 export type ScheduledTeam = {
   record: TeamRecord;
   name: string;
@@ -104,10 +121,11 @@ export type ScheduledTeam = {
   id: number;
   isWinner: boolean;
   score?: TeamScore;
+  startingPitcher?: GamePlayer;
 };
 
 export type GameToday = {
-  id: number;
+  id: number | string;
   feed: string;
   status: GameStatus;
   away: TeamClub;
@@ -125,10 +143,12 @@ export type GameToday = {
   };
   playsByInning?: Array<InningPlay>;
   decisions: GameDecision | undefined;
+  streams: Array<GameStream>;
 };
 
 export type InningPlay = Omit<CurrentPlay, 'runners' | 'count' | 'events'> & {
   teamAbbreviation: string;
+  currentInning?: string;
 };
 
 export type ScoringPlay = Omit<CurrentPlay, 'runners' | 'count' | 'events'> & {

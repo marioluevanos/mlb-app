@@ -8,12 +8,13 @@ export const Route = createFileRoute('/live/$id')({
     const { params } = loader;
     const apiLive = `https://statsapi.mlb.com/api/v1.1/game/${params.id}/feed/live`;
     const game = await fetch(apiLive);
-    const jsonG: MLBLive = await game.json();
-    const liveGame = mapToLiveGame(jsonG);
-    const [yyyy, mm, dd] = jsonG.gameData.datetime.officialDate.split('-');
+    const jsonLive: MLBLive = await game.json();
+    const liveGame = mapToLiveGame(jsonLive);
+    const [yyyy, mm, dd] = jsonLive.gameData.datetime.officialDate.split('-');
     const gamePreviews = await fetchScheduledGames(yyyy, mm, dd);
+
     return {
-      gamePreview: gamePreviews?.games.find((g) => g.id === jsonG.gamePk),
+      gamePreview: gamePreviews?.games.find((g) => g.id === jsonLive.gamePk),
       liveGame,
     };
   },

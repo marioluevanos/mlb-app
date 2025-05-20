@@ -240,8 +240,6 @@ export function mapToLiveGame(data: MLBLive): GameToday {
     matchup: currentPlay?.matchup,
   });
 
-  console.log(getAllPlays());
-
   return {
     id: data.gamePk,
     feed: MLB_API + data.link,
@@ -268,6 +266,7 @@ export function mapToLiveGame(data: MLBLive): GameToday {
         pitcher: matchup?.pitcher,
       },
     },
+    streams: [],
     currentInning: mapCurrentInning(linescore),
     decisions: getDecision(status, decisions, awayTeam, homeTeam),
   };
@@ -280,7 +279,8 @@ export function mapToLiveGame(data: MLBLive): GameToday {
         acc[`${currentInning}`] = [];
       }
 
-      const teamAbbreviation = atBat.about.isTopInning
+      const isTop = atBat.about.isTopInning;
+      const teamAbbreviation = isTop
         ? awayTeam.abbreviation
         : homeTeam.abbreviation;
 
@@ -291,6 +291,7 @@ export function mapToLiveGame(data: MLBLive): GameToday {
         }),
         teamAbbreviation,
         result: atBat.result,
+        currentInning: `${isTop ? 'TOP' : 'BOT'} ${getOrdinal(currentInning) || 0}`,
       });
 
       return acc;

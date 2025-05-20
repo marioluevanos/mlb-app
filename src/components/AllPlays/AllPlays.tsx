@@ -15,7 +15,6 @@ type AllPlaysProps = {
 export const AllPlays: FC<AllPlaysProps> = (props) => {
   const { className, allPlays = [], onPlayerClick } = props;
 
-  console.log({ allPlays });
   return Object.keys(allPlays).length > 0 ? (
     <section className={cn('all-plays', className)}>
       <ol>
@@ -33,13 +32,20 @@ export const AllPlays: FC<AllPlaysProps> = (props) => {
                   key={`${event.teamAbbreviation}-${index}`}
                 >
                   <span className="header">
-                    <CurrentInning currentInning={getOrdinal(inning)} />
+                    <CurrentInning
+                      currentInning={event.currentInning || getOrdinal(inning)}
+                    />
+                    {/* <span className="current-inning">
+                      {event.currentInning} :
+                    </span> */}
                     {event.teamAbbreviation && (
                       <span className="abbreviation">
                         {event.teamAbbreviation}
                       </span>
                     )}{' '}
-                    <span className="event">{event.result?.event}</span>
+                    {event.result?.event && (
+                      <span className="event">: {event.result?.event}</span>
+                    )}
                   </span>
                   <Player
                     onClick={onPlayerClick}

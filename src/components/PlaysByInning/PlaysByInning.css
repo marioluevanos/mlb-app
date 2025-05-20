@@ -43,14 +43,16 @@
   }
 
   & .play-event-by-inning.is-rbi {
-    color: var(--blue);
+    color: white;
 
     & .header::before {
       border-color: var(--blue);
+      background: var(--blue);
     }
 
     & .event {
       border-color: var(--blue);
+      background: var(--blue);
     }
   }
 
@@ -156,7 +158,10 @@
 }
 
 .plays-by-inning-no-plays {
-  padding: 1rem;
+  font-family: var(--font-sans);
+  color: var(--text1);
   text-align: center;
-  font-size: 14px;
+  font-size: 12px;
+  margin: 2rem auto;
+  text-transform: capitalize;
 }

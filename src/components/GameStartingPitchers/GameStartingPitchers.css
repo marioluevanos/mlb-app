@@ -1,0 +1,42 @@
+.game-starting-pitchers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0 1rem 1.5rem;
+
+  & .vs {
+    text-align: center;
+    flex: 1 4%;
+    font-size: 12px;
+  }
+
+  & .player {
+    flex: 1 0 40%;
+    margin: 0;
+
+    grid-template-columns: 1fr;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    grid-template-areas:
+      'avatar'
+      'name'
+      'summary'
+      'note';
+
+    & .player-note {
+      display: none;
+    }
+    & .player-avatar {
+      margin: auto;
+    }
+  }
+  & .player-name[data-pos]::after {
+    display: block;
+    margin: 0;
+  }
+
+  & h3 {
+    flex: 1 0 100%;
+  }
+}
