@@ -144,6 +144,7 @@ export type GameToday = {
   playsByInning?: Array<InningPlay>;
   decisions: GameDecision | undefined;
   streams: Array<GameStream>;
+  highlights: Promise<Array<GameHighlight>>;
 };
 
 export type InningPlay = Omit<CurrentPlay, 'runners' | 'count' | 'events'> & {

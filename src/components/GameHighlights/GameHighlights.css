@@ -1,0 +1,159 @@
+.game-highlight {
+  position: relative;
+  padding: 1rem 0 0;
+
+  & h3 {
+    padding: 0 1rem;
+  }
+
+  & h3 span {
+    color: var(--text1);
+    font-weight: 400;
+  }
+
+  & video {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  &:has(.vertical) .current-game-highlight {
+    background: var(--bg);
+    border-bottom: 1px solid var(--bg2);
+    position: sticky;
+    top: 48px;
+    z-index: 10;
+    padding-bottom: 1.5rem;
+  }
+
+  & h4 {
+    margin: 1rem 0 0;
+    padding: 0 1rem;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  & p {
+    margin: 0.25rem 0 0;
+    padding: 0 1rem;
+    font-size: 12px;
+    line-height: 1.75;
+
+    &:empty {
+      display: none;
+    }
+  }
+}
+
+.game-highlights {
+  position: relative;
+  display: flex;
+  background: var(--bg);
+
+  &.vertical {
+    flex-direction: column;
+    padding: 1.5rem 1rem 1rem;
+    gap: 1rem;
+
+    & .game-highlight-item {
+      display: flex;
+      gap: 1rem;
+    }
+
+    & .caption {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    & img {
+      width: 8rem;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+
+  &.horizontal {
+    flex-direction: row;
+    overflow: scroll hidden;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none; /* Firefox */
+    overflow: -moz-scrollbars-none;
+    scroll-padding: 0 1rem 0 1rem;
+    padding: 1px 0.5rem 1rem;
+    margin-top: 1.5rem;
+
+    &::-webkit-scrollbar {
+      display: none; /* Safari and Chrome */
+    }
+
+    & .game-highlight-item {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      min-width: 40vw;
+      padding: 0 0.5rem;
+
+      & .caption {
+        padding: 1rem 0 0;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
+  }
+}
+
+.game-highlight-item {
+  margin: 0;
+  position: relative;
+  flex: 1;
+
+  & .caption {
+    text-wrap: balance;
+    font-size: 12px;
+    margin: 0;
+    display: block;
+  }
+
+  & .title {
+    color: var(--text);
+    display: block;
+  }
+
+  & .duration {
+    margin-top: 0.5rem;
+    color: var(--text1);
+    display: block;
+  }
+
+  & .img {
+    background: var(--bg);
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    & img {
+      filter: brightness(66%);
+    }
+  }
+}
+
+.game-highlight-btn {
+  background: none;
+  border: none;
+  color: transparent;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: pointer;
+  padding: 0;
+
+  &.active + img {
+    outline: 1px solid var(--text);
+  }
+}

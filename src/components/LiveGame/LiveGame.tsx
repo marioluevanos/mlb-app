@@ -11,6 +11,7 @@ import { TopPerformers } from '../TopPerformers/TopPerformers';
 import { TeamCompare } from '../TeamCompare/TeamCompare';
 import { GameStreams } from '../GameStreams/GameStreams';
 import { GameStartingPitchers } from '../GameStartingPitchers/GameStartingPitchers';
+import { GameHighlights } from '../GameHighlights/GameHighlights';
 import type { MLBLive } from '@/types.mlb';
 import type {
   GamePreview as GamePreviewType,
@@ -153,6 +154,11 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
       {!isFinal && game.streams.length ? (
         <GameStreams streams={game.streams} />
       ) : null}
+
+      <GameHighlights
+        title={isPre ? 'Preview' : 'Highlights'}
+        highlights={game.highlights}
+      />
     </section>
   );
 };

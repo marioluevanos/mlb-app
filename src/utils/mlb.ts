@@ -4,6 +4,7 @@ import type {
   GameData,
   HighlightItem,
   Linescore,
+  MLBContent,
   MLBGamePreview,
   MLBGames,
   MLBLive,
@@ -14,6 +15,7 @@ import type {
 } from '../types.mlb';
 import type {
   CurrentMatchup,
+  GameHighlight,
   GamePlayer,
   GamePreview,
   GamePreviews,
@@ -268,6 +270,7 @@ export function mapToLiveGame(data: MLBLive): GameToday {
       },
     },
     streams: [],
+    highlights: getHighlights(data.gamePk),
     currentInning: mapCurrentInning(linescore),
     decisions: getDecision(status, decisions, awayTeam, homeTeam),
   };
@@ -420,6 +423,18 @@ export function mapToLiveGame(data: MLBLive): GameToday {
       }
     }
   }
+}
+
+/**
+ * Updates live game
+ */
+async function getHighlights(gameId: number): Promise<Array<GameHighlight>> {
+  const contentUrl = MLB_API + '/api/v1/game/' + gameId + '/content';
+  const response = await fetch(contentUrl);
+  const content = (await response.json()) as MLBContent;
+  const items = content.highlights?.highlights?.items;
+
+  return items.map(mapHighlight);
 }
 
 function getGameTime(gameData: GameData) {
