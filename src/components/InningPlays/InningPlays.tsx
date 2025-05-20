@@ -3,6 +3,7 @@ import './InningPlays.css';
 import { Tabs } from '../ui/Tabs/Tabs';
 import { PlaysByInning } from '../PlaysByInning/PlaysByInning';
 import { ScoringPlays } from '../ScoringPlays/ScoringPlays';
+import { AllPlays } from '../AllPlays/AllPlays';
 import type { GameStatus, GameToday, InningPlay } from '@/types';
 import type { BaseSyntheticEvent, FC } from 'react';
 import { cn } from '@/utils/cn';
@@ -12,6 +13,7 @@ type InningPlaysProps = {
   className?: string;
   currentInning?: string;
   playsByInning?: Array<InningPlay>;
+  allPlays?: GameToday['allPlays'];
   scoringPlays?: GameToday['scoringPlays'];
   onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };
@@ -23,6 +25,7 @@ export const InningPlays: FC<InningPlaysProps> = (props) => {
     currentInning = '',
     playsByInning,
     scoringPlays,
+    allPlays,
     onPlayerClick,
   } = props;
   const isPreGame = status === 'Pre-Game';
@@ -36,27 +39,36 @@ export const InningPlays: FC<InningPlaysProps> = (props) => {
 
   if (isFinal) {
     return (
-      <>
+      <Tabs
+        className={cn('inning-plays', className)}
+        tabs={[<>Scoring Plays</>, <>All Plays</>]}
+      >
         <ScoringPlays
           className="is-final"
           title="Scoring Plays"
           scoringPlays={scoringPlays}
           onPlayerClick={onPlayerClick}
         />
-      </>
+        <AllPlays allPlays={allPlays} />
+      </Tabs>
     );
   }
 
   return (
     <Tabs
       className={cn('inning-plays', className)}
-      tabs={[<>{currentInning.toLowerCase()} Plays</>, <>Scoring Plays</>]}
+      tabs={[
+        <>{currentInning.toLowerCase()} Plays</>,
+        <>Scoring Plays</>,
+        <>All Plays</>,
+      ]}
     >
       <PlaysByInning
         playsByInning={playsByInning}
         onPlayerClick={onPlayerClick}
       />
       <ScoringPlays scoringPlays={scoringPlays} onPlayerClick={onPlayerClick} />
+      <AllPlays allPlays={allPlays} />
     </Tabs>
   );
 };

@@ -120,6 +120,9 @@ export type GameToday = {
   scoringPlays?: {
     [inning: string | number]: Array<ScoringPlay>;
   };
+  allPlays?: {
+    [inning: string | number]: Array<InningPlay>;
+  };
   playsByInning?: Array<InningPlay>;
   decisions: GameDecision | undefined;
 };

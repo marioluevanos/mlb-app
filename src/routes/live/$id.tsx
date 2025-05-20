@@ -20,9 +20,6 @@ export const Route = createFileRoute('/live/$id')({
   component: function RouteComponent() {
     const data = Route.useLoaderData();
 
-    console.log({ data });
-
-    if (!data) return null;
     const { liveGame, gamePreview } = data;
 
     return <LiveGame liveGame={liveGame} gamePreview={gamePreview} />;

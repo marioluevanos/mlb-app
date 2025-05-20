@@ -1,4 +1,4 @@
-.scoring-plays {
+.all-plays {
   border-bottom: 1px dotted var(--bg2);
 
   & ol {
@@ -11,11 +11,11 @@
     flex-direction: column-reverse;
   }
 
-  & .scoring-event-inning {
+  & .all-event-inning {
     display: flex;
   }
 
-  & .scoring-event-inning h3 {
+  & .all-event-inning h3 {
     padding: 0 1rem;
     margin: 0;
     position: sticky;
@@ -27,21 +27,21 @@
     align-self: flex-start;
   }
 
-  & h3.scoring-plays-title {
+  & h3.all-plays-title {
     padding: 0 1rem;
   }
 
-  &.is-final .scoring-event-inning h3 {
+  &.is-final .all-event-inning h3 {
     top: calc(48px + 1rem);
   }
 
-  & .scoring-events {
+  & .all-events {
     padding: 0 1rem 0;
     display: flex;
     flex-direction: column-reverse;
   }
 
-  & .scoring-event {
+  & .all-event {
     display: block;
     font-size: 12px;
     position: relative;
@@ -59,7 +59,7 @@
     }
   }
 
-  & .scoring-event .header {
+  & .all-event .header {
     font-size: 10px;
     display: flex;
     align-items: center;
@@ -77,7 +77,28 @@
     gap: 0.5rem;
   }
 
-  & .scoring-event .current-inning {
+  & .all-event.is-out .header {
+    border-color: var(--red);
+
+    & .abbreviation,
+    & .current-inning,
+    & .event {
+      color: var(--red);
+    }
+  }
+
+  & .all-event.is-rbi .header {
+    border-color: var(--blue);
+    background: var(--blue);
+
+    & .abbreviation,
+    & .current-inning,
+    & .event {
+      color: white;
+    }
+  }
+
+  & .all-event .current-inning {
     margin: 0;
   }
 
@@ -129,7 +150,7 @@
   }
 }
 
-.scoring-plays-no-score {
+.all-plays-no-score {
   font-family: var(--font-sans);
   color: var(--text1);
   text-align: center;

@@ -87,6 +87,7 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
         currentInning={game.currentInning}
         playsByInning={game.playsByInning}
         scoringPlays={game.scoringPlays}
+        allPlays={game.allPlays}
       />
 
       {game.topPerformers?.length > 0 ? (

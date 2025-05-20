@@ -53,5 +53,7 @@ export const PlaysByInning: FC<PlaysByInningProps> = (props) => {
         )}
       </ol>
     </section>
-  ) : null;
+  ) : (
+    <p className="plays-by-inning-no-plays">No Plays Recorded</p>
+  );
 };

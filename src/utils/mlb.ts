@@ -240,6 +240,8 @@ export function mapToLiveGame(data: MLBLive): GameToday {
     matchup: currentPlay?.matchup,
   });
 
+  console.log(getAllPlays());
+
   return {
     id: data.gamePk,
     feed: MLB_API + data.link,
@@ -248,9 +250,10 @@ export function mapToLiveGame(data: MLBLive): GameToday {
     away: awayTeam,
     home: homeTeam,
     innings: linescore.innings,
-    playsByInning: getCurrentPlays(),
     topPerformers: boxscore.topPerformers.map(topPerformers) || [],
+    playsByInning: getCurrentPlays(),
     scoringPlays: getScoringPlays(),
+    allPlays: getAllPlays(),
     currentPlay: {
       count: currentPlay?.count,
       events: currentPlay?.playEvents,
@@ -268,6 +271,31 @@ export function mapToLiveGame(data: MLBLive): GameToday {
     currentInning: mapCurrentInning(linescore),
     decisions: getDecision(status, decisions, awayTeam, homeTeam),
   };
+
+  function getAllPlays(): GameToday['allPlays'] {
+    return allPlays.reduce<NonNullable<GameToday['allPlays']>>((acc, atBat) => {
+      const currentInning = atBat?.about.inning;
+
+      if (!acc[`${currentInning}`]) {
+        acc[`${currentInning}`] = [];
+      }
+
+      const teamAbbreviation = atBat.about.isTopInning
+        ? awayTeam.abbreviation
+        : homeTeam.abbreviation;
+
+      acc[`${currentInning}`].push({
+        matchup: getCurrentMatchup({
+          players: allPlayers,
+          matchup: atBat.matchup,
+        }),
+        teamAbbreviation,
+        result: atBat.result,
+      });
+
+      return acc;
+    }, {});
+  }
 
   function getScoringPlays(): GameToday['scoringPlays'] {
     return scoringPlays.reduce<NonNullable<GameToday['scoringPlays']>>(
@@ -290,6 +318,46 @@ export function mapToLiveGame(data: MLBLive): GameToday {
       },
       {},
     );
+
+    function scoringPlay(
+      args: {
+        allPlays: Array<AtBat>;
+        allPlayers: Array<GamePlayer>;
+        currentInning: number;
+        teamAbbreviation: Array<string>;
+      },
+      acc: Array<ScoringPlay>,
+      playIndex: number,
+    ) {
+      const {
+        allPlayers,
+        allPlays,
+        currentInning,
+        teamAbbreviation = [],
+      } = args;
+      const play = allPlays.find((b) => b.atBatIndex === playIndex);
+
+      if (play && currentInning === play.about.inning) {
+        const matchup = getCurrentMatchup({
+          players: allPlayers,
+          matchup: play.matchup,
+        });
+
+        acc.push({
+          inning: `${play.about.isTopInning ? 'TOP' : 'BOT'} ${play.about.inning}`,
+          teamAbbreviation: play.about.isTopInning
+            ? teamAbbreviation[0]
+            : teamAbbreviation[1],
+          result: play?.result,
+          matchup: {
+            batter: matchup?.batter,
+            pitcher: matchup?.pitcher,
+          },
+        });
+      }
+
+      return acc;
+    }
   }
 
   function getCurrentPlays() {
@@ -306,85 +374,50 @@ export function mapToLiveGame(data: MLBLive): GameToday {
       }),
       [],
     );
-  }
-}
 
-function playByInning(
-  args: {
-    allPlays: Array<AtBat>;
-    allPlayers: Array<GamePlayer>;
-    teamAbbreviation: Array<string>;
-  },
-  acc: Array<InningPlay>,
-  playIndex: number,
-) {
-  const { allPlayers, allPlays, teamAbbreviation } = args;
-  const play = allPlays[playIndex];
-
-  if (play) {
-    const matchup = getCurrentMatchup({
-      players: allPlayers,
-      matchup: play.matchup,
-    });
-
-    acc.push({
-      teamAbbreviation: play.about.isTopInning
-        ? teamAbbreviation[0]
-        : teamAbbreviation[1],
-      result: play?.result,
-      matchup: {
-        batter: mapToBatter(matchup?.batter, play?.result),
-        pitcher: mapToBatter(matchup?.pitcher, play?.result),
+    function playByInning(
+      args: {
+        allPlays: Array<AtBat>;
+        allPlayers: Array<GamePlayer>;
+        teamAbbreviation: Array<string>;
       },
-    });
+      acc: Array<InningPlay>,
+      playIndex: number,
+    ) {
+      const { allPlayers, allPlays, teamAbbreviation } = args;
+      const play = allPlays[playIndex];
+
+      if (play && play.result.description) {
+        const matchup = getCurrentMatchup({
+          players: allPlayers,
+          matchup: play.matchup,
+        });
+
+        acc.push({
+          teamAbbreviation: play.about.isTopInning
+            ? teamAbbreviation[0]
+            : teamAbbreviation[1],
+          result: play?.result,
+          matchup: {
+            batter: mapToBatter(matchup?.batter, play?.result),
+            pitcher: mapToBatter(matchup?.pitcher, play?.result),
+          },
+        });
+      }
+
+      return acc;
+
+      function mapToBatter(player?: GamePlayer, result?: AtBat['result']) {
+        return {
+          id: player?.id,
+          avatar: player?.avatar,
+          fullName: player?.fullName,
+          position: player?.position,
+          summary: result?.rbi ? `(${result?.rbi} RBI)` : '',
+        };
+      }
+    }
   }
-
-  return acc;
-
-  function mapToBatter(player?: GamePlayer, result?: AtBat['result']) {
-    return {
-      id: player?.id,
-      avatar: player?.avatar,
-      fullName: player?.fullName,
-      position: player?.position,
-      summary: result?.rbi ? `(${result?.rbi} RBI)` : '',
-    };
-  }
-}
-
-function scoringPlay(
-  args: {
-    allPlays: Array<AtBat>;
-    allPlayers: Array<GamePlayer>;
-    currentInning: number;
-    teamAbbreviation: Array<string>;
-  },
-  acc: Array<ScoringPlay>,
-  playIndex: number,
-) {
-  const { allPlayers, allPlays, currentInning, teamAbbreviation = [] } = args;
-  const play = allPlays.find((b) => b.atBatIndex === playIndex);
-
-  if (play && currentInning === play.about.inning) {
-    const matchup = getCurrentMatchup({
-      players: allPlayers,
-      matchup: play.matchup,
-    });
-
-    acc.push({
-      inning: `${play.about.isTopInning ? 'TOP' : 'BOT'} ${play.about.inning}`,
-      teamAbbreviation: play.about.isTopInning
-        ? teamAbbreviation[0]
-        : teamAbbreviation[1],
-      result: play?.result,
-      matchup: {
-        batter: matchup?.batter,
-        pitcher: matchup?.pitcher,
-      },
-    });
-  }
-
-  return acc;
 }
 
 function getCurrentMatchup(args: {
