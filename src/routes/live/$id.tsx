@@ -1,7 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useRouterState } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import type { MLBLive } from '@/types.mlb';
 import { fetchScheduledGames, mapToLiveGame } from '@/utils/mlb';
 import { LiveGame } from '@/components/LiveGame/LiveGame';
+import { useMLB } from '@/components/ui/MLBProvider';
 
 export const Route = createFileRoute('/live/$id')({
   loader: async (loader) => {
@@ -20,9 +22,17 @@ export const Route = createFileRoute('/live/$id')({
   },
   component: function RouteComponent() {
     const data = Route.useLoaderData();
+    const router = useRouterState();
+    const { pathname } = router.location;
+    const routeId = +pathname.replace(/\D+/g, '');
+    const { liveGame, setLiveGame } = useMLB();
 
-    const { liveGame, gamePreview } = data;
+    useEffect(() => {
+      if (!liveGame || Number(liveGame.id) !== routeId) {
+        setLiveGame(data.liveGame);
+      }
+    }, [liveGame, setLiveGame, data.liveGame, routeId]);
 
-    return <LiveGame liveGame={liveGame} gamePreview={gamePreview} />;
+    return <LiveGame liveGame={data.liveGame} gamePreview={data.gamePreview} />;
   },
 });

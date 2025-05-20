@@ -1,7 +1,7 @@
 import './Header.css';
 import { useCallback } from 'react';
 import { useRouter, useRouterState } from '@tanstack/react-router';
-import { LeftIcon, RefreshIcon, RightIcon } from '../Icon';
+import { LeftIcon, RightIcon } from '../Icon';
 import { Button } from '../Button/Button';
 import type { BaseSyntheticEvent, FC } from 'react';
 import { useMLB } from '@/components/ui/MLBProvider';
@@ -11,7 +11,7 @@ import { cn } from '@/utils/cn';
 const dateNavigator = new DateNavigator();
 
 export const Header: FC = () => {
-  const { date, setDate } = useMLB();
+  const { date, setDate, liveGame } = useMLB();
   const isToday = date.split('T')[0] === getLocalDate();
   const router = useRouter();
   const { location } = useRouterState();
@@ -55,17 +55,16 @@ export const Header: FC = () => {
     [setDate],
   );
 
+  const goHome = useCallback((event: BaseSyntheticEvent) => {
+    event.preventDefault();
+    router.navigate({ href: '/' });
+    return false;
+  }, []);
+
   return (
     <header id="header">
       <h1>
-        <button
-          className="logo-button"
-          onClick={(e) => {
-            e.preventDefault();
-            router.navigate({ href: '/' });
-            return false;
-          }}
-        >
+        <button className="logo-button" onClick={goHome}>
           <img
             className="logo"
             width={256}
@@ -76,17 +75,18 @@ export const Header: FC = () => {
           MLB
         </button>
       </h1>
-      <nav className="header-nav">
+      <nav className={cn('header-nav', isLiveGame && 'is-live')}>
         {isLiveGame ? (
           <>
-            <Button
-              title="Refresh"
-              key="Refresh"
-              onClick={() => {}}
-              className="refresh"
-            >
-              <RefreshIcon />
-            </Button>
+            <span className="date" onClick={goHome}>
+              {toLegibleDate(
+                dateNavigator.getCurrentDate().toISOString(),
+                false,
+              )}
+            </span>
+            {liveGame?.status && (
+              <span className="status">{liveGame?.status}</span>
+            )}
           </>
         ) : (
           <>

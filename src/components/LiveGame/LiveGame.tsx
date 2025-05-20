@@ -24,14 +24,14 @@ import { cn } from '@/utils/cn';
 
 type LiveGameProps = {
   className?: string;
-  liveGame?: GameToday;
+  liveGame: GameToday;
   gamePreview?: GamePreviewType;
   onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };
 
 export const LiveGame: FC<LiveGameProps> = (props) => {
   const { className, gamePreview, liveGame, onPlayerClick } = props;
-  const [game, setGame] = useState<GameToday | undefined>(liveGame);
+  const [game, setGame] = useState<GameToday>(liveGame);
   const isTopInning = game && game.currentInning?.split(' ')[0] === 'TOP';
   const isFinal = ['Final', 'Game Over'].includes(String(game?.status));
   const isInProgress = game?.status === 'In Progress';
@@ -39,6 +39,7 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
   const isPregame = game?.status === 'Pre-Game';
   const isPostponed = game?.status === 'Postponed';
   const isWarmup = game?.status === 'Warmup';
+  const isSuspended = game?.status.startsWith('Suspended');
   const isPre = isScheduled || isPregame || isPostponed || isWarmup;
 
   /**
@@ -76,8 +77,10 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
    * Get live game links
    */
   useEffect(() => {
-    getLiveGameLinks();
-  }, [getLiveGameLinks]);
+    if (game.streams.length === 0 && !isFinal) {
+      getLiveGameLinks();
+    }
+  }, [getLiveGameLinks, game.streams, isFinal]);
 
   /**
    * Check if game is in progress and update
@@ -89,13 +92,14 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
     }
   }, [game?.status, updateGameInProgress]);
 
-  return !game ? null : (
+  console.log({ game });
+  return (
     <section
       id={game.id.toString()}
       data-status={toKebabCase(game.status)}
       className={cn('live-game', toKebabCase(game.status), className)}
     >
-      {game.status === 'In Progress' && game.innings.length > 0 ? (
+      {(isInProgress || isFinal || isSuspended) && game.innings.length > 0 ? (
         <Scoreboard
           innings={game.innings}
           status={game.status}
@@ -115,7 +119,7 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
         </>
       )}
 
-      {!isFinal && isInProgress ? (
+      {(!isFinal && isInProgress) || (!isFinal && isSuspended) ? (
         <GameMatchup matchup={game.currentPlay?.matchup}>
           <GameBug
             count={game.currentPlay?.count}
@@ -144,7 +148,8 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
           title={isPre ? 'Who to Watch' : 'Top Performers'}
         />
       ) : null}
-      <TeamCompare away={game.away} home={game.home} />
+
+      {!isPre && <TeamCompare away={game.away} home={game.home} />}
 
       {!isFinal && game.streams.length ? (
         <GameStreams streams={game.streams} />

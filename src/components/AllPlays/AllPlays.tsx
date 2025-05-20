@@ -35,16 +35,13 @@ export const AllPlays: FC<AllPlaysProps> = (props) => {
                     <CurrentInning
                       currentInning={event.currentInning || getOrdinal(inning)}
                     />
-                    {/* <span className="current-inning">
-                      {event.currentInning} :
-                    </span> */}
                     {event.teamAbbreviation && (
                       <span className="abbreviation">
                         {event.teamAbbreviation}
                       </span>
                     )}{' '}
                     {event.result?.event && (
-                      <span className="event">: {event.result?.event}</span>
+                      <span className="event">{event.result?.event}</span>
                     )}
                   </span>
                   <Player

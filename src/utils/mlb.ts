@@ -1,6 +1,7 @@
 import type {
   AtBat,
   Decisions,
+  GameData,
   HighlightItem,
   Linescore,
   MLBGamePreview,
@@ -108,13 +109,13 @@ async function mergePreviewWithLive(
         }),
       )
     ).map(({ live, game }) => {
-      const { teams, datetime } = live.gameData;
+      const { teams } = live.gameData;
       const { linescore } = live.liveData;
       const { currentPlay } = live.liveData.plays;
 
       return {
         ...game,
-        time: `${datetime.time} ${datetime.ampm}`,
+        time: getGameTime(live.gameData),
         currentInning: mapCurrentInning(linescore),
         count: currentPlay?.count,
         runners: {
@@ -164,11 +165,11 @@ function mapStartingPitcher(
   const pitching = pitcher?.season?.pitching;
 
   return {
-    fullName: probablePitchers?.fullName,
-    id: probablePitchers?.id,
+    fullName: probablePitchers?.fullName || 'TBD',
+    id: probablePitchers?.id || 0,
     avatar: probablePitchers ? avatar(probablePitchers?.id) : undefined,
     position: pitching ? `${pitching?.wins} — ${pitching?.losses}` : '0-0',
-    summary: pitching ? `${pitching?.era} ERA, ${pitching?.whip} WHIP` : '',
+    summary: pitching ? `${pitching?.era} ERA, ${pitching?.whip} WHIP` : '-',
   };
 }
 
@@ -243,7 +244,7 @@ export function mapToLiveGame(data: MLBLive): GameToday {
   return {
     id: data.gamePk,
     feed: MLB_API + data.link,
-    time: `${data.gameData.datetime.time} ${data.gameData.datetime.ampm}`,
+    time: getGameTime(gameData),
     status,
     away: awayTeam,
     home: homeTeam,
@@ -419,6 +420,10 @@ export function mapToLiveGame(data: MLBLive): GameToday {
       }
     }
   }
+}
+
+function getGameTime(gameData: GameData) {
+  return `${gameData.datetime.time} ${gameData.datetime.ampm} ${gameData.venue.timeZone.tz.replace('D', '')}`;
 }
 
 function getCurrentMatchup(args: {

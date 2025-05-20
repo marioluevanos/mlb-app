@@ -37,6 +37,20 @@
     justify-content: space-between;
   }
 
+  & .status,
+  & .date {
+    font-size: 12px;
+
+    text-align: right;
+    color: var(--text1);
+  }
+
+  & .status {
+    margin-left: auto;
+    font-weight: 600;
+    color: var(--text);
+  }
+
   & .current-day {
     flex: 1;
   }

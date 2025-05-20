@@ -1,11 +1,11 @@
 /**
  * Legible dates for the UI.
  */
-export function toLegibleDate(date: string) {
+export function toLegibleDate(date: string, includeYear: boolean = true) {
   const [d, m, y] = formatDateInput(date);
   return new Date(d, m - 1, y).toLocaleDateString(undefined, {
     weekday: 'short',
-    year: 'numeric',
+    year: includeYear ? 'numeric' : undefined,
     month: 'short',
     day: 'numeric',
   });
@@ -28,7 +28,7 @@ export function formatDateInput(date = ''): [number, number, number] {
  */
 export function getLocalDate(d: string | number = '') {
   const date = !d ? new Date() : new Date(d);
-  const tzoffset = date.getTimezoneOffset() * 60000; //offset in milliseconds
+  const tzoffset = date.getTimezoneOffset() * 60000; // offset in milliseconds
   const localISOTime = new Date(Date.now() - tzoffset)
     .toISOString()
     .slice(0, -1);
@@ -66,8 +66,8 @@ export class DateNavigator {
     this.currentDate.setDate(this.currentDate.getDate() - 1);
   }
 
-  getSurroundingDays(): DayInfo[] {
-    const days: DayInfo[] = [];
+  getSurroundingDays(): Array<DayInfo> {
+    const days: Array<DayInfo> = [];
 
     for (let offset = -3; offset <= 3; offset++) {
       const tempDate = new Date(this.currentDate);
