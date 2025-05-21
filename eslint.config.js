@@ -1,8 +1,16 @@
 //  @ts-check
 
 import { tanstackConfig } from '@tanstack/eslint-config';
+import reactHooks from 'eslint-plugin-react-hooks';
+import { defineConfig, globalIgnores } from 'eslint/config';
 
-export default [
+export default defineConfig([
+  globalIgnores([
+    '.storybook/**',
+    'eslint.config.js',
+    'prettier.config.js',
+    'vite.config.js',
+  ]),
   ...tanstackConfig,
   {
     files: [
@@ -12,8 +20,12 @@ export default [
       'prettier.config.js',
       'vite.config.js',
     ],
+
+    plugins: { 'react-hooks': reactHooks },
     rules: {
-      '@typescript-eslint/array-type': ['error'],
+      'react-hooks/rules-of-hooks': ['error'],
+      'react-hooks/exhaustive-deps': ['error'],
+      '@typescript-eslint/array-type': ['warn'],
       '@typescript-eslint/naming-convention': ['off'],
       '@typescript-eslint/no-unnecessary-condition': ['off'],
       '@typescript-eslint/prefer-for-of': ['off'],
@@ -29,4 +41,4 @@ export default [
       ],
     },
   },
-];
+]);

@@ -6,6 +6,7 @@ import type { BaseSyntheticEvent, FC, ReactNode } from 'react';
 import { cn } from '@/utils/cn';
 import { toKebabCase } from '@/utils/toKebabCase';
 import { cssVars } from '@/utils/cssVars';
+import { parseStatus } from '@/utils/mlb';
 
 export type BoxScoreProps = {
   home: TeamClub;
@@ -33,7 +34,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
   const hasAwayPitching = hasData('pitching', away.players);
   const hasHomeBatting = hasData('batting', home.players);
   const hasHomePitching = hasData('pitching', home.players);
-  const isFinal = status === 'Final' || status === 'Game Over';
+  const { isFinal } = parseStatus(status);
   const boxTabs = [];
   const awayWin = winner === 'away';
   const homeWin = winner === 'home';

@@ -169,7 +169,7 @@ function mapStartingPitcher(
   return {
     fullName: probablePitchers?.fullName || 'TBD',
     id: probablePitchers?.id || 0,
-    avatar: probablePitchers ? avatar(probablePitchers?.id) : undefined,
+    avatar: probablePitchers ? avatar(probablePitchers?.id, 128) : undefined,
     position: pitching ? `${pitching?.wins} — ${pitching?.losses}` : '0-0',
     summary: pitching ? `${pitching?.era} ERA, ${pitching?.whip} WHIP` : '-',
   };
@@ -429,12 +429,12 @@ export function mapToLiveGame(data: MLBLive): GameToday {
  * Updates live game
  */
 async function getHighlights(gameId: number): Promise<Array<GameHighlight>> {
-  const contentUrl = MLB_API + '/api/v1/game/' + gameId + '/content';
+  const contentUrl = `${MLB_API}/api/v1/game/${gameId}/content`;
   const response = await fetch(contentUrl);
   const content = (await response.json()) as MLBContent;
   const items = content.highlights?.highlights?.items;
 
-  return items.map(mapHighlight);
+  return items?.map(mapHighlight) || [];
 }
 
 function getGameTime(gameData: GameData) {
@@ -586,6 +586,28 @@ export function isWinner(
       return 'away';
     }
   }
+}
+
+export function parseStatus(status: GameStatus | undefined = '') {
+  const isFinal = ['Final', 'Game Over'].includes(status);
+  const isScheduled = status === 'Scheduled';
+  const isPregame = status === 'Pre-Game';
+  const isPostponed = status === 'Postponed';
+  const isWarmup = status === 'Warmup';
+  const isSuspended = status?.startsWith('Suspended');
+  const isPre = isScheduled || isPregame || isWarmup;
+  const isInProgress = status === 'In Progress';
+
+  return {
+    isPre,
+    isInProgress,
+    isFinal,
+    isScheduled,
+    isPostponed,
+    isPregame,
+    isWarmup,
+    isSuspended,
+  };
 }
 
 export function getOrdinal(n: number | string | undefined): string {

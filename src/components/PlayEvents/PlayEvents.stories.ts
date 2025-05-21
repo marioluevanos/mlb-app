@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import { PlayEvents } from './PlayEvents';
+import type { Meta, StoryObj } from '@storybook/react';
 import { GAME_1ST } from '@/_mockdata/mockdata';
 
 const meta = {

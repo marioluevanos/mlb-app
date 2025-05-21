@@ -1,15 +1,21 @@
 #header {
-  height: 3rem;
+  position: static;
   position: sticky;
   top: 0;
-  padding: 0 1rem;
-  gap: 0 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--bg);
-  border-bottom: 1px solid var(--bg2);
   z-index: 200;
+
+  & .header-inner {
+    position: relative;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg);
+    border-bottom: 1px solid var(--bg2);
+    padding: 0 1rem;
+    gap: 0 1rem;
+    z-index: 1;
+  }
 
   & h1 {
     display: flex;
@@ -40,7 +46,7 @@
   & .status,
   & .date {
     font-size: 12px;
-
+    font-family: var(--font-sans);
     text-align: right;
     color: var(--text1);
   }
@@ -62,4 +68,32 @@
   & .refresh {
     margin-left: auto;
   }
+
+  & .streams {
+    background: none;
+    border: none;
+    padding: 0;
+    position: relative;
+
+    & * {
+      pointer-events: none;
+    }
+  }
+}
+
+#header .game-streams {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 48px;
+  border-bottom: 1px solid var(--bg3);
+  background: var(--bg1);
+  transform: translate3d(0, -100%, 0);
+  transition: transform 0.3s var(--ease-in-sine);
+  z-index: -1;
+}
+
+#header .is-tv-open.game-streams {
+  transform: translate3d(0, 0%, 0);
+  transition: transform 0.3s var(--ease-out-sine);
 }

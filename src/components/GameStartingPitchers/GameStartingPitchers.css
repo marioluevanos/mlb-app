@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 0 1rem 1.5rem;
+  padding: 1.5rem 1rem;
 
   & .vs {
     text-align: center;
@@ -27,8 +27,12 @@
     & .player-note {
       display: none;
     }
+
     & .player-avatar {
       margin: auto;
+      width: 64px;
+      height: 64px;
+      display: block;
     }
   }
   & .player-name[data-pos]::after {

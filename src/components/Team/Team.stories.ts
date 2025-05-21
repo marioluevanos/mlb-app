@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import { Team } from './Team';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
   title: 'Components/Team',

@@ -39,7 +39,7 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
       setMedia(highlight);
       requestAnimationFrame(playVideo);
     },
-    [],
+    [playVideo],
   );
 
   return !media ? null : (

@@ -318,3 +318,78 @@ export const AtBatIcon: FC<{ className?: string }> = (props) => {
     </svg>
   );
 };
+
+export const TvIcon: FC<{ className?: string }> = (props) => {
+  return (
+    <svg
+      height="16"
+      width="16"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="4.5"
+        x2="7.5"
+        y1="1.5"
+        y2="4.5"
+      />
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="11.5"
+        x2="7.5"
+        y1="0.5"
+        y2="4.5"
+      />
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="12.5"
+        x2="12.5"
+        y1="7.5"
+        y2="9.5"
+      />
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="12.5"
+        x2="12.5"
+        y1="11.5"
+        y2="12.5"
+      />
+      <rect
+        height="5"
+        width="6"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x="3.5"
+        y="7.5"
+      />
+      <rect
+        height="11"
+        width="15"
+        fill="none"
+        rx="1"
+        ry="1"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x="0.5"
+        y="4.5"
+      />
+    </svg>
+  );
+};

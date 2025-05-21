@@ -7,6 +7,7 @@ import { AllPlays } from '../AllPlays/AllPlays';
 import type { GameStatus, GameToday, InningPlay } from '@/types';
 import type { BaseSyntheticEvent, FC } from 'react';
 import { cn } from '@/utils/cn';
+import { parseStatus } from '@/utils/mlb';
 
 type InningPlaysProps = {
   status: GameStatus;
@@ -28,12 +29,9 @@ export const InningPlays: FC<InningPlaysProps> = (props) => {
     allPlays,
     onPlayerClick,
   } = props;
-  const isPreGame = status === 'Pre-Game';
-  const isScheduled = status === 'Scheduled';
-  const isWarmup = status === 'Warmup';
-  const isFinal = ['Final', 'Game Over'].includes(status);
+  const { isPre, isScheduled, isWarmup, isFinal } = parseStatus(status);
 
-  if (isPreGame || isScheduled || isWarmup) {
+  if (isPre || isScheduled || isWarmup) {
     return null;
   }
 

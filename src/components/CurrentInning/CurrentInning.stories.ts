@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import { CurrentInning } from './CurrentInning';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
   title: 'Components/CurrentInning',

@@ -21,14 +21,15 @@
     background: var(--bg);
     border-bottom: 1px solid var(--bg2);
     position: sticky;
+    padding-bottom: 1.5rem;
     top: 48px;
     z-index: 10;
-    padding-bottom: 1.5rem;
   }
 
   & h4 {
-    margin: 1rem 0 0;
-    padding: 0 1rem;
+    font-family: var(--font-sans);
+    margin: 0;
+    padding: 1.5rem 1rem 0.25rem;
     font-size: 14px;
     color: var(--text);
   }
@@ -114,6 +115,7 @@
   & .caption {
     text-wrap: balance;
     font-size: 12px;
+    font-family: var(--font-sans);
     margin: 0;
     display: block;
   }
@@ -124,6 +126,8 @@
   }
 
   & .duration {
+    font-size: 10px;
+    font-family: var(--font-mono);
     margin-top: 0.5rem;
     color: var(--text1);
     display: block;

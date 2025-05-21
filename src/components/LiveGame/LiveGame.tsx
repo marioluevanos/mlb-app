@@ -9,9 +9,9 @@ import { InningPlays } from '../InningPlays/InningPlays';
 import { GameDecisions } from '../GameDecisions/GameDecisions';
 import { TopPerformers } from '../TopPerformers/TopPerformers';
 import { TeamCompare } from '../TeamCompare/TeamCompare';
-import { GameStreams } from '../GameStreams/GameStreams';
 import { GameStartingPitchers } from '../GameStartingPitchers/GameStartingPitchers';
 import { GameHighlights } from '../GameHighlights/GameHighlights';
+import { useMLB } from '../ui/MLBProvider';
 import type { MLBLive } from '@/types.mlb';
 import type {
   GamePreview as GamePreviewType,
@@ -19,7 +19,7 @@ import type {
   GameToday,
 } from '@/types';
 import type { BaseSyntheticEvent, FC } from 'react';
-import { mapToLiveGame } from '@/utils/mlb';
+import { mapToLiveGame, parseStatus } from '@/utils/mlb';
 import { toKebabCase } from '@/utils/toKebabCase';
 import { cn } from '@/utils/cn';
 
@@ -33,15 +33,11 @@ type LiveGameProps = {
 export const LiveGame: FC<LiveGameProps> = (props) => {
   const { className, gamePreview, liveGame, onPlayerClick } = props;
   const [game, setGame] = useState<GameToday>(liveGame);
+  const { setLiveGame } = useMLB();
   const isTopInning = game && game.currentInning?.split(' ')[0] === 'TOP';
-  const isFinal = ['Final', 'Game Over'].includes(String(game?.status));
-  const isInProgress = game?.status === 'In Progress';
-  const isScheduled = game?.status === 'Scheduled';
-  const isPregame = game?.status === 'Pre-Game';
-  const isPostponed = game?.status === 'Postponed';
-  const isWarmup = game?.status === 'Warmup';
-  const isSuspended = game?.status.startsWith('Suspended');
-  const isPre = isScheduled || isPregame || isPostponed || isWarmup;
+  const { isPre, isFinal, isInProgress, isSuspended } = parseStatus(
+    game?.status,
+  );
 
   /**
    * Fetch and update the game in progress
@@ -51,7 +47,7 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
     const response = await fetch(game.feed);
     const live: MLBLive = await response.json();
     const updated = mapToLiveGame(live);
-
+    console.log(updated);
     setGame(updated);
   }, [game]);
 
@@ -66,13 +62,15 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
     if (jsonLinks) {
       const g = jsonLinks.games.find((g) => g.id === game?.id);
       if (game && g && g?.streams.length) {
-        setGame({
+        const updated = {
           ...game,
           streams: g.streams,
-        });
+        };
+        setGame(updated);
+        setLiveGame(updated);
       }
     }
-  }, [game]);
+  }, [game, setLiveGame]);
 
   /**
    * Get live game links
@@ -131,7 +129,9 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
         <GameDecisions decisions={game.decisions} />
       )}
 
-      <PlayEvents events={game.currentPlay?.events} status={game.status} />
+      {!isPre && (
+        <PlayEvents events={game.currentPlay?.events} status={game.status} />
+      )}
 
       <InningPlays
         status={game.status}
@@ -150,10 +150,6 @@ export const LiveGame: FC<LiveGameProps> = (props) => {
       ) : null}
 
       {!isPre && <TeamCompare away={game.away} home={game.home} />}
-
-      {!isFinal && game.streams.length ? (
-        <GameStreams streams={game.streams} />
-      ) : null}
 
       <GameHighlights
         title={isPre ? 'Preview' : 'Highlights'}

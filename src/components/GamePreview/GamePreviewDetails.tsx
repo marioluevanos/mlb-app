@@ -4,6 +4,7 @@ import { CurrentInning } from '../CurrentInning/CurrentInning';
 import type { FC } from 'react';
 import type { GamePreview } from '@/types';
 import { cn } from '@/utils/cn';
+import { parseStatus } from '@/utils/mlb';
 
 export type GamePreviewDetailsProps = {
   className?: string;
@@ -21,12 +22,14 @@ export const GamePreviewDetails: FC<GamePreviewDetailsProps> = (props) => {
     gameNumber,
     doubleHeader,
   } = gamePreview;
-  const isFinal = status === 'Final' || status === 'Game Over';
-  const isScheduled = status === 'Scheduled';
-  const isPregame = status === 'Pre-Game';
-  const isPostponed = status === 'Postponed';
-  const isWarmup = status === 'Warmup';
-  const isSuspended = status.startsWith('Suspended');
+  const {
+    isFinal,
+    isScheduled,
+    isPregame,
+    isPostponed,
+    isWarmup,
+    isSuspended,
+  } = parseStatus(status);
 
   if (isPregame || isScheduled || isWarmup) {
     return (

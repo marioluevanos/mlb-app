@@ -10,7 +10,7 @@ import type { MLBLive } from '@/types.mlb';
 import type { GamePreview as GamePreviewType } from '@/types';
 import { cn } from '@/utils/cn';
 import { toKebabCase } from '@/utils/toKebabCase';
-import { isWinner, mapCurrentInning } from '@/utils/mlb';
+import { isWinner, mapCurrentInning, parseStatus } from '@/utils/mlb';
 
 export type GamePreviewProps = {
   className?: string;
@@ -21,11 +21,7 @@ export type GamePreviewProps = {
 export const GamePreview: FC<GamePreviewProps> = (props) => {
   const { className, gamePreview } = props;
   const { away, home, status, id, feed } = gamePreview;
-  const isScheduled = status === 'Scheduled';
-  const isPregame = status === 'Pre-Game';
-  const isPostponed = status === 'Postponed';
-  const isWarmup = status === 'Warmup';
-  const isPre = isScheduled || isPregame || isPostponed || isWarmup;
+  const { isPre } = parseStatus(status);
   const winner = isWinner(away.score, home.score);
   const { setGamePreviews, gamePreviews } = useMLB();
 

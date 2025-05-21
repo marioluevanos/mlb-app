@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import { TeamCompare } from './TeamCompare';
+import type { Meta, StoryObj } from '@storybook/react';
 import { GAME_FINAL } from '@/_mockdata/mockdata';
 
 const meta = {

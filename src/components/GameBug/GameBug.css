@@ -61,8 +61,8 @@
     }
 
     & .base.runner {
-      background: var(--accent);
-      border-color: var(--accent);
+      background: var(--blue);
+      border-color: var(--blue);
     }
 
     & .base.home {

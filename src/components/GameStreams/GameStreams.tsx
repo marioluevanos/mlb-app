@@ -1,19 +1,23 @@
 import './GameStreams.css';
+import { Button } from '../ui/Button/Button';
 import type { GameStream } from '@/types';
-import type { FC } from 'react';
+import type { FC, RefObject } from 'react';
+import { cn } from '@/utils/cn';
 
 type GameStreamsProps = {
+  className?: string;
+  ref?: RefObject<HTMLDivElement | null>;
   streams?: Array<GameStream>;
 };
 
 export const GameStreams: FC<GameStreamsProps> = (props) => {
-  const { streams = [] } = props;
+  const { className, streams = [], ref } = props;
 
   return (
-    <section className="game-streams">
+    <section className={cn('game-streams', className)} ref={ref}>
       <h3>Game Links</h3>
       {streams?.map((link) => (
-        <a
+        <Button
           key={link.name}
           className="game-link"
           href={link.url}
@@ -21,8 +25,9 @@ export const GameStreams: FC<GameStreamsProps> = (props) => {
           rel="noopener"
         >
           {link.name}
-        </a>
+        </Button>
       ))}
     </section>
   );
 };
+6;
