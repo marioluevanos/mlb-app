@@ -61,8 +61,8 @@
     }
 
     & .base.runner {
-      background: var(--blue);
-      border-color: var(--blue);
+      background: var(--text);
+      border-color: var(--text);
     }
 
     & .base.home {

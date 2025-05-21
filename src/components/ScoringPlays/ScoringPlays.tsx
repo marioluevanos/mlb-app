@@ -2,13 +2,13 @@ import './ScoringPlays.css';
 
 import { Player } from '../Player/Player';
 import { EventHeader } from '../EventHeader/EventHeader';
-import type { GameToday } from '@/types';
+import type { LiveGame } from '@/types';
 import type { BaseSyntheticEvent, FC } from 'react';
 import { cn } from '@/utils/cn';
 import { getOrdinal } from '@/utils/mlb';
 
 type PlayEventsProps = {
-  scoringPlays?: GameToday['scoringPlays'];
+  scoringPlays?: LiveGame['scoringPlays'];
   className?: string;
   onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };

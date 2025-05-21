@@ -1,16 +1,14 @@
 import './GamePreview.css';
-import { useCallback, useEffect } from 'react';
+
 import { Link } from '@tanstack/react-router';
 import { Team } from '../Team/Team';
 import { TeamScore } from '../TeamScore/TeamScore';
-import { useMLB } from '../ui/MLBProvider';
 import { GamePreviewDetails } from './GamePreviewDetails';
 import type { BaseSyntheticEvent, FC } from 'react';
-import type { MLBLive } from '@/types.mlb';
 import type { GamePreview as GamePreviewType } from '@/types';
 import { cn } from '@/utils/cn';
 import { toKebabCase } from '@/utils/toKebabCase';
-import { isWinner, mapCurrentInning, parseStatus } from '@/utils/mlb';
+import { isWinner, parseStatus } from '@/utils/mlb';
 
 export type GamePreviewProps = {
   className?: string;
@@ -20,54 +18,9 @@ export type GamePreviewProps = {
 
 export const GamePreview: FC<GamePreviewProps> = (props) => {
   const { className, gamePreview } = props;
-  const { away, home, status, id, feed } = gamePreview;
+  const { away, home, status, id } = gamePreview;
   const { isPre } = parseStatus(status);
   const winner = isWinner(away.score, home.score);
-  const { setGamePreviews, gamePreviews } = useMLB();
-
-  /**
-   * Map live game data for preview UI
-   */
-  const mapLiveGamePreview = useCallback(
-    (game: GamePreviewType, live: MLBLive, id: number) => {
-      const { linescore, plays } = live.liveData;
-      if (game.id === id) {
-        game.home.score = linescore.teams.home;
-        game.away.score = linescore.teams.away;
-        game.currentInning = mapCurrentInning(linescore);
-        game.count = plays.currentPlay.count;
-        game.runners = {
-          first: linescore.offense.first,
-          second: linescore.offense.second,
-          third: linescore.offense.third,
-        };
-      }
-      return game;
-    },
-    [],
-  );
-
-  /**
-   * Fetch and update the game in progress
-   */
-  const updateGameInProgress = useCallback(async () => {
-    const response = await fetch(feed);
-    const live: MLBLive = await response.json();
-    const games = gamePreviews?.games || [];
-    const updated = games.map((g) => mapLiveGamePreview(g, live, id));
-
-    setGamePreviews({ date: gamePreviews?.date, games: updated });
-  }, [feed, id, setGamePreviews, mapLiveGamePreview, gamePreviews]);
-
-  /**
-   * Check if game is in progress and update
-   */
-  useEffect(() => {
-    if (status === 'In Progress') {
-      const intervalId = setInterval(updateGameInProgress, 15000);
-      return () => clearInterval(intervalId);
-    }
-  }, [status, updateGameInProgress]);
 
   return (
     <section

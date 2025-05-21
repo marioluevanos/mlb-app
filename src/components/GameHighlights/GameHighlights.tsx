@@ -1,18 +1,17 @@
 import './GameHighlights.css';
-import { use, useCallback, useId, useRef, useState } from 'react';
+import { useCallback, useId, useRef, useState } from 'react';
 import type { GameHighlight } from '@/types';
 import type { BaseSyntheticEvent, FC } from 'react';
 import { cssVars } from '@/utils/cssVars';
 import { cn } from '@/utils/cn';
 
 type GameHighlightsProps = {
-  highlights?: Promise<Array<GameHighlight>>;
+  highlights?: Array<GameHighlight>;
   title?: string;
 };
 
 export const GameHighlights: FC<GameHighlightsProps> = (props) => {
-  const { title } = props;
-  const highlights = use(props.highlights || Promise.resolve([]));
+  const { title, highlights = [] } = props;
   const id = useId();
   const [media, setMedia] = useState<GameHighlight>(highlights[0]);
   const videoRef = useRef<HTMLVideoElement | null>(null);

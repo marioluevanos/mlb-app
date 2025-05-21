@@ -124,7 +124,8 @@ export type ScheduledTeam = {
   startingPitcher?: GamePlayer;
 };
 
-export type GameToday = {
+export type LiveGame = {
+  date: string;
   id: number | string;
   feed: string;
   status: GameStatus;
@@ -143,8 +144,7 @@ export type GameToday = {
   };
   playsByInning?: Array<InningPlay>;
   decisions: GameDecision | undefined;
-  streams: Array<GameStream>;
-  highlights: Promise<Array<GameHighlight>>;
+  highlights: Array<GameHighlight>;
 };
 
 export type InningPlay = Omit<CurrentPlay, 'runners' | 'count' | 'events'> & {

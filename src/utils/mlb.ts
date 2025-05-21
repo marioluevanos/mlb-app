@@ -20,8 +20,8 @@ import type {
   GamePreview,
   GamePreviews,
   GameStatus,
-  GameToday,
   InningPlay,
+  LiveGame,
   ScoringPlay,
   TeamClub,
   TeamScore,
@@ -226,7 +226,7 @@ function mapToTeam(team: 'home' | 'away', data: MLBLive): TeamClub {
 /**
  * Maps to live game data
  */
-export function mapToLiveGame(data: MLBLive): GameToday {
+export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
   const { gameData, liveData } = data;
   const { linescore, boxscore, plays, decisions } = liveData;
   const { currentPlay, scoringPlays, allPlays, playsByInning } = plays;
@@ -244,6 +244,7 @@ export function mapToLiveGame(data: MLBLive): GameToday {
   });
 
   return {
+    date: gameData.datetime.officialDate,
     id: data.gamePk,
     feed: MLB_API + data.link,
     time: getGameTime(gameData),
@@ -269,14 +270,13 @@ export function mapToLiveGame(data: MLBLive): GameToday {
         pitcher: matchup?.pitcher,
       },
     },
-    streams: [],
-    highlights: getHighlights(data.gamePk),
+    highlights: await getHighlights(data.gamePk),
     currentInning: mapCurrentInning(linescore),
     decisions: getDecision(status, decisions, awayTeam, homeTeam),
   };
 
-  function getAllPlays(): GameToday['allPlays'] {
-    return allPlays.reduce<NonNullable<GameToday['allPlays']>>((acc, atBat) => {
+  function getAllPlays(): LiveGame['allPlays'] {
+    return allPlays.reduce<NonNullable<LiveGame['allPlays']>>((acc, atBat) => {
       const currentInning = atBat?.about.inning;
 
       if (!acc[`${currentInning}`]) {
@@ -302,8 +302,8 @@ export function mapToLiveGame(data: MLBLive): GameToday {
     }, {});
   }
 
-  function getScoringPlays(): GameToday['scoringPlays'] {
-    return scoringPlays.reduce<NonNullable<GameToday['scoringPlays']>>(
+  function getScoringPlays(): LiveGame['scoringPlays'] {
+    return scoringPlays.reduce<NonNullable<LiveGame['scoringPlays']>>(
       (acc, playIndex) => {
         const play = allPlays.find((b) => b.atBatIndex === playIndex);
         const currentInning = play?.about.inning;
@@ -617,6 +617,28 @@ export function getOrdinal(n: number | string | undefined): string {
   const suffix = v >= 11 && v <= 13 ? 'th' : suffixes[v % 10] || 'th';
 
   return `${n}${suffix}`;
+}
+
+export function getPlayerProfile({
+  gameId,
+  games = [],
+  playerId,
+}: {
+  playerId: number;
+  games?: Array<LiveGame>;
+  gameId: number | string;
+}): GamePlayer {
+  const game = games.find((g) => g.id === gameId);
+  const players = [
+    ...(game?.away?.players || []),
+    ...(game?.home?.players || []),
+  ];
+  const player = players.find((p) => p.id === playerId);
+
+  return {
+    ...player,
+    avatar: headshot(player?.id),
+  };
 }
 
 export function avatar(id: string | number, size: number = 64) {

@@ -70,6 +70,7 @@
   }
 
   & .streams {
+    color: var(--text);
     background: none;
     border: none;
     padding: 0;
@@ -79,21 +80,4 @@
       pointer-events: none;
     }
   }
-}
-
-#header .game-streams {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 48px;
-  border-bottom: 1px solid var(--bg3);
-  background: var(--bg1);
-  transform: translate3d(0, -100%, 0);
-  transition: transform 0.3s var(--ease-in-sine);
-  z-index: -1;
-}
-
-#header .is-tv-open.game-streams {
-  transform: translate3d(0, 0%, 0);
-  transition: transform 0.3s var(--ease-out-sine);
 }

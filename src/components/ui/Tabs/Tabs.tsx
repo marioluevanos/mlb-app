@@ -1,5 +1,6 @@
 import './Tabs.css';
 import { Fragment, useState } from 'react';
+import { Button } from '../Button/Button';
 import type { FC, ReactNode } from 'react';
 import { cn } from '@/utils/cn';
 
@@ -17,7 +18,7 @@ export const Tabs: FC<TabsProps> = (props) => {
     <section className={cn('tabs', className)}>
       <div className="tabs-actions">
         {tabs?.map((t, i) => (
-          <button
+          <Button
             className={cn('button', i === activeTab && 'active')}
             key={i}
             onClick={() => {
@@ -25,7 +26,7 @@ export const Tabs: FC<TabsProps> = (props) => {
             }}
           >
             {t}
-          </button>
+          </Button>
         ))}
       </div>
       <div className="tabs-content">

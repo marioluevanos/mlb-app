@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
 import reportWebVitals from './reportWebVitals.ts';
-import { MLBProvider } from './components/ui/MLBProvider.tsx';
 
 // Create a new router instance
 const router = createRouter({
@@ -29,9 +28,7 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <MLBProvider>
-        <RouterProvider router={router} />
-      </MLBProvider>
+      <RouterProvider router={router} />
     </StrictMode>,
   );
 }

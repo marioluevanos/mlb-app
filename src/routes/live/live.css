@@ -1,0 +1,40 @@
+.live-game {
+  position: relative;
+  padding-bottom: 4rem;
+}
+
+.live-game .scoreboard {
+  padding: 1rem;
+}
+
+.live-game .game-decisions {
+  padding-bottom: 1rem;
+  border-top: 1px solid var(--bg2);
+}
+
+.live-game .game-matchup .current-matchup .player {
+  grid-template-areas:
+    'avatar name name'
+    'avatar summary summary';
+
+  & .player-note {
+    display: none;
+  }
+}
+
+#live-game .game-streams {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 48px;
+  border-bottom: 1px solid var(--bg3);
+  background: var(--bg1);
+  transform: translate3d(0, -100%, 0);
+  transition: transform 0.3s var(--ease-in-sine);
+  z-index: -1;
+}
+
+#live-game .is-tv-open.game-streams {
+  transform: translate3d(0, 0%, 0);
+  transition: transform 0.3s var(--ease-out-sine);
+}

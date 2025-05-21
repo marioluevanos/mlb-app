@@ -3,12 +3,12 @@ import './AllPlays.css';
 import { Player } from '../Player/Player';
 import { EventHeader } from '../EventHeader/EventHeader';
 import type { BaseSyntheticEvent, FC } from 'react';
-import type { GameToday } from '@/types';
+import type { LiveGame } from '@/types';
 import { cn } from '@/utils/cn';
 import { getOrdinal } from '@/utils/mlb';
 
 type AllPlaysProps = {
-  allPlays?: GameToday['allPlays'];
+  allPlays?: LiveGame['allPlays'];
   className?: string;
   onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };
