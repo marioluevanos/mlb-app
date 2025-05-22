@@ -8,6 +8,7 @@ import type { GameStream, GameStreamLinks, LiveGame } from '@/types';
 import {
   fetchScheduledGames,
   getPlayerProfile,
+  isWinner,
   mapToLiveGame,
   parseStatus,
 } from '@/utils/mlb';
@@ -29,6 +30,7 @@ import { GameStreams } from '@/components/GameStreams/GameStreams';
 import { toLegibleDate } from '@/utils/date';
 import { useOutsideClick } from '@/components/ui/useOutsideClick';
 import { TvIcon } from '@/components/ui/Icon';
+import { BoxScore } from '@/components/BoxScore/BoxScore';
 
 export const Route = createFileRoute('/live/$id')({
   loader: async (loader) => {
@@ -55,6 +57,7 @@ export const Route = createFileRoute('/live/$id')({
     );
     const date = toLegibleDate(game.date, false);
     const [tvPanelOpen, setTvPanelOpen] = useState(false);
+    const winner = isWinner(game.away.score, game.home.score);
 
     /**
      * Handle outside click
@@ -235,6 +238,19 @@ export const Route = createFileRoute('/live/$id')({
           ) : null}
 
           {!isPre && <TeamCompare away={game.away} home={game.home} />}
+
+          <BoxScore
+            home={game.home}
+            away={game.away}
+            winner={winner}
+            status={game.status}
+            onPlayerClick={onPlayerClick}
+            matchup={{
+              batterId: game.currentPlay?.matchup.batter.id,
+              pitcherId: game.currentPlay?.matchup.pitcher.id,
+            }}
+            currentInning={game.currentInning}
+          />
 
           <GameHighlights
             title={isPre ? 'Preview' : 'Highlights'}

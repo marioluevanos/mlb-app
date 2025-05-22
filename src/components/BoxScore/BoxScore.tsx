@@ -189,7 +189,7 @@ const BoxPlayers: FC<BoxPlayersProps> = (props) => {
     return acc;
   }, '');
 
-  return players.length > 0 ? (
+  return currentPlayers.length > 0 ? (
     <section
       className={cn('box-players', className)}
       style={cssVars({
@@ -202,7 +202,7 @@ const BoxPlayers: FC<BoxPlayersProps> = (props) => {
           <div className="box-heading-labels">
             <span className="box-name">{title}</span>
           </div>
-          {currentPlayers.map((player) => (
+          {currentPlayers.map((player, index) => (
             <span
               className={cn(
                 'box-name',
@@ -211,14 +211,16 @@ const BoxPlayers: FC<BoxPlayersProps> = (props) => {
                 ph(player.battingOrder),
               )}
               data-pos={player.position}
-              key={player.id}
+              key={`${player.id}-${index}`}
             >
-              {firstName(player.fullName)}
+              {`${player.id}-${index}`}
+              {/* {firstName(player.fullName)} */}
             </span>
           ))}
         </div>
         <div className={cn('box-player-stats', toKebabCase(position))}>
           <BoxScorePlayers
+            key="box-score-players"
             currentPlayers={currentPlayers}
             position={position}
             onPlayerClick={onPlayerClick}
@@ -266,9 +268,9 @@ const BoxScorePlayers: FC<
         </div>
       ) : null}
     </>,
-    currentPlayers.map((player) => (
+    currentPlayers.map((player, index) => (
       <div
-        key={player.id}
+        key={`${player.id}-${index}`}
         data-player-id={player.id}
         onClick={onPlayerClick}
         className={cn(

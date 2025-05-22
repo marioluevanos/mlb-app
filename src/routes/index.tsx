@@ -159,7 +159,7 @@ export const Route = createFileRoute('/')({
     }, [date, getGamePreviews]);
 
     return (
-      <main>
+      <main id="game-previews">
         <Header
           navChildren={
             <>
