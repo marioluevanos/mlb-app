@@ -1,5 +1,4 @@
 .player-profile {
-  // padding: 1rem;
   font-size: 12px;
 }
 
@@ -9,17 +8,17 @@
   align-items: center;
   margin-bottom: 1.5rem;
 
-  * {
+  & * {
     margin: 0;
   }
 
-  .text {
+  & .text {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
   }
 
-  img {
+  & img {
     border-radius: 4px;
     width: 3rem;
   }
@@ -31,7 +30,7 @@
   justify-content: space-between;
   cursor: pointer;
 
-  * {
+  & * {
     pointer-events: none;
   }
 }
@@ -41,7 +40,7 @@
   flex-direction: column;
   justify-content: center;
 
-  > span:first-child {
+  & > span:first-child {
     font-weight: 700;
   }
 }
@@ -56,7 +55,7 @@
 }
 
 .player-profile .box-row.players .box-name::after {
-  content: "(" attr(data-pos) ")";
+  content: '(' attr(data-pos) ')';
   color: var(--text1);
   margin-left: 0.25rem;
 }
