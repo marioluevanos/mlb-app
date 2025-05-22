@@ -1,5 +1,5 @@
 import './BoxScore.css';
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { Button } from '../ui/Button/Button';
 import type { GamePlayer, GameStatus, TeamClub } from '@/types';
 import type { BaseSyntheticEvent, FC, ReactNode } from 'react';
@@ -93,7 +93,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
             title={`Batting`}
             players={away.players}
             position="Batting"
-            key="batting-away"
+            key={`batting-away-${away.abbreviation}`}
             matchup={matchup}
           />
         )}
@@ -104,7 +104,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
             title={`Pitching`}
             players={away.players}
             position="Pitching"
-            key="pitching-away"
+            key={`pitching-away-${away.abbreviation}`}
             matchup={matchup}
           />
         )}
@@ -115,7 +115,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
             title={`Batting`}
             players={home.players}
             position="Batting"
-            key="batting-home"
+            key={`batting-home-${home.abbreviation}`}
             matchup={matchup}
           />
         )}
@@ -126,7 +126,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
             title={`Pitching`}
             players={home.players}
             position="Pitching"
-            key="pitching-home"
+            key={`pitching-home-${home.abbreviation}`}
             matchup={matchup}
           />
         )}
@@ -213,8 +213,7 @@ const BoxPlayers: FC<BoxPlayersProps> = (props) => {
               data-pos={player.position}
               key={`${player.id}-${index}`}
             >
-              {`${player.id}-${index}`}
-              {/* {firstName(player.fullName)} */}
+              {firstName(player.fullName)}
             </span>
           ))}
         </div>
@@ -240,7 +239,7 @@ const BoxScorePlayers: FC<
   const { position, onPlayerClick, matchup, currentPlayers } = props;
 
   return [
-    <>
+    <Fragment key={position}>
       {position === 'Batting' ? (
         <div className="box-stats box-heading-labels">
           <span>AB</span>
@@ -267,7 +266,7 @@ const BoxScorePlayers: FC<
           <span className="season">L</span>
         </div>
       ) : null}
-    </>,
+    </Fragment>,
     currentPlayers.map((player, index) => (
       <div
         key={`${player.id}-${index}`}
