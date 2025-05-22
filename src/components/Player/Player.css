@@ -38,7 +38,7 @@
 .player-name {
   color: var(--text);
   font-weight: 600;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1;
 
   &:empty {
@@ -50,6 +50,7 @@
     font-weight: 400;
     color: var(--text1);
     margin-left: 0.25rem;
+    font-size: 12px;
   }
 }
 

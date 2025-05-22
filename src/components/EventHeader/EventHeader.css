@@ -20,6 +20,10 @@
   color: var(--text);
 }
 
+.event-header + .player .player-name {
+  font-size: 12px;
+}
+
 .event-header .abbreviation {
   color: var(--text1);
 }

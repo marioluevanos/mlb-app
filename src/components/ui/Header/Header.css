@@ -45,7 +45,7 @@
 
   & .status,
   & .date {
-    font-size: 12px;
+    font-size: 14px;
     font-family: var(--font-sans);
     text-align: right;
     color: var(--text1);

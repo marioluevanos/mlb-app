@@ -22,7 +22,7 @@ export const Tabs: FC<TabsProps> = (props) => {
     setActiveTab(i);
     const parent = event.target.parentElement?.parentElement;
     if (parent) {
-      window.scrollTo({ top: parent.offsetTop, behavior: 'smooth' });
+      window.scrollTo({ top: parent.offsetTop + 1, behavior: 'smooth' });
     }
   }, []);
 
