@@ -25,48 +25,38 @@ export type BoxScoreProps = {
 export const BoxScore: FC<BoxScoreProps> = (props) => {
   const { home, away, winner, status, matchup, onPlayerClick } = props;
   const [activeTab, setActiveTab] = useState<number>(0);
-  const hasData = (
-    type: 'batting' | 'pitching',
-    players: Array<GamePlayer> = [],
-  ) =>
-    players.some((p) => p.game && Object.values(p.game[type] || {}).length > 0);
-  const hasAwayBatting = hasData('batting', away.players);
-  const hasAwayPitching = hasData('pitching', away.players);
-  const hasHomeBatting = hasData('batting', home.players);
-  const hasHomePitching = hasData('pitching', home.players);
   const { isFinal } = parseStatus(status);
   const boxTabs = [];
   const awayWin = winner === 'away';
   const homeWin = winner === 'home';
-  const isAwayStats = activeTab === 0 && (hasAwayBatting || hasAwayPitching);
-  const isHomeStats = activeTab === 1 && (hasHomeBatting || hasHomePitching);
+  const isAwayStats = activeTab === 0;
+  const isHomeStats = activeTab === 1;
 
-  if (hasAwayBatting || hasAwayPitching) {
-    boxTabs.push(
-      <>
-        <span className="label">{away.abbreviation} (Away)</span>
-        {isFinal && (
-          <span className={cn(awayWin ? 'win' : 'loss')}>
-            {awayWin ? 'W' : 'L'} {away.record.wins}&ndash;{away.record.losses}
-          </span>
-        )}
-      </>,
-    );
-  }
+  boxTabs.push(
+    <>
+      <span className="label">{away.abbreviation}</span>
+      {isFinal && (
+        <span className={cn('record', awayWin ? 'win' : 'loss')}>
+          {' — '}
+          {awayWin ? 'Win' : 'Loss'} ({away.record.wins}&ndash;
+          {away.record.losses})
+        </span>
+      )}
+    </>,
+  );
 
-  if (hasHomeBatting || hasHomePitching) {
-    boxTabs.push(
-      <>
-        <span className="label">{home.abbreviation} (Home)</span>
-
-        {isFinal && (
-          <span className={cn(homeWin ? 'win' : 'loss')}>
-            {homeWin ? 'W' : 'L'} {home.record.wins}&ndash;{home.record.losses}
-          </span>
-        )}
-      </>,
-    );
-  }
+  boxTabs.push(
+    <>
+      <span className="label">{home.abbreviation}</span>
+      {isFinal && (
+        <span className={cn('record', homeWin ? 'win' : 'loss')}>
+          {' — '}
+          {homeWin ? 'Win' : 'Loss'} ({home.record.wins}&ndash;
+          {home.record.losses})
+        </span>
+      )}
+    </>,
+  );
 
   return (
     <section className="box-score">
@@ -86,54 +76,59 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
         </div>
       ) : null}
       <div className="box-score-content">
-        {hasAwayBatting && (
-          <BoxPlayers
-            onPlayerClick={onPlayerClick}
-            className={cn(isFinal && 'final', isAwayStats && 'active')}
-            title={`Batting`}
-            players={away.players}
-            position="Batting"
-            key={`batting-away-${away.abbreviation}`}
-            matchup={matchup}
-          />
-        )}
-        {hasAwayPitching && (
-          <BoxPlayers
-            onPlayerClick={onPlayerClick}
-            className={cn(isFinal && 'final', isAwayStats && 'active')}
-            title={`Pitching`}
-            players={away.players}
-            position="Pitching"
-            key={`pitching-away-${away.abbreviation}`}
-            matchup={matchup}
-          />
-        )}
-        {hasHomeBatting && (
-          <BoxPlayers
-            onPlayerClick={onPlayerClick}
-            className={cn(isFinal && 'final', isHomeStats && 'active')}
-            title={`Batting`}
-            players={home.players}
-            position="Batting"
-            key={`batting-home-${home.abbreviation}`}
-            matchup={matchup}
-          />
-        )}
-        {hasHomePitching && (
-          <BoxPlayers
-            onPlayerClick={onPlayerClick}
-            className={cn(isFinal && 'final', isHomeStats && 'active')}
-            title={`Pitching`}
-            players={home.players}
-            position="Pitching"
-            key={`pitching-home-${home.abbreviation}`}
-            matchup={matchup}
-          />
-        )}
+        <BoxPlayers
+          onPlayerClick={onPlayerClick}
+          className={cn(isFinal && 'final', isAwayStats && 'active')}
+          title={`Batting`}
+          players={away.players}
+          position="Batting"
+          key={`batting-away-${away.abbreviation}`}
+          matchup={matchup}
+        />
+
+        <BoxPlayers
+          onPlayerClick={onPlayerClick}
+          className={cn(isFinal && 'final', isAwayStats && 'active')}
+          title={`Pitching`}
+          players={away.players}
+          position="Pitching"
+          key={`pitching-away-${away.abbreviation}`}
+          matchup={matchup}
+        />
+
+        <BoxPlayers
+          onPlayerClick={onPlayerClick}
+          className={cn(isFinal && 'final', isHomeStats && 'active')}
+          title={`Batting`}
+          players={home.players}
+          position="Batting"
+          key={`batting-home-${home.abbreviation}`}
+          matchup={matchup}
+        />
+
+        <BoxPlayers
+          onPlayerClick={onPlayerClick}
+          className={cn(isFinal && 'final', isHomeStats && 'active')}
+          title={`Pitching`}
+          players={home.players}
+          position="Pitching"
+          key={`pitching-home-${home.abbreviation}`}
+          matchup={matchup}
+        />
       </div>
     </section>
   );
 };
+
+function hasData(
+  type: 'batting' | 'pitching',
+  data: 'game' | 'season',
+  players: Array<GamePlayer> = [],
+) {
+  return players.some(
+    (p) => p[data] && Object.values(p[data][type] || {}).length > 0,
+  );
+}
 
 type BoxPlayersProps = {
   title?: string;
@@ -160,9 +155,28 @@ const BoxPlayers: FC<BoxPlayersProps> = (props) => {
    * Get Batters or Pitchers
    */
   const currentPlayers = useMemo(() => {
-    return position === 'Batting'
-      ? getBattingOrder(players)
-      : getPitchingOrder(players);
+    const order =
+      position === 'Batting'
+        ? getBattingOrder(players)
+        : getPitchingOrder(players);
+
+    if (order.length) {
+      return order;
+    }
+
+    if (position === 'Pitching') {
+      return players.filter((p) => {
+        if (p.position === 'P') {
+          return p;
+        }
+      });
+    }
+
+    return players.filter((p) => {
+      if (p.position !== 'P') {
+        return p;
+      }
+    });
   }, [position, players]);
 
   /**
@@ -211,7 +225,9 @@ const BoxPlayers: FC<BoxPlayersProps> = (props) => {
                 ph(player.battingOrder),
               )}
               data-pos={player.position}
+              data-player-id={player.id}
               key={`${player.id}-${index}`}
+              onClick={onPlayerClick}
             >
               {firstName(player.fullName)}
             </span>
@@ -237,10 +253,12 @@ const BoxScorePlayers: FC<
   }
 > = (props) => {
   const { position, onPlayerClick, matchup, currentPlayers } = props;
+  const hasBatting = hasData('batting', 'game', currentPlayers);
+  const hasPitching = hasData('pitching', 'game', currentPlayers);
 
   return [
     <Fragment key={position}>
-      {position === 'Batting' ? (
+      {position === 'Batting' && hasBatting ? (
         <div className="box-stats box-heading-labels">
           <span>AB</span>
           <span>R</span>
@@ -252,7 +270,7 @@ const BoxScorePlayers: FC<
           <span className="season">OPS</span>
           <span className="season">SB</span>
         </div>
-      ) : position === 'Pitching' ? (
+      ) : position === 'Pitching' && hasPitching ? (
         <div className="box-stats box-heading-labels">
           <span>IP</span>
           <span>H</span>
@@ -267,53 +285,56 @@ const BoxScorePlayers: FC<
         </div>
       ) : null}
     </Fragment>,
-    currentPlayers.map((player, index) => (
-      <div
-        key={`${player.id}-${index}`}
-        data-player-id={player.id}
-        onClick={onPlayerClick}
-        className={cn(
-          'box-stats',
-          matchup?.batterId === player.id && 'active',
-          matchup?.pitcherId === player.id && 'active',
-          position.toLowerCase(),
-        )}
-      >
-        {player.game &&
-          (position === 'Batting' ? (
-            <>
-              <span>{player.game.batting?.atBats}</span>
-              <span>{player.game.batting?.runs}</span>
-              <span>{player.game.batting?.hits}</span>
-              <span>{player.game.batting?.rbi}</span>
-              <span>{player.game.batting?.baseOnBalls}</span>
-              <span>{player.game.batting?.strikeOuts}</span>
-              <span className="season">
-                {player.season?.batting?.avg?.slice(0, 4)}
-              </span>
-              <span className="season">
-                {player.season?.batting?.ops?.slice(0, 4)}
-              </span>
-              <span className="season">
-                {player.season?.batting?.stolenBases}
-              </span>
-            </>
-          ) : (
-            <>
-              <span>{player.game.pitching?.inningsPitched}</span>
-              <span>{player.game.pitching?.hits}</span>
-              <span>{player.game.pitching?.runs}</span>
-              <span>{player.game.pitching?.earnedRuns}</span>
-              <span>{player.game.pitching?.baseOnBalls}</span>
-              <span>{player.game.pitching?.strikeOuts}</span>
-              <span className="season">{player.season?.pitching?.era}</span>
-              <span className="season">{player.season?.pitching?.whip}</span>
-              <span className="season">{player.season?.pitching?.wins}</span>
-              <span className="season">{player.season?.pitching?.losses}</span>
-            </>
-          ))}
-      </div>
-    )),
+    (hasPitching || hasBatting) &&
+      currentPlayers.map((player, index) => (
+        <div
+          key={`${player.id}-${index}`}
+          data-player-id={player.id}
+          onClick={onPlayerClick}
+          className={cn(
+            'box-stats',
+            matchup?.batterId === player.id && 'active',
+            matchup?.pitcherId === player.id && 'active',
+            position.toLowerCase(),
+          )}
+        >
+          {player.game &&
+            (position === 'Batting' ? (
+              <>
+                <span>{player.game.batting?.atBats}</span>
+                <span>{player.game.batting?.runs}</span>
+                <span>{player.game.batting?.hits}</span>
+                <span>{player.game.batting?.rbi}</span>
+                <span>{player.game.batting?.baseOnBalls}</span>
+                <span>{player.game.batting?.strikeOuts}</span>
+                <span className="season">
+                  {player.season?.batting?.avg?.slice(0, 4)}
+                </span>
+                <span className="season">
+                  {player.season?.batting?.ops?.slice(0, 4)}
+                </span>
+                <span className="season">
+                  {player.season?.batting?.stolenBases}
+                </span>
+              </>
+            ) : (
+              <>
+                <span>{player.game.pitching?.inningsPitched}</span>
+                <span>{player.game.pitching?.hits}</span>
+                <span>{player.game.pitching?.runs}</span>
+                <span>{player.game.pitching?.earnedRuns}</span>
+                <span>{player.game.pitching?.baseOnBalls}</span>
+                <span>{player.game.pitching?.strikeOuts}</span>
+                <span className="season">{player.season?.pitching?.era}</span>
+                <span className="season">{player.season?.pitching?.whip}</span>
+                <span className="season">{player.season?.pitching?.wins}</span>
+                <span className="season">
+                  {player.season?.pitching?.losses}
+                </span>
+              </>
+            ))}
+        </div>
+      )),
   ];
 };
 

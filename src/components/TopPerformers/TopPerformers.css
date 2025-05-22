@@ -15,9 +15,9 @@
   }
 
   & .player-avatar {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 4rem;
+    width: 64px;
+    height: 64px;
+    margin-right: 0.5rem;
   }
 }
 
@@ -45,8 +45,8 @@
   }
 
   & .player-avatar {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 4rem;
+    width: 64px;
+    height: 64px;
+    margin-right: 0.5rem;
   }
 }

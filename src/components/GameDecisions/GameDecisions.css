@@ -1,6 +1,6 @@
 .game-decisions {
   font-size: 14px;
-  padding: 1rem;
+  padding: 1.5rem 1rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -13,20 +13,19 @@
     position: relative;
     margin: 0 0 1rem;
     flex: 1 0 calc(100% - 1rem);
+    grid-template-areas:
+      'avatar name name'
+      'avatar summary summary'
+      'avatar note note';
   }
 
   & .player:last-child {
     margin-bottom: 0;
   }
 
-  & .player.winner::after {
-    content: '';
-    background: var(--accent);
-    border-radius: 6px;
-    width: 6px;
-    height: 6px;
-    position: absolute;
-    top: 0;
-    left: 1.5rem;
+  & .player-avatar {
+    width: 64px;
+    height: 64px;
+    margin-right: 0.5rem;
   }
 }

@@ -8,7 +8,7 @@
   }
 
   & .win {
-    color: var(--accent);
+    color: var(--text1);
   }
 
   & .loss {
@@ -22,7 +22,7 @@
   background: var(--bg);
   display: flex;
   padding: 1rem 1rem 1rem;
-  gap: 1rem;
+  gap: 2rem;
 
   &:empty {
     display: none;
@@ -31,8 +31,31 @@
   & .button {
     text-transform: capitalize;
     justify-content: space-between;
+    color: var(--text1);
+    padding: 0;
+    background: none;
+    font: 700 0.875rem/1 var(--font-sans);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  & .button:hover {
+    background: transparent;
+  }
+
+  & .button.active {
     color: var(--text);
-    flex: 1;
+    position: relative;
+    background: transparent;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      bottom: -17px;
+      left: 0;
+      height: 1px;
+      background: var(--accent);
+    }
   }
 
   & .button .label {
@@ -41,22 +64,19 @@
     font-family: var(--font-sans);
   }
 
-  & .button:hover {
-    background: var(--bg1);
-  }
-
-  & .button.active {
-    outline: 1px solid var(--text1);
-  }
-
-  & .icon {
-    width: 14px;
-    height: 14px;
+  & .button .team-home-away,
+  & .button .record {
+    display: inline-flex;
+    margin-left: 0.5rem;
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
   }
 }
 
 .box-players {
-  padding: 1rem;
+  padding: 1rem 0 1rem 1rem;
   font-size: 12px;
   display: none;
 

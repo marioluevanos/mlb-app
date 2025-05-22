@@ -5,7 +5,6 @@ import { EventHeader } from '../EventHeader/EventHeader';
 import type { BaseSyntheticEvent, FC } from 'react';
 import type { LiveGame } from '@/types';
 import { cn } from '@/utils/cn';
-import { getOrdinal } from '@/utils/mlb';
 
 type AllPlaysProps = {
   allPlays?: LiveGame['allPlays'];
@@ -21,7 +20,7 @@ export const AllPlays: FC<AllPlaysProps> = (props) => {
       <ol>
         {Object.entries(allPlays).map(([inning, events], i) => (
           <li className={cn('all-event-inning')} key={i}>
-            <h3>{getOrdinal(inning)}</h3>
+            <h3>{inning}</h3>
             <div className="all-events">
               {events.map((event, index) => (
                 <div

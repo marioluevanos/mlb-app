@@ -193,7 +193,7 @@ export function toGamePlayer(p: Player): GamePlayer {
     position: p.position.abbreviation,
     fullName: p.person.fullName,
     id: p.person.id,
-    avatar: avatar(p.person.id),
+    avatar: avatar(p.person.id, 128),
   };
 }
 
@@ -278,9 +278,11 @@ export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
   function getAllPlays(): LiveGame['allPlays'] {
     return allPlays.reduce<NonNullable<LiveGame['allPlays']>>((acc, atBat) => {
       const currentInning = atBat?.about.inning;
+      const half = atBat?.about.isTopInning ? 'Top' : 'Bot';
+      const inning = `${half} ${getOrdinal(currentInning)}`;
 
-      if (!acc[`${currentInning}`]) {
-        acc[`${currentInning}`] = [];
+      if (!acc[inning]) {
+        acc[inning] = [];
       }
 
       const isTop = atBat.about.isTopInning;
@@ -288,14 +290,14 @@ export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
         ? awayTeam.abbreviation
         : homeTeam.abbreviation;
 
-      acc[`${currentInning}`].push({
+      acc[inning].push({
         matchup: getCurrentMatchup({
           players: allPlayers,
           matchup: atBat.matchup,
         }),
         teamAbbreviation,
         result: atBat.result,
-        currentInning: `${isTop ? 'TOP' : 'BOT'} ${getOrdinal(currentInning) || 0}`,
+        currentInning: inning,
       });
 
       return acc;
@@ -309,7 +311,9 @@ export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
         const currentInning = play?.about.inning;
 
         if (currentInning) {
-          acc[`${currentInning}`] = scoringPlays.reduce<Array<ScoringPlay>>(
+          const half = play?.about.isTopInning ? 'Top' : 'Bot';
+          const inning = `${half} ${getOrdinal(currentInning)}`;
+          acc[inning] = scoringPlays.reduce<Array<ScoringPlay>>(
             scoringPlay.bind(null, {
               allPlays,
               allPlayers,
@@ -515,17 +519,17 @@ function getDecision(
     winner: {
       ...(wp || decisions.winner),
       summary: wp?.game?.pitching.summary,
-      note: wp?.game?.pitching.note,
+      note: wp?.game?.pitching.note?.replace('W', 'Win'),
     },
     loser: {
       ...(lp || decisions.loser),
       summary: lp?.game?.pitching.summary,
-      note: lp?.game?.pitching.note,
+      note: lp?.game?.pitching.note?.replace('L', 'Loss'),
     },
     save: {
       ...(sv || decisions.save),
       summary: sv?.game?.pitching.summary,
-      note: sv?.game?.pitching.note,
+      note: sv?.game?.pitching.note?.replace('S', 'Save'),
     },
   };
 }
@@ -542,7 +546,7 @@ function topPerformers(payload: Performer): GamePlayer {
   if (type === 'starter' && stats.pitching.summary) {
     summary = `(G) ${stats.pitching.summary}`;
   }
-  const seasonBatting = `(S) ${seasonStats.batting.hits} H, ${seasonStats.batting.baseOnBalls} BB, ${seasonStats.batting.homeRuns} HR, ${seasonStats.batting.totalBases} TB`;
+  const seasonBatting = `(S) ${seasonStats.batting.avg} AVG, ${seasonStats.batting.hits} H, ${seasonStats.batting.rbi} RBI, ${seasonStats.batting.homeRuns} HR`;
   const seasonPitching = `(S) ${seasonStats.pitching.era} ERA, ${seasonStats.pitching.whip} WHIP`;
 
   return {
@@ -620,15 +624,12 @@ export function getOrdinal(n: number | string | undefined): string {
 }
 
 export function getPlayerProfile({
-  gameId,
-  games = [],
+  game,
   playerId,
 }: {
   playerId: number;
-  games?: Array<LiveGame>;
-  gameId: number | string;
+  game?: LiveGame;
 }): GamePlayer {
-  const game = games.find((g) => g.id === gameId);
   const players = [
     ...(game?.away?.players || []),
     ...(game?.home?.players || []),

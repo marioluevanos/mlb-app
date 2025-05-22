@@ -1,6 +1,8 @@
 .live-game {
   position: relative;
   padding-bottom: 4rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .live-game .scoreboard {
@@ -20,6 +22,11 @@
   & .player-note {
     display: none;
   }
+}
+
+.live-game.final .inning-plays {
+  order: 1;
+  margin-top: -1px;
 }
 
 #live-game .game-streams {

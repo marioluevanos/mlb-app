@@ -31,6 +31,7 @@ import { toLegibleDate } from '@/utils/date';
 import { useOutsideClick } from '@/components/ui/useOutsideClick';
 import { TvIcon } from '@/components/ui/Icon';
 import { BoxScore } from '@/components/BoxScore/BoxScore';
+import { eventEmitter } from '@/utils/eventEmitter';
 
 export const Route = createFileRoute('/live/$id')({
   loader: async (loader) => {
@@ -105,12 +106,10 @@ export const Route = createFileRoute('/live/$id')({
         const playerId = +target.dataset?.playerId;
         const player = getPlayerProfile({
           playerId,
-          gameId: +game.id,
-          games: [],
+          game,
         });
 
-        // setActivePlayer(player);
-        console.log(player);
+        eventEmitter.emit('playerclick', player);
       },
       [game],
     );
@@ -211,7 +210,10 @@ export const Route = createFileRoute('/live/$id')({
               />
             </GameMatchup>
           ) : (
-            <GameDecisions decisions={game.decisions} />
+            <GameDecisions
+              onPlayerClick={onPlayerClick}
+              decisions={game.decisions}
+            />
           )}
 
           {!isPre && (
@@ -234,6 +236,7 @@ export const Route = createFileRoute('/live/$id')({
               className={cn(isPre && 'pre-game')}
               topPerformers={game.topPerformers}
               title={isPre ? 'Who to Watch' : 'Top Performers'}
+              onPlayerClick={onPlayerClick}
             />
           ) : null}
 

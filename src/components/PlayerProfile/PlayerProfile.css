@@ -1,0 +1,95 @@
+.player-profile {
+  // padding: 1rem;
+  font-size: 12px;
+}
+
+.player-profile header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  * {
+    margin: 0;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  img {
+    border-radius: 4px;
+    width: 3rem;
+  }
+}
+
+.player-profile .player-profile-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+
+  * {
+    pointer-events: none;
+  }
+}
+
+.player-profile-stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  > span:first-child {
+    font-weight: 700;
+  }
+}
+
+.player-profile-section {
+  margin-bottom: 1.5rem;
+}
+
+.player-profile .box-row .box-name {
+  grid-area: name;
+  color: var(--text);
+}
+
+.player-profile .box-row.players .box-name::after {
+  content: "(" attr(data-pos) ")";
+  color: var(--text1);
+  margin-left: 0.25rem;
+}
+
+.player-profile .box-row:first-of-type {
+  font-weight: 600;
+  border-bottom: 1px dotted var(--bg2);
+  padding-bottom: 0.5rem;
+}
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: hsl(0deg 0% 0%/66%);
+  z-index: 100;
+}
+
+.drawer-content .drawer-handle {
+  top: 1rem;
+  background: var(--bg3);
+}
+
+.drawer-content {
+  height: fit-content;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  outline: none;
+  z-index: 100;
+
+  & .drawer-children {
+    padding: 2rem 1rem 2rem;
+    background: var(--bg1);
+  }
+}

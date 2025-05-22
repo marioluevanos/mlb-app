@@ -10,10 +10,13 @@
     font-size: 12px;
   }
 
+  & .player-name {
+    line-height: 1.5;
+  }
+
   & .player {
     flex: 1 0 40%;
     margin: 0;
-
     grid-template-columns: 1fr;
     justify-content: center;
     align-items: center;
