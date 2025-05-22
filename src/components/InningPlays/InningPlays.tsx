@@ -46,7 +46,7 @@ export const InningPlays: FC<InningPlaysProps> = (props) => {
           scoringPlays={scoringPlays}
           onPlayerClick={onPlayerClick}
         />
-        <AllPlays allPlays={allPlays} />
+        <AllPlays allPlays={allPlays} onPlayerClick={onPlayerClick} />
       </Tabs>
     );
   }
@@ -65,7 +65,7 @@ export const InningPlays: FC<InningPlaysProps> = (props) => {
         onPlayerClick={onPlayerClick}
       />
       <ScoringPlays scoringPlays={scoringPlays} onPlayerClick={onPlayerClick} />
-      <AllPlays allPlays={allPlays} />
+      <AllPlays allPlays={allPlays} onPlayerClick={onPlayerClick} />
     </Tabs>
   );
 };

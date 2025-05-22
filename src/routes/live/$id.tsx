@@ -229,6 +229,7 @@ export const Route = createFileRoute('/live/$id')({
             playsByInning={game.playsByInning}
             scoringPlays={game.scoringPlays}
             allPlays={game.allPlays}
+            onPlayerClick={onPlayerClick}
           />
 
           {game.topPerformers?.length > 0 ? (
