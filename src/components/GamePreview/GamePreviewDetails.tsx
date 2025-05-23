@@ -28,6 +28,7 @@ export const GamePreviewDetails: FC<GamePreviewDetailsProps> = (props) => {
     isPregame,
     isPostponed,
     isWarmup,
+    isDelayed,
     isSuspended,
   } = parseStatus(status);
 
@@ -39,7 +40,7 @@ export const GamePreviewDetails: FC<GamePreviewDetailsProps> = (props) => {
     );
   }
 
-  if (isSuspended) {
+  if (isSuspended || isDelayed) {
     return (
       <span className="game-preview-details">
         <span className={cn('game-status', className)}>

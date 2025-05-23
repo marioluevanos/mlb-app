@@ -9,6 +9,10 @@
   padding: 1rem;
 }
 
+.live-game .game-preview {
+  border-bottom: none;
+}
+
 .live-game .game-decisions {
   padding-bottom: 1rem;
   border-top: 1px solid var(--bg2);

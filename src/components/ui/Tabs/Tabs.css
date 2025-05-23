@@ -24,7 +24,7 @@
   }
 
   & .button:hover {
-    background: var(--bg1);
+    background: transparent;
   }
 
   & .button.active {

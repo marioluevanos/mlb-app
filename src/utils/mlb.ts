@@ -598,6 +598,7 @@ export function parseStatus(status: GameStatus | undefined = '') {
   const isPregame = status === 'Pre-Game';
   const isPostponed = status === 'Postponed';
   const isWarmup = status === 'Warmup';
+  const isDelayed = status === 'Delayed';
   const isSuspended = status?.startsWith('Suspended');
   const isPre = isScheduled || isPregame || isWarmup;
   const isInProgress = status === 'In Progress';
@@ -611,6 +612,7 @@ export function parseStatus(status: GameStatus | undefined = '') {
     isPregame,
     isWarmup,
     isSuspended,
+    isDelayed,
   };
 }
 

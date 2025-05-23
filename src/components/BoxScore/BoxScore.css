@@ -119,6 +119,7 @@
   margin-left: auto;
   text-align: right;
   align-items: center;
+  padding-right: 1rem;
 
   & span {
     pointer-events: none;
