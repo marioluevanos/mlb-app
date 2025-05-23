@@ -24,8 +24,8 @@ export const TeamCompare: FC<TeamCompareProps> = (props) => {
             isMore(away.score?.runs, home.score?.runs),
           )}
         >
-          <Team team={away} />
-          <Team team={home} />
+          <Team label="abbreviation" team={away} />
+          <Team label="abbreviation" team={home} />
         </span>
       </CompareRow>
     </section>
