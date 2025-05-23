@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useOutsideClick } from '../ui/useOutsideClick';
 import { BoxStats } from './BoxStats';
 import type { BaseSyntheticEvent, FC } from 'react';
 import type { BoxScoreProps } from './BoxScore';
@@ -34,6 +35,38 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
     onPlayerClick,
   } = props;
 
+  const HIGHLIGH_CLASS = 'highlighted';
+
+  const getSiblings = (el: (HTMLDivElement | Element) | null) =>
+    Array.from(el?.parentElement?.children || []);
+
+  /**
+   * Handle row clicks on a stat row
+   */
+  const onRowClick = useCallback((event: BaseSyntheticEvent) => {
+    const { target: statNode } = event;
+    const { playerId } = statNode.dataset;
+    const playerNameSel = `.box-name[data-player-id="${playerId}"]`;
+    const playerNode = document.querySelector(playerNameSel);
+    const rowSiblings = getSiblings(statNode);
+    const nameSiblings = getSiblings(playerNode);
+
+    rowSiblings.forEach((el) => el.classList.remove(HIGHLIGH_CLASS));
+    nameSiblings.forEach((el) => el.classList.remove(HIGHLIGH_CLASS));
+
+    statNode.classList.add(HIGHLIGH_CLASS);
+    playerNode?.classList.add(HIGHLIGH_CLASS);
+  }, []);
+
+  /**
+   * Handle outside click
+   */
+  const onOutsideClickRef = useOutsideClick<HTMLDivElement>(() => {
+    onOutsideClickRef.current
+      ?.querySelectorAll('.highlighted')
+      .forEach((el) => el.classList.remove(HIGHLIGH_CLASS));
+  });
+
   /**
    * Get Batters or Pitchers
    */
@@ -68,7 +101,10 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
   const ph = (bo?: number | string) => (Number(bo) % 100 > 0 ? 'ph' : '');
 
   return currentPlayers.length > 0 ? (
-    <section className={cn('box-players', toKebabCase(splits), className)}>
+    <section
+      className={cn('box-players', toKebabCase(splits), className)}
+      ref={onOutsideClickRef}
+    >
       {header}
       <div className="box-players-data">
         <div className="box-player-names">
@@ -98,7 +134,7 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
             key="box-score-players"
             currentPlayers={currentPlayers}
             statType={statType}
-            onPlayerClick={onPlayerClick}
+            onPlayerClick={onRowClick}
             matchup={matchup}
           />
         </div>

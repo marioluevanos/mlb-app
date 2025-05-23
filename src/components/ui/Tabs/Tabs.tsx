@@ -18,7 +18,7 @@ export const Tabs: FC<TabsProps> = (props) => {
     children,
     tabs = [],
     style,
-    scrollBehavior = 'instant',
+    scrollBehavior = 'smooth',
   } = props;
   const [activeTab, setActiveTab] = useState<number>(0);
   const tabsContentRef = useRef<HTMLDivElement>(null);

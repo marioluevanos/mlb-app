@@ -1,14 +1,10 @@
 .box-players {
-  padding: 1rem 1rem 0;
+  padding: 1rem 0 0 1rem;
   font-size: 12px;
 
   &:last-child {
     padding-bottom: 1.5rem;
   }
-}
-
-.final .box-players {
-  padding-right: 0;
 }
 
 .box-players-data {
@@ -23,7 +19,7 @@
   overscroll-behavior-x: contain;
   scrollbar-width: none; /* Firefox */
   overflow: -moz-scrollbars-none;
-  scroll-padding: 0 0 0 0;
+  scroll-padding: 0 1rem 0 0;
 }
 
 .box-player-stats {
@@ -41,7 +37,6 @@
 .box-stats {
   display: grid;
   justify-content: space-evenly;
-  margin-left: auto;
   text-align: right;
   align-items: center;
 
@@ -68,20 +63,6 @@
   }
 }
 
-/* Game Batting */
-.batting .box-stats {
-  grid-template-columns: auto 4.5ch 4.5ch 5.25ch 4.5ch 4.5ch 6ch 6.5ch 4.5ch;
-}
-
-/* Game Pitching */
-.pitching .box-stats {
-  grid-template-columns: auto 4.5ch 4.5ch 4ch 4ch 4.5ch 7ch 7ch 4ch 4ch;
-}
-
-.box-players.season .pitching .box-stats {
-  grid-template-columns: auto 6.5ch 4.5ch 4.5ch 4ch 4ch 4.5ch 7ch 7ch 4ch 4ch;
-}
-
 .box-heading-labels {
   font-weight: 600;
   padding-bottom: 0.5rem;
@@ -89,7 +70,6 @@
 
 .box-heading-labels .box-name {
   font-family: var(--font-sans);
-  font-size: 14px;
 
   &::after {
     display: none;
@@ -133,4 +113,25 @@
   content: '(' attr(data-pos) ')';
   color: var(--text1);
   margin-left: 0.25rem;
+}
+
+.box-name.highlighted,
+.box-stats.highlighted {
+  position: relative;
+  z-index: 1;
+  color: var(--accent);
+}
+
+.box-name.highlighted::before,
+.box-stats.highlighted::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  opacity: 0.15;
+  z-index: -1;
+}
+
+.box-name.highlighted::after {
+  color: var(--accent);
 }

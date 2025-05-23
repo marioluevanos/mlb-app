@@ -52,7 +52,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
           splits={splits}
           onPlayerClick={onPlayerClick}
           className={cn(isFinal && 'final')}
-          title={`${away.abbreviation} Batting`}
+          title={`${away.abbreviation} ${splits} Batting`}
           players={away.players}
           statType="Batting"
           key={`batting-away-${away.abbreviation}`}
@@ -62,7 +62,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
           splits={splits}
           onPlayerClick={onPlayerClick}
           className={cn(isFinal && 'final')}
-          title={`${away.abbreviation} Pitching`}
+          title={`${away.abbreviation} ${splits} Pitching`}
           players={away.players}
           statType="Pitching"
           key={`pitching-away-${away.abbreviation}`}
@@ -74,7 +74,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
           splits={splits}
           onPlayerClick={onPlayerClick}
           className={cn(isFinal && 'final')}
-          title={`${home.abbreviation} Batting`}
+          title={`${home.abbreviation} ${splits} Batting`}
           players={home.players}
           statType="Batting"
           key={`batting-home-${home.abbreviation}`}
@@ -84,7 +84,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
           splits={splits}
           onPlayerClick={onPlayerClick}
           className={cn(isFinal && 'final')}
-          title={`${home.abbreviation} Pitching`}
+          title={`${home.abbreviation} ${splits} Pitching`}
           players={home.players}
           statType="Pitching"
           key={`pitching-home-${home.abbreviation}`}

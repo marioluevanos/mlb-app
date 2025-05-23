@@ -1,7 +1,7 @@
 import './live.css';
 
 import { createFileRoute } from '@tanstack/react-router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { BaseSyntheticEvent } from 'react';
 import type { MLBLive, PlayerProfile } from '@/types.mlb';
 import type {
@@ -68,6 +68,7 @@ export const Route = createFileRoute('/live/$id')({
     const date = toLegibleDate(game.date, false);
     const [tvPanelOpen, setTvPanelOpen] = useState(false);
     const winner = isWinner(game.away.score, game.home.score);
+    const statsFetched = useRef(false);
 
     /**
      * Handle outside click
@@ -199,6 +200,8 @@ export const Route = createFileRoute('/live/$id')({
      * Call for more player stats and merge
      */
     const getStatsAndMerge = useCallback(async () => {
+      if (statsFetched.current) return;
+
       const homePlayers = await getPlayerStats(game.home.players);
       const awayPlayers = await getPlayerStats(game.away.players);
 
@@ -213,6 +216,8 @@ export const Route = createFileRoute('/live/$id')({
           players: homePlayers,
         },
       });
+
+      statsFetched.current = true;
     }, [game, getPlayerStats]);
 
     /**
@@ -222,7 +227,7 @@ export const Route = createFileRoute('/live/$id')({
       if (isPre) {
         getStatsAndMerge();
       }
-    }, [getStatsAndMerge, isPre]);
+    }, [isPre, getStatsAndMerge]);
 
     /**
      * Get live game links
