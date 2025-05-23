@@ -38,11 +38,6 @@ export const Route = createFileRoute('/')({
     const [gamePreviews, setGamePreviews] = useState<Array<GamePreviewType>>(
       data.gamePreviews,
     );
-    const gamesInProgress = gamePreviews.map((game) => {
-      if (game.status === 'In Progress') {
-        return game;
-      }
-    });
 
     /**
      * Previous Day click
@@ -92,46 +87,43 @@ export const Route = createFileRoute('/')({
     }, []);
 
     /**
-     * Map live game data for preview UI
-     */
-    const mapLiveGamePreview = useCallback(
-      (game: GamePreviewType, live: MLBLive, id: number) => {
-        const { linescore, plays } = live.liveData;
-        if (game.id === id) {
-          game.home.score = linescore.teams.home;
-          game.away.score = linescore.teams.away;
-          game.currentInning = mapCurrentInning(linescore);
-          game.count = plays.currentPlay.count;
-          game.runners = {
-            first: linescore.offense.first,
-            second: linescore.offense.second,
-            third: linescore.offense.third,
-          };
-        }
-        return game;
-      },
-      [],
-    );
-
-    /**
      * Fetch and update the game in progress
      */
     const updateGameInProgress = useCallback(
       async (feed: string) => {
         const response = await fetch(feed);
         const live: MLBLive = await response.json();
-        const games = gamePreviews || [];
-        const updated = games.map((g) => mapLiveGamePreview(g, live, g.id));
+        const updated = gamePreviews.map((game: GamePreviewType) => {
+          const { linescore, plays } = live.liveData;
+          if (game.id === live.gamePk) {
+            game.home.score = linescore.teams.home;
+            game.away.score = linescore.teams.away;
+            game.currentInning = mapCurrentInning(linescore);
+            game.count = plays.currentPlay.count;
+            game.runners = {
+              first: linescore.offense.first,
+              second: linescore.offense.second,
+              third: linescore.offense.third,
+            };
+          }
+          return Object.assign(game, {});
+        });
 
         setGamePreviews(updated);
       },
-      [mapLiveGamePreview, gamePreviews],
+      [gamePreviews],
     );
 
     /**
      * Check if game is in progress and update
      */
     useEffect(() => {
+      const gamesInProgress = gamePreviews.filter((game) => {
+        if (game.status === 'In Progress') {
+          return game;
+        }
+      });
+
       if (gamesInProgress.length) {
         const intervalIds = gamesInProgress.reduce<Array<number>>(
           (acc, game) => {
@@ -149,7 +141,7 @@ export const Route = createFileRoute('/')({
 
         return () => intervalIds.forEach((id) => clearInterval(id));
       }
-    }, [gamesInProgress, updateGameInProgress]);
+    }, [gamePreviews, updateGameInProgress]);
 
     /**
      * Update game previews
