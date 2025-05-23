@@ -5,6 +5,7 @@
     "titleBar.activeBackground": "#020287",
     "titleBar.inactiveBackground": "#cc0101"
   },
+  "editor.acceptSuggestionOnEnter": "on",
   "editor.tabSize": 2,
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",

@@ -9,25 +9,11 @@
   --bg: hsl(210deg 0% 100%);
   --bg1: hsl(210deg 16% 96%);
   --bg2: hsl(210deg 8% 92%);
-  --bg3: hsl(210deg 8% 88%);
+  --bg3: hsl(210deg 8% 82%);
   --text: hsl(210deg 0% 24%);
   --text1: hsl(210deg 0% 56%);
   --text2: hsl(210deg 0% 64%);
   --text-active: var(--text);
-}
-
-/**
- * EASE "default" mode
- */
-:root {
-  --ease-in-sine: cubic-bezier(0.47, 0, 0.745, 0.715);
-  --ease-out-sine: cubic-bezier(0.39, 0.575, 0.565, 1);
-  --ease-in-out-sine: cubic-bezier(0.445, 0.05, 0.55, 0.95);
-  --ease-in-expo: cubic-bezier(0.95, 0.05, 0.795, 0.035);
-  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
-  --ease-in-out-expo: cubic-bezier(1, 0, 0, 1);
-  --ease-in-cube: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-  --ease-out-cube: cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -48,13 +34,19 @@
   }
 }
 
+/**
+ * EASE "default" mode
+ */
 :root {
-  --aside-p: 1rem;
-  --input-h: 2.5rem;
-  --summary-top: calc(var(--summary-h) + var(--aside-p) + var(--aside-p));
-  --full-h: calc(var(--vh, 1vh) * 100);
+  --ease-in-sine: cubic-bezier(0.47, 0, 0.745, 0.715);
+  --ease-out-sine: cubic-bezier(0.39, 0.575, 0.565, 1);
+  --ease-in-out-sine: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  --ease-in-expo: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-in-out-expo: cubic-bezier(1, 0, 0, 1);
+  --ease-in-cube: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  --ease-out-cube: cubic-bezier(0.215, 0.61, 0.355, 1);
 }
-
 /* width */
 ::-webkit-scrollbar {
   width: 0.25rem;

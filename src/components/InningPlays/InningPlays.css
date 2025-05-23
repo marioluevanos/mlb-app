@@ -14,3 +14,10 @@
     }
   }
 }
+
+.final,
+.game-over {
+  & .inning-plays {
+    min-height: 100svh;
+  }
+}

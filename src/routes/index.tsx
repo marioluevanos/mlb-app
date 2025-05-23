@@ -47,6 +47,7 @@ export const Route = createFileRoute('/')({
         event.preventDefault();
         dateNavigator.goBackOneDay();
         setDate(dateNavigator.getCurrentDate().toISOString());
+        window.scrollTo(0, 0);
       },
       [setDate],
     );
@@ -61,6 +62,7 @@ export const Route = createFileRoute('/')({
         const today = new Date(localDate);
         dateNavigator.setCurrentDay(today);
         setDate(localDate);
+        window.scrollTo(0, 0);
       },
       [setDate],
     );
@@ -73,18 +75,10 @@ export const Route = createFileRoute('/')({
         event.preventDefault();
         dateNavigator.goForwardOneDay();
         setDate(dateNavigator.getCurrentDate().toISOString());
+        window.scrollTo(0, 0);
       },
       [setDate],
     );
-
-    const getGamePreviews = useCallback(async (date: string) => {
-      const [year, month, day] = formatDateInput(date);
-      const gamePreviews = await fetchScheduledGames(year, month, day);
-
-      if (gamePreviews?.games) {
-        setGamePreviews(gamePreviews.games);
-      }
-    }, []);
 
     /**
      * Fetch and update the game in progress
@@ -113,6 +107,18 @@ export const Route = createFileRoute('/')({
       },
       [gamePreviews],
     );
+
+    /**
+     * Initialization function
+     */
+    const getGamePreviews = useCallback(async (date: string) => {
+      const [year, month, day] = formatDateInput(date);
+      const gamePreviews = await fetchScheduledGames(year, month, day);
+
+      if (gamePreviews?.games) {
+        setGamePreviews(gamePreviews.games);
+      }
+    }, []);
 
     /**
      * Check if game is in progress and update

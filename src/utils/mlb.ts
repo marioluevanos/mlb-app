@@ -12,6 +12,7 @@ import type {
   Performer,
   PersonRef,
   Player,
+  PlayerProfile,
 } from '../types.mlb';
 import type {
   CurrentMatchup,
@@ -22,6 +23,8 @@ import type {
   GameStatus,
   InningPlay,
   LiveGame,
+  PlayerSeasonProfile,
+  PlayerStatParams,
   ScoringPlay,
   TeamClub,
   TeamScore,
@@ -67,6 +70,41 @@ export async function fetchScheduledGames(
   }
 }
 
+const abbreviations = {
+  'New York Yankees': 'NYY',
+  'Texas Rangers': 'TEX',
+  'Toronto Blue Jays': 'TOR',
+  'San Diego Padres': 'SD',
+  'Colorado Rockies': 'COL',
+  'Philadelphia Phillies': 'PHI',
+  Athletics: 'ATH',
+  'Los Angeles Angels': 'LAA',
+  'Detroit Tigers': 'DET',
+  'Cleveland Guardians': 'CLE',
+  'Pittsburgh Pirates': 'PIT',
+  'Milwaukee Brewers': 'MIL',
+  'Washington Nationals': 'WSH',
+  'Atlanta Braves': 'ATL',
+  'Houston Astros': 'HOU',
+  'Seattle Mariners': 'SEA',
+  'Boston Red Sox': 'BOS',
+  'Baltimore Orioles': 'BAL',
+  'Miami Marlins': 'MIA',
+  'Kansas City Royals': 'KC',
+  'Cincinnati Reds': 'CIN',
+  'Chicago Cubs': 'CHC',
+  'St. Louis Cardinals': 'STL',
+  'Arizona Diamondbacks': 'AZ',
+  'Chicago White Sox': 'CHI',
+  'New York Mets': 'NYM',
+  'Los Angeles Dodgers': 'LAD',
+  'San Francisco Giants': 'SF',
+  'Tampa Bay Rays': 'TB',
+  'Minnesota Twins': 'MIN',
+};
+
+type Abbreviations = keyof typeof abbreviations;
+
 export function mapToGamePreview(g: MLBGamePreview) {
   const { away, home } = g.teams;
 
@@ -82,6 +120,7 @@ export function mapToGamePreview(g: MLBGamePreview) {
       logo: logo(away.team.id),
       record: away.leagueRecord,
       name: away.team.name,
+      abbreviation: abbreviations[away.team.name as Abbreviations],
       id: away.team.id,
       isWinner: away.isWinner,
     },
@@ -89,6 +128,7 @@ export function mapToGamePreview(g: MLBGamePreview) {
       logo: logo(home.team.id),
       record: home.leagueRecord,
       name: home.team.name,
+      abbreviation: abbreviations[home.team.name as Abbreviations],
       id: home.team.id,
       isWinner: home.isWinner,
     },
@@ -212,7 +252,7 @@ function mapToTeam(team: 'home' | 'away', data: MLBLive): TeamClub {
 
   return {
     record: teams[team].record.leagueRecord,
-    name: teams[team].abbreviation,
+    name: teams[team].name,
     id: teams[team].id,
     score: linescore.teams[team],
     startingPitcher,
@@ -254,8 +294,8 @@ export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
     innings: linescore.innings,
     topPerformers: boxscore.topPerformers.map(topPerformers) || [],
     playsByInning: getCurrentPlays(),
-    scoringPlays: getScoringPlays(),
-    allPlays: getAllPlays(),
+    scoringPlays: getScoringPlays([awayTeam.id, homeTeam.id]),
+    allPlays: getAllPlays([awayTeam.id, homeTeam.id]),
     currentPlay: {
       count: currentPlay?.count,
       events: currentPlay?.playEvents,
@@ -275,11 +315,14 @@ export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
     decisions: getDecision(status, decisions, awayTeam, homeTeam),
   };
 
-  function getAllPlays(): LiveGame['allPlays'] {
+  function getAllPlays(
+    teamIds: [awayId: number, homeId: number],
+  ): LiveGame['allPlays'] {
     return allPlays.reduce<NonNullable<LiveGame['allPlays']>>((acc, atBat) => {
       const currentInning = atBat?.about.inning;
       const half = atBat?.about.isTopInning ? 'Top' : 'Bot';
       const inning = `${half} ${getOrdinal(currentInning)}`;
+      const teamId = atBat?.about.isTopInning ? teamIds[0] : teamIds[1];
 
       if (!acc[inning]) {
         acc[inning] = [];
@@ -295,6 +338,7 @@ export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
           players: allPlayers,
           matchup: atBat.matchup,
         }),
+        teamLogo: logo(teamId),
         teamAbbreviation,
         result: atBat.result,
         currentInning: inning,
@@ -304,7 +348,9 @@ export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
     }, {});
   }
 
-  function getScoringPlays(): LiveGame['scoringPlays'] {
+  function getScoringPlays(
+    teamIds: [awayId: number, homeId: number],
+  ): LiveGame['scoringPlays'] {
     return scoringPlays.reduce<NonNullable<LiveGame['scoringPlays']>>(
       (acc, playIndex) => {
         const play = allPlays.find((b) => b.atBatIndex === playIndex);
@@ -352,11 +398,14 @@ export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
           matchup: play.matchup,
         });
 
+        const teamId = teamIds[play.about.isTopInning ? 0 : 1];
+
         acc.push({
           inning: `${play.about.isTopInning ? 'TOP' : 'BOT'} ${play.about.inning}`,
           teamAbbreviation: play.about.isTopInning
             ? teamAbbreviation[0]
             : teamAbbreviation[1],
+          teamLogo: logo(teamId),
           result: play?.result,
           matchup: {
             batter: matchup?.batter,
@@ -406,6 +455,7 @@ export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
           teamAbbreviation: play.about.isTopInning
             ? teamAbbreviation[0]
             : teamAbbreviation[1],
+          teamLogo: '', // intentionally left blank
           result: play?.result,
           matchup: {
             batter: mapToBatter(matchup?.batter, play?.result),
@@ -625,13 +675,16 @@ export function getOrdinal(n: number | string | undefined): string {
   return `${n}${suffix}`;
 }
 
-export function getPlayerProfile({
+/**
+ * Find the players profile from the current game
+ */
+export function findPlayerProfile({
   game,
   playerId,
 }: {
   playerId: number;
   game?: LiveGame;
-}): GamePlayer {
+}): PlayerSeasonProfile {
   const players = [
     ...(game?.away?.players || []),
     ...(game?.home?.players || []),
@@ -641,7 +694,48 @@ export function getPlayerProfile({
   return {
     ...player,
     avatar: headshot(player?.id),
+    /**
+     * @TODO finish thi sshit
+     */
+    mlbDebutDate: '',
+    height: '',
+    weight: 0,
+    birthDate: '',
+    currentAge: 100,
+    birthCity: '',
   };
+}
+
+/**
+ * Get detailed player stats
+ */
+export async function getPlayerProfileStats(
+  params: PlayerStatParams,
+): Promise<{ people: Array<PlayerProfile> }> {
+  const { playerIds = [], season, group, gameType = 'R' } = params;
+  const personIds = playerIds.map((id) => `personIds=${id}`).join('&');
+  const statParams = `season=${season}&hydrate=stats(group=${group},type=season,season=${season},gameType=[${gameType}])`;
+  const API = `${MLB_API}/api/v1/people?${personIds}&${statParams}`;
+  try {
+    const response = await fetch(API);
+    const json: { people: Array<PlayerProfile> } = await response.json();
+
+    return json;
+  } catch (error) {
+    console.error(error);
+  }
+
+  return {
+    people: [],
+  };
+}
+
+/**
+ * Modified player name
+ */
+export function getPlayerFirstName(name: string = '') {
+  const [last, first] = name.split(' ').reverse();
+  return `${first.charAt(0)}. ${last}`;
 }
 
 export function avatar(id: string | number, size: number = 64) {

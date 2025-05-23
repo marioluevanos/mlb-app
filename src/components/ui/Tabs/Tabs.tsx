@@ -1,33 +1,50 @@
 import './Tabs.css';
 import { Fragment, useCallback, useRef, useState } from 'react';
 import { Button } from '../Button/Button';
-import type { BaseSyntheticEvent, FC, ReactNode } from 'react';
+import type { BaseSyntheticEvent, CSSProperties, FC, ReactNode } from 'react';
 import { cn } from '@/utils/cn';
 
 export type TabsProps = {
   className?: string;
   children?: Array<ReactNode>;
   tabs?: Array<ReactNode>;
+  scrollBehavior?: ScrollBehavior;
+  style?: CSSProperties;
 };
 
 export const Tabs: FC<TabsProps> = (props) => {
-  const { className, children, tabs = [] } = props;
+  const {
+    className,
+    children,
+    tabs = [],
+    style,
+    scrollBehavior = 'instant',
+  } = props;
   const [activeTab, setActiveTab] = useState<number>(0);
   const tabsContentRef = useRef<HTMLDivElement>(null);
 
   /**
    * Set active tab and scroll to top of content
    */
-  const onTabClick = useCallback((i: number, event: BaseSyntheticEvent) => {
-    setActiveTab(i);
-    const parent = event.target.parentElement?.parentElement;
-    if (parent) {
-      window.scrollTo({ top: parent.offsetTop + 1, behavior: 'smooth' });
-    }
-  }, []);
+  const onTabClick = useCallback(
+    (i: number, event: BaseSyntheticEvent) => {
+      setActiveTab(i);
+      requestAnimationFrame(() => {
+        const parent = event.target.parentElement?.parentElement;
+
+        if (parent) {
+          window.scrollTo({
+            top: parent.offsetTop + 1,
+            behavior: scrollBehavior,
+          });
+        }
+      });
+    },
+    [scrollBehavior],
+  );
 
   return tabs?.length > 0 ? (
-    <section className={cn('tabs', className)}>
+    <section className={cn('tabs', className)} style={style}>
       <div className="tabs-actions">
         {tabs?.map((tab, i) => (
           <Button
@@ -35,7 +52,7 @@ export const Tabs: FC<TabsProps> = (props) => {
             key={i}
             onClick={onTabClick.bind(null, i)}
           >
-            {tab}
+            <span>{tab}</span>
           </Button>
         ))}
       </div>

@@ -5,7 +5,9 @@ import { cn } from '@/utils/cn';
 export type TeamProps = {
   className?: string;
   children?: ReactNode;
+  label: 'abbreviation' | 'name';
   team: {
+    abbreviation: string;
     name: string;
     logo: string;
     id: number;
@@ -13,7 +15,7 @@ export type TeamProps = {
 };
 
 export const Team: FC<TeamProps> = (props) => {
-  const { team, className, children } = props;
+  const { team, className, children, label = 'abbreviation' } = props;
 
   return (
     <div className={cn('team', className)} data-team-id={team.id}>
@@ -22,7 +24,9 @@ export const Team: FC<TeamProps> = (props) => {
           <img src={team.logo} width={32} height={32} alt={team.name} />
         )}
       </span>
-      <span className="team-name">{team.name}</span>
+      <span className="team-name">
+        {label === 'name' ? team.name : team.abbreviation}
+      </span>
       {children}
     </div>
   );

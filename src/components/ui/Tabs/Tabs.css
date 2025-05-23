@@ -5,22 +5,53 @@
 .tabs .tabs-actions {
   background: var(--bg);
   display: flex;
-  padding: 1rem 1rem 1rem;
-  gap: 1rem;
+  padding: 0 0.5rem;
+  flex-direction: row;
+  overflow: scroll hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none; /* Firefox */
+  overflow: -moz-scrollbars-none;
+  scroll-padding: 0 1rem 0 1rem;
   z-index: 100;
+  flex: 1;
+
+  &::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
 
   &:empty {
     display: none;
   }
 
   & .button {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    padding: 1rem 0.5rem;
+    white-space: nowrap;
     text-transform: capitalize;
     justify-content: space-between;
     color: var(--text1);
-    padding: 0;
     background: none;
-    font: 700 0.875rem/1 var(--font-sans);
+    font: 700 16px/1 var(--font-sans);
     -webkit-tap-highlight-color: transparent;
+
+    & * {
+      pointer-events: none;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0.5rem;
+      right: 0.5rem;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.15s var(--ease-out-sine);
+    }
   }
 
   & .button:hover {
@@ -29,16 +60,9 @@
 
   & .button.active {
     color: var(--text);
-    position: relative;
 
     &::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      bottom: -17px;
-      left: 0;
-      height: 1px;
-      background: var(--accent);
+      opacity: 1;
     }
   }
 
@@ -62,6 +86,7 @@
 
 .tabs-content h3 {
   white-space: nowrap;
+  min-width: 80px;
   padding: 0 1rem 1.5rem;
   margin: 1.25rem 0 0 0;
   position: sticky;

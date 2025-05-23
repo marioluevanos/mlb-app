@@ -37,7 +37,14 @@ export type ScoreboardTeam = Omit<
   'players' | 'batting' | 'fielding' | 'pitching'
 >;
 
-export type TeamRoster = GamePlayer;
+export type PlayerSeasonProfile = GamePlayer & {
+  mlbDebutDate: string;
+  height: string;
+  weight: number;
+  birthDate: string;
+  currentAge: number;
+  birthCity: string;
+};
 
 export type GameStatus = string;
 
@@ -117,6 +124,7 @@ export type GameStreamLinks = {
 export type ScheduledTeam = {
   record: TeamRecord;
   name: string;
+  abbreviation: string;
   logo: string;
   id: number;
   isWinner: boolean;
@@ -147,16 +155,27 @@ export type LiveGame = {
   highlights: Array<GameHighlight>;
 };
 
-export type InningPlay = Omit<CurrentPlay, 'runners' | 'count' | 'events'> & {
+export type InningPlay = {
+  teamLogo: string;
   teamAbbreviation: string;
   currentInning?: string;
-  inning?: string;
+  inning?: string | number;
+  matchup: CurrentMatchup;
+  result?: PlayResult;
 };
 
-export type ScoringPlay = Omit<CurrentPlay, 'runners' | 'count' | 'events'> & {
-  teamAbbreviation: string;
-  currentInning?: string;
-  inning: string;
+export type ScoringPlay = InningPlay;
+
+export type CurrentPlay = {
+  matchup: CurrentMatchup;
+  result?: PlayResult;
+  events: Array<PlayEvent>;
+  count: CurrentCount;
+  runners: {
+    first?: GamePlayer;
+    second?: GamePlayer;
+    third?: GamePlayer;
+  };
 };
 
 export type GameDecision = {
@@ -189,14 +208,20 @@ export type CurrentCount = {
   outs: number;
 };
 
-export type CurrentPlay = {
-  matchup: CurrentMatchup;
-  events: Array<PlayEvent>;
-  result?: PlayResult;
-  count: CurrentCount;
-  runners: {
-    first?: GamePlayer;
-    second?: GamePlayer;
-    third?: GamePlayer;
-  };
+export type StatsByPosition = {
+  [key in Exclude<PlayerStatParams['group'], 'fielding'>]: Array<GamePlayer>;
+};
+
+export type StatType = 'Batting' | 'Pitching' | 'Fielding';
+
+export type PlayerStatParams = {
+  playerIds: Array<number>;
+  season: number;
+  group: 'hitting' | 'pitching' | 'fielding';
+  /**
+   * "R": Represents a regular season game.
+   * "P": Indicates a playoff game.
+   * "E": Suggests an exhibition game or a preseason game.
+   */
+  gameType?: 'R' | 'P' | 'E';
 };

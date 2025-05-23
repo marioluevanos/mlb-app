@@ -39,6 +39,7 @@ export const Scoreboard: FC<ScoreboardProps> = (props) => {
           <Team
             key={team.id}
             team={team}
+            label="abbreviation"
             className={cn(
               winner === 'away' && index === 0 && 'winner',
               winner === 'home' && index === 1 && 'winner',

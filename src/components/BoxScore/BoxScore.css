@@ -1,93 +1,17 @@
-.box-score {
-  &:has(.box-score-content:empty) {
-    display: none;
-  }
-
-  & div:empty {
-    display: none;
-  }
-
-  & .win {
-    color: var(--text1);
-  }
-
-  & .loss {
-    color: hsl(0 100% 60%);
-    color: var(--text1);
-  }
-}
-
-.box-score-actions {
-  border-bottom: 1px dotted var(--bg2);
-  background: var(--bg);
-  display: flex;
-  padding: 1rem 1rem 1rem;
-  gap: 2rem;
-
-  &:empty {
-    display: none;
-  }
-
-  & .button {
-    text-transform: capitalize;
-    justify-content: space-between;
-    color: var(--text1);
-    padding: 0;
-    background: none;
-    font: 700 0.875rem/1 var(--font-sans);
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  & .button:hover {
-    background: transparent;
-  }
-
-  & .button.active {
-    color: var(--text);
-    position: relative;
-    background: transparent;
-
-    &::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      bottom: -17px;
-      left: 0;
-      height: 1px;
-      background: var(--accent);
-    }
-  }
-
-  & .button .label {
-    text-transform: none;
-    letter-spacing: 0;
-    font-family: var(--font-sans);
-  }
-
-  & .button .team-home-away,
-  & .button .record {
-    display: inline-flex;
-    margin-left: 0.5rem;
-    text-transform: none;
-    letter-spacing: 0;
-    font-family: var(--font-mono);
-    font-size: 12px;
-  }
-}
-
 .box-players {
-  padding: 1rem 0 1rem 1rem;
+  padding: 1rem 1rem 0;
   font-size: 12px;
-  display: none;
 
-  &.active {
-    display: block;
+  &:last-child {
+    padding-bottom: 1.5rem;
   }
+}
+
+.final .box-players {
+  padding-right: 0;
 }
 
 .box-players-data {
-  display: flex;
-
   display: flex;
   flex-direction: row;
   flex: 1;
@@ -106,6 +30,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding-right: 1rem;
 }
 
 .box-players:not(.final) .active {
@@ -119,31 +44,42 @@
   margin-left: auto;
   text-align: right;
   align-items: center;
-  padding-right: 1rem;
 
   & span {
     pointer-events: none;
     width: 100%;
     scroll-snap-align: end;
     scroll-snap-stop: always;
-    text-align: center;
-
-    &:not(:first-child) {
-      border-left: 1px solid var(--bg2);
-    }
-  }
-
-  & .season {
-    color: var(--text1);
+    text-align: right;
+    position: relative;
+    padding: 0 0.5rem;
   }
 }
 
+.box-stats:not(.box-heading-labels) {
+  & span:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -2px;
+    bottom: -2px;
+    background: var(--bg2);
+    width: 1px;
+  }
+}
+
+/* Game Batting */
 .batting .box-stats {
-  grid-template-columns: 4ch 3ch 3ch 5ch 4ch 4ch 6ch 6ch 4ch;
+  grid-template-columns: auto 4.5ch 4.5ch 5.25ch 4.5ch 4.5ch 6ch 6.5ch 4.5ch;
 }
 
+/* Game Pitching */
 .pitching .box-stats {
-  grid-template-columns: 5ch 3ch 3ch 4ch 4ch 3ch 6ch 6ch 3ch 3ch;
+  grid-template-columns: auto 4.5ch 4.5ch 4ch 4ch 4.5ch 7ch 7ch 4ch 4ch;
+}
+
+.box-players.season .pitching .box-stats {
+  grid-template-columns: auto 6.5ch 4.5ch 4.5ch 4ch 4ch 4.5ch 7ch 7ch 4ch 4ch;
 }
 
 .box-heading-labels {
@@ -152,7 +88,8 @@
 }
 
 .box-heading-labels .box-name {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
+  font-size: 14px;
 
   &::after {
     display: none;
@@ -165,12 +102,19 @@
   white-space: nowrap;
 }
 
-.ph.batting::before {
-  content: '—';
-  margin-right: 0.25rem;
+.ph.box-name {
+  padding-left: 0.25rem;
+
+  &::before {
+    content: '—';
+    margin-right: 0.25rem;
+  }
 }
 
 .box-player-names {
+  --pos-length: 4ch;
+  --name-padding: 1ch;
+
   gap: 4px;
   flex: 1;
   display: flex;
@@ -178,7 +122,11 @@
   align-items: stretch;
   position: sticky;
   left: 0;
+  min-width: calc(
+    var(--max-name) * 1ch + var(--pos-length) + var(--name-padding)
+  );
   background: var(--bg);
+  z-index: 10;
 }
 
 .box-player-names .box-name::after {

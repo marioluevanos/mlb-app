@@ -10,8 +10,11 @@
   padding: 0.25rem 0.75rem 0.25rem 0.5rem;
   width: max-content;
   position: relative;
-  left: -2px;
   gap: 0.5rem;
+}
+
+.event-header.has-logo {
+  padding: 0 0.75rem 0 0;
 }
 
 .event-header .abbreviation,

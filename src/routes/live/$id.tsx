@@ -3,11 +3,20 @@ import './live.css';
 import { createFileRoute } from '@tanstack/react-router';
 import { useCallback, useEffect, useState } from 'react';
 import type { BaseSyntheticEvent } from 'react';
-import type { MLBLive } from '@/types.mlb';
-import type { GameStream, GameStreamLinks, LiveGame } from '@/types';
+import type { MLBLive, PlayerProfile } from '@/types.mlb';
+import type {
+  GamePlayer,
+  GameStream,
+  GameStreamLinks,
+  LiveGame,
+  StatType,
+  StatsByPosition,
+} from '@/types';
 import {
   fetchScheduledGames,
-  getPlayerProfile,
+  findPlayerProfile,
+  getPlayerProfileStats,
+  headshot,
   isWinner,
   mapToLiveGame,
   parseStatus,
@@ -104,7 +113,7 @@ export const Route = createFileRoute('/live/$id')({
 
         const target = event.target;
         const playerId = +target.dataset?.playerId;
-        const player = getPlayerProfile({
+        const player = findPlayerProfile({
           playerId,
           game,
         });
@@ -113,6 +122,107 @@ export const Route = createFileRoute('/live/$id')({
       },
       [game],
     );
+
+    /**
+     * Get and filter player ids
+     */
+    const getIds = useCallback((players: Array<GamePlayer>) => {
+      return players.reduce<Array<number>>((acc, p) => {
+        if (p.id) {
+          acc.push(p.id);
+        }
+        return acc;
+      }, []);
+    }, []);
+
+    /**
+     * Map season stats to game player object
+     */
+    const mapToGamePlayer = useCallback(
+      (people: Array<PlayerProfile>, type: StatType) => {
+        return people.map<GamePlayer>((p) => {
+          const stats = p.stats[0].splits[0].stat;
+
+          return {
+            position: p.primaryPosition.abbreviation,
+            avatar: headshot(p.id),
+            fullName: p.fullName,
+            id: p.id,
+            season: {
+              batting: type === 'Batting' ? stats : {},
+              pitching: type === 'Pitching' ? stats : {},
+            },
+          };
+        });
+      },
+      [],
+    );
+
+    /**
+     * Get platyer stats by team
+     */
+    const getPlayerStats = useCallback(
+      async (players: Array<GamePlayer> | undefined) => {
+        const args = (players || []).reduce<StatsByPosition>(
+          (acc, p) => {
+            const key = p.position === 'P' ? 'pitching' : 'hitting';
+            if (p && p.id) {
+              acc[key].push(p);
+            }
+            return acc;
+          },
+          { pitching: [], hitting: [] },
+        );
+
+        const [pitching, hitting] = await Promise.all([
+          getPlayerProfileStats({
+            playerIds: getIds(args.pitching),
+            group: 'pitching',
+            season: 2025,
+          }),
+          getPlayerProfileStats({
+            playerIds: getIds(args.hitting),
+            group: 'hitting',
+            season: 2025,
+          }),
+        ]);
+
+        const pitchers = mapToGamePlayer(pitching.people, 'Pitching');
+        const batters = mapToGamePlayer(hitting.people, 'Batting');
+
+        return [...pitchers, ...batters];
+      },
+      [getIds, mapToGamePlayer],
+    );
+
+    /**
+     * Call for more player stats and merge
+     */
+    const getStatsAndMerge = useCallback(async () => {
+      const homePlayers = await getPlayerStats(game.home.players);
+      const awayPlayers = await getPlayerStats(game.away.players);
+
+      setGame({
+        ...game,
+        away: {
+          ...game.away,
+          players: awayPlayers,
+        },
+        home: {
+          ...game.home,
+          players: homePlayers,
+        },
+      });
+    }, [game, getPlayerStats]);
+
+    /**
+     * Initialize
+     */
+    useEffect(() => {
+      if (isPre) {
+        getStatsAndMerge();
+      }
+    }, [getStatsAndMerge, isPre]);
 
     /**
      * Get live game links
@@ -229,6 +339,7 @@ export const Route = createFileRoute('/live/$id')({
             playsByInning={game.playsByInning}
             scoringPlays={game.scoringPlays}
             allPlays={game.allPlays}
+            highlights={game.highlights}
             onPlayerClick={onPlayerClick}
           />
 
@@ -256,10 +367,9 @@ export const Route = createFileRoute('/live/$id')({
             currentInning={game.currentInning}
           />
 
-          <GameHighlights
-            title={isPre ? 'Preview' : 'Highlights'}
-            highlights={game.highlights}
-          />
+          {!isFinal && (
+            <GameHighlights title="Preview" highlights={game.highlights} />
+          )}
         </section>
       </main>
     );

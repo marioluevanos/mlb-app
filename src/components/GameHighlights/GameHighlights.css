@@ -133,7 +133,7 @@
     display: block;
   }
 
-  & .img {
+  & img {
     background: var(--bg);
     width: 100%;
     height: auto;

@@ -9,7 +9,7 @@
   padding: 1rem;
 }
 
-.live-game .game-preview {
+.live-game .game-preview:not(.scheduled) {
   border-bottom: none;
 }
 
@@ -28,9 +28,27 @@
   }
 }
 
-.live-game.final .inning-plays {
-  order: 1;
-  margin-top: -1px;
+/* Game Over/ Final */
+.live-game.game-over,
+.live-game.final {
+  & .inning-plays {
+    order: 1;
+    margin-top: -1px;
+  }
+
+  & .game-highlight {
+    padding: 0;
+  }
+
+  & .game-highlight .current-game-highlight {
+    padding-top: 0;
+    padding-right: 0;
+    top: calc(48px + 48px - 1px);
+  }
+
+  & .game-highlight h3 {
+    display: none;
+  }
 }
 
 #live-game .game-streams {

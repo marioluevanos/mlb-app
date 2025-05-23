@@ -94,28 +94,34 @@ const BoxPlayer: FC<BoxPlayerProps> = (props) => {
             <p>#{player.jerseyNumber}</p>
           </div>
         </header>
-        <section className="player-profile-section">
-          <h3>Season Batting</h3>
-          <div key={player.id} className={cn('player-profile-row')}>
-            {batting.map((stat, idx) => (
-              <span className="player-profile-stats" key={idx}>
-                <span>{stat.label}</span>
-                <span>{stat.value}</span>
-              </span>
-            ))}
-          </div>
-        </section>
-        <section className="player-profile-section">
-          <h3>Season Pitching</h3>
-          <div key={player.id} className={cn('player-profile-row')}>
-            {pitching.map((stat, idx) => (
-              <span className="player-profile-stats" key={idx}>
-                <span>{stat.label}</span>
-                <span>{stat.value}</span>
-              </span>
-            ))}
-          </div>
-        </section>
+
+        {player.position !== 'P' && (
+          <section className="player-profile-section">
+            <h3>Season Batting</h3>
+            <div key={player.id} className={cn('player-profile-row')}>
+              {batting.map((stat, idx) => (
+                <span className="player-profile-stats" key={idx}>
+                  <span>{stat.label}</span>
+                  <span>{stat.value}</span>
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {player.position === 'P' && (
+          <section className="player-profile-section">
+            <h3>Season Pitching</h3>
+            <div key={player.id} className={cn('player-profile-row')}>
+              {pitching.map((stat, idx) => (
+                <span className="player-profile-stats" key={idx}>
+                  <span>{stat.label}</span>
+                  <span>{stat.value}</span>
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     )
   );
