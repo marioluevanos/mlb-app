@@ -1,11 +1,11 @@
 import { Fragment } from 'react';
+import { getSource } from './BoxScore.utils';
 import type { BaseSyntheticEvent, FC } from 'react';
 import type { BoxPlayersProps } from './BoxPlayers';
 import type { GamePlayer } from '@/types';
 import { cn } from '@/utils/cn';
 import { cssVars } from '@/utils/cssVars';
 import { toKebabCase } from '@/utils/toKebabCase';
-import { getSource } from '@/utils/mlb';
 
 type BoxStatsProps = Pick<
   BoxPlayersProps,

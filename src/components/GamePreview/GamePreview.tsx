@@ -45,7 +45,10 @@ export const GamePreview: FC<GamePreviewProps> = (props) => {
       <div className="game-preview-teams">
         <Team
           key={away.id}
-          team={away}
+          team={{
+            ...away,
+            // logo: `/logos/${away.abbreviation}.svg`,
+          }}
           label="abbreviation"
           className={cn('game-preview-away', winner === 'away' && 'winner')}
         >
@@ -56,7 +59,10 @@ export const GamePreview: FC<GamePreviewProps> = (props) => {
         </Team>
         <Team
           key={home.id}
-          team={home}
+          team={{
+            ...home,
+            // logo: `/logos/${home.abbreviation}.svg`,
+          }}
           label="abbreviation"
           className={cn('game-preview-home', winner === 'home' && 'winner')}
         >

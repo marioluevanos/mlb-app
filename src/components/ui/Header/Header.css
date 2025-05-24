@@ -28,6 +28,7 @@
     background: none;
     border: none;
     font: 700 0px/1 var(--font-sans);
+    cursor: pointer;
   }
 
   & .logo {

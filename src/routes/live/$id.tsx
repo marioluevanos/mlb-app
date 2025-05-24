@@ -317,7 +317,10 @@ export const Route = createFileRoute('/live/$id')({
           )}
 
           {(!isFinal && isInProgress) || (!isFinal && isSuspended) ? (
-            <GameMatchup matchup={game.currentPlay?.matchup}>
+            <GameMatchup
+              matchup={game.currentPlay?.matchup}
+              onPlayerClick={onPlayerClick}
+            >
               <GameBug
                 count={game.currentPlay?.count}
                 currentInning={game.currentInning}
