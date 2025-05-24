@@ -9,9 +9,9 @@
   --bg: hsl(210deg 0% 100%);
   --bg1: hsl(210deg 16% 96%);
   --bg2: hsl(210deg 8% 92%);
-  --bg3: hsl(210deg 8% 82%);
-  --text: hsl(210deg 0% 24%);
-  --text1: hsl(210deg 0% 56%);
+  --bg3: hsl(210deg 8% 76%);
+  --text: hsl(210deg 0% 0%);
+  --text1: hsl(210deg 0% 30%);
   --text2: hsl(210deg 0% 64%);
   --text-active: var(--text);
 }
