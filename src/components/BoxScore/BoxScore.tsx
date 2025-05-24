@@ -24,8 +24,12 @@ export type BoxScoreProps = {
 
 export const BoxScore: FC<BoxScoreProps> = (props) => {
   const { home, away, status, matchup, onPlayerClick } = props;
-  const { isFinal, isPre } = parseStatus(status);
+  const { isFinal, isPre, isInProgress } = parseStatus(status);
   const splits = isPre ? 'Season' : 'Game';
+  const boxPlayerClassName = cn(
+    isFinal && 'final',
+    isInProgress && 'in-progress',
+  );
 
   /**
    * Get longest name to set column width
@@ -51,7 +55,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
         <BoxPlayers
           splits={splits}
           onPlayerClick={onPlayerClick}
-          className={cn(isFinal && 'final')}
+          className={boxPlayerClassName}
           title={`${away.abbreviation} ${splits} Batting`}
           players={away.players}
           statType="Batting"
@@ -61,7 +65,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
         <BoxPlayers
           splits={splits}
           onPlayerClick={onPlayerClick}
-          className={cn(isFinal && 'final')}
+          className={boxPlayerClassName}
           title={`${away.abbreviation} ${splits} Pitching`}
           players={away.players}
           statType="Pitching"
@@ -73,7 +77,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
         <BoxPlayers
           splits={splits}
           onPlayerClick={onPlayerClick}
-          className={cn(isFinal && 'final')}
+          className={boxPlayerClassName}
           title={`${home.abbreviation} ${splits} Batting`}
           players={home.players}
           statType="Batting"
@@ -83,7 +87,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
         <BoxPlayers
           splits={splits}
           onPlayerClick={onPlayerClick}
-          className={cn(isFinal && 'final')}
+          className={boxPlayerClassName}
           title={`${home.abbreviation} ${splits} Pitching`}
           players={home.players}
           statType="Pitching"

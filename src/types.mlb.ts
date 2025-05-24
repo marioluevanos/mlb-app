@@ -972,6 +972,7 @@ export type BattingRecord = {
   popOuts: number;
   lineOuts: number;
   summary?: string;
+  note?: string;
 };
 
 export interface Player {

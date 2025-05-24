@@ -142,7 +142,7 @@ export const Route = createFileRoute('/live/$id')({
     const mapToGamePlayer = useCallback(
       (people: Array<PlayerProfile>, type: StatType) => {
         return people.map<GamePlayer>((p) => {
-          const stats = p.stats[0].splits[0].stat;
+          const stats = p.stats ? p.stats[0]?.splits[0]?.stat : {};
 
           return {
             position: p.primaryPosition.abbreviation,

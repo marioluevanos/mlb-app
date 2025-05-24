@@ -29,7 +29,7 @@
   padding-right: 1rem;
 }
 
-.box-players:not(.final) .active {
+.box-players.in-progress .active {
   background: var(--bg2);
   color: var(--text);
 }
@@ -48,7 +48,12 @@
     text-align: right;
     position: relative;
     padding: 0 0.5rem;
+    white-space: nowrap;
   }
+}
+
+.box-stats .box-stats-label {
+  pointer-events: all;
 }
 
 .box-stats:not(.box-heading-labels) {

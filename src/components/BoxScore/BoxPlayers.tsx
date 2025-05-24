@@ -1,23 +1,28 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useState } from 'react';
 import { useOutsideClick } from '../ui/useOutsideClick';
 import { BoxStats } from './BoxStats';
 import type { BaseSyntheticEvent, FC } from 'react';
 import type { BoxScoreProps } from './BoxScore';
 import type { ReactNode } from '@tanstack/react-router';
-import type { GamePlayer, StatType } from '@/types';
+import type { GamePlayer, StatSplit, StatType } from '@/types';
+import type { BattingRecord, PitchingRecord } from '@/types.mlb';
 import { toKebabCase } from '@/utils/toKebabCase';
 import { cn } from '@/utils/cn';
 import { getPlayerFirstName } from '@/utils/mlb';
+
+type SortKey = keyof PitchingRecord & keyof BattingRecord;
+
+type SortPayload = {
+  sortKey: SortKey;
+  splitKey: Exclude<Lowercase<StatSplit>, 'playoff'>;
+};
 
 export type BoxPlayersProps = {
   title?: string;
   players?: Array<GamePlayer>;
   className?: string;
   statType: StatType;
-  /**
-   * Where to take the stats from
-   */
-  splits: 'Season' | 'Playoff' | 'Game';
+  splits: StatSplit;
   header?: ReactNode;
   matchup?: BoxScoreProps['matchup'];
   onPlayerClick?: (event: BaseSyntheticEvent) => void;
@@ -36,9 +41,26 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
   } = props;
 
   const HIGHLIGH_CLASS = 'highlighted';
+  const statKey = statType === 'Batting' ? 'batting' : 'pitching';
+  const [sort, setSort] = useState<SortPayload>();
 
   const getSiblings = (el: (HTMLDivElement | Element) | null) =>
     Array.from(el?.parentElement?.children || []);
+
+  const currentPlayers = sortyByStat(
+    getCurrentPlayers(players, statType, splits),
+    sort?.splitKey,
+    statKey,
+    sort?.sortKey,
+  );
+
+  /**
+   * Sort the stats
+   */
+  const onSortClick = useCallback((event: BaseSyntheticEvent) => {
+    const { sortKey, splitKey } = event.target.dataset;
+    setSort({ sortKey, splitKey });
+  }, []);
 
   /**
    * Handle row clicks on a stat row
@@ -68,34 +90,6 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
   });
 
   /**
-   * Get Batters or Pitchers
-   */
-  const currentPlayers = useMemo(() => {
-    const order =
-      statType === 'Batting'
-        ? getBattingOrder(players)
-        : getPitchingOrder(players);
-
-    if (splits === 'Game' && order.length) {
-      return order;
-    }
-
-    if (statType === 'Pitching') {
-      return players.filter((p) => {
-        if (p.position === 'P') {
-          return p;
-        }
-      });
-    }
-
-    return players.filter((p) => {
-      if (p.position !== 'P') {
-        return p;
-      }
-    });
-  }, [statType, players, splits]);
-
-  /**
    * Pinch hitter class
    */
   const ph = (bo?: number | string) => (Number(bo) % 100 > 0 ? 'ph' : '');
@@ -119,6 +113,7 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
                 matchup?.pitcherId === player.id && 'active',
                 ph(player.battingOrder),
               )}
+              data-batting-order={player.battingOrder}
               data-pos={player.position}
               data-player-id={player.id}
               key={`${player.id}-${index}`}
@@ -134,6 +129,7 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
             key="box-score-players"
             currentPlayers={currentPlayers}
             statType={statType}
+            onSortClick={onSortClick}
             onPlayerClick={onRowClick}
             matchup={matchup}
           />
@@ -175,4 +171,60 @@ function getPitchingOrder(players: Array<GamePlayer>) {
     }
     return acc;
   }, []);
+}
+
+function sortyByStat(
+  players: Array<GamePlayer>,
+  splitKey: 'game' | 'season' | undefined,
+  statKey: 'batting' | 'pitching',
+  sortKey: SortKey | undefined,
+) {
+  if (!sortKey || !splitKey) return players;
+
+  return players.sort((a, b) => {
+    if (a[splitKey] && b[splitKey]) {
+      const aStats = a[splitKey][statKey];
+      const bStats = b[splitKey][statKey];
+      if (aStats && bStats) {
+        const aVal = Number(aStats[sortKey]);
+        const bVal = Number(bStats[sortKey]);
+
+        return aVal > bVal ? -1 : 1;
+      }
+    }
+    return 0;
+  });
+}
+
+function getCurrentPlayers(
+  players: Array<GamePlayer>,
+  statType: StatType,
+  splits: StatSplit,
+) {
+  /**
+   * Get Batters or Pitchers
+   */
+
+  const order =
+    statType === 'Batting'
+      ? getBattingOrder(players)
+      : getPitchingOrder(players);
+
+  if (splits === 'Game' && order.length) {
+    return order;
+  }
+
+  if (statType === 'Pitching') {
+    return players.filter((p) => {
+      if (p.position === 'P') {
+        return p;
+      }
+    });
+  }
+
+  return players.filter((p) => {
+    if (p.position !== 'P') {
+      return p;
+    }
+  });
 }

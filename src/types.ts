@@ -214,6 +214,11 @@ export type StatsByPosition = {
 
 export type StatType = 'Batting' | 'Pitching' | 'Fielding';
 
+/**
+ * Where to take the stats from
+ */
+export type StatSplit = 'Season' | 'Playoff' | 'Game';
+
 export type PlayerStatParams = {
   playerIds: Array<number>;
   season: number;
@@ -225,3 +230,12 @@ export type PlayerStatParams = {
    */
   gameType?: 'R' | 'P' | 'E';
 };
+
+export type StatMap<T> = Record<
+  string,
+  {
+    statKey: keyof T;
+    splitKey: StatSplit;
+    value: (p: GamePlayer) => number | string | undefined;
+  }
+>;
