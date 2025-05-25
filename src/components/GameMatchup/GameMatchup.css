@@ -39,10 +39,6 @@
     align-self: flex-start;
   }
 
-  & .player-avatar {
-    margin-top: 0.25rem;
-  }
-
   & .play-events {
     flex: 1 0 100%;
     padding-left: 0;

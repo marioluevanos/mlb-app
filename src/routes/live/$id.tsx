@@ -30,10 +30,9 @@ import { GameMatchup } from '@/components/GameMatchup/GameMatchup';
 import { GameBug } from '@/components/GameBug/GameBug';
 import { GameDecisions } from '@/components/GameDecisions/GameDecisions';
 import { PlayEvents } from '@/components/PlayEvents/PlayEvents';
-import { InningPlays } from '@/components/InningPlays/InningPlays';
+import { GamePlays } from '@/components/GamePlays/GamePlays';
 import { TopPerformers } from '@/components/TopPerformers/TopPerformers';
 import { TeamCompare } from '@/components/TeamCompare/TeamCompare';
-import { GameHighlights } from '@/components/GameHighlights/GameHighlights';
 import { Header } from '@/components/ui/Header/Header';
 import { GameStreams } from '@/components/GameStreams/GameStreams';
 import { toLegibleDate } from '@/utils/date';
@@ -341,7 +340,7 @@ export const Route = createFileRoute('/live/$id')({
             />
           )}
 
-          <InningPlays
+          <GamePlays
             status={game.status}
             currentInning={game.currentInning}
             playsByInning={game.playsByInning}
@@ -350,15 +349,6 @@ export const Route = createFileRoute('/live/$id')({
             highlights={game.highlights}
             onPlayerClick={onPlayerClick}
           />
-
-          {game.topPerformers?.length > 0 ? (
-            <TopPerformers
-              className={cn(isPre && 'pre-game')}
-              topPerformers={game.topPerformers}
-              title={isPre ? 'Who to Watch' : 'Top Performers'}
-              onPlayerClick={onPlayerClick}
-            />
-          ) : null}
 
           {!isPre && <TeamCompare away={game.away} home={game.home} />}
 
@@ -375,9 +365,14 @@ export const Route = createFileRoute('/live/$id')({
             currentInning={game.currentInning}
           />
 
-          {!isFinal && (
-            <GameHighlights title="Preview" highlights={game.highlights} />
-          )}
+          {game.topPerformers?.length > 0 ? (
+            <TopPerformers
+              className={cn(isPre && 'pre-game')}
+              topPerformers={game.topPerformers}
+              title={isPre ? 'Who to Watch' : 'Top Performers'}
+              onPlayerClick={onPlayerClick}
+            />
+          ) : null}
         </section>
       </main>
     );

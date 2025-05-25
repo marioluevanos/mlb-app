@@ -15,10 +15,12 @@
     display: flex;
   }
 
-  & .all-event-inning:not(:first-child) {
-    & h3 {
-      margin-top: 0.25rem;
-    }
+  & .all-event-inning:not(:last-child) .all-events {
+    padding-top: 0;
+  }
+
+  & .all-event-inning:not(:last-child) h3 {
+    margin-top: 0.25rem;
   }
 
   & .all-event {

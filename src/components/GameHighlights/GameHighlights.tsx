@@ -43,9 +43,11 @@ export const GameHighlights: FC<GameHighlightsProps> = (props) => {
 
   return !media ? null : (
     <section className="game-highlight">
-      <h3>
-        {title} <span>({highlights.length})</span>
-      </h3>
+      {title && (
+        <h3>
+          {title} <span>({highlights.length})</span>
+        </h3>
+      )}
       <div className="current-game-highlight">
         <video
           ref={videoRef}

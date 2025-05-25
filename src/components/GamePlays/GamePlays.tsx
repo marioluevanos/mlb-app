@@ -1,4 +1,4 @@
-import './InningPlays.css';
+import './GamePlays.css';
 
 import { Tabs } from '../ui/Tabs/Tabs';
 import { PlaysByInning } from '../PlaysByInning/PlaysByInning';
@@ -10,7 +10,7 @@ import type { BaseSyntheticEvent, FC } from 'react';
 import { cn } from '@/utils/cn';
 import { parseStatus } from '@/utils/mlb';
 
-type InningPlaysProps = {
+type GamePlaysProps = {
   status: GameStatus;
   className?: string;
   currentInning?: string;
@@ -21,7 +21,7 @@ type InningPlaysProps = {
   onPlayerClick?: (event: BaseSyntheticEvent) => void;
 };
 
-export const InningPlays: FC<InningPlaysProps> = (props) => {
+export const GamePlays: FC<GamePlaysProps> = (props) => {
   const {
     className,
     status,
@@ -38,39 +38,25 @@ export const InningPlays: FC<InningPlaysProps> = (props) => {
     return null;
   }
 
-  if (isFinal) {
-    return (
-      <Tabs
-        className={cn('inning-plays', className)}
-        tabs={[<>Scoring Plays</>, <>All Plays</>, <>Highlights</>]}
-      >
-        <ScoringPlays
-          className="is-final"
-          scoringPlays={scoringPlays}
-          onPlayerClick={onPlayerClick}
-        />
-        <AllPlays allPlays={allPlays} onPlayerClick={onPlayerClick} />
-
-        <GameHighlights title="Highlights" highlights={highlights} />
-      </Tabs>
-    );
-  }
-
   return (
     <Tabs
       className={cn('inning-plays', className)}
       tabs={[
-        <>{currentInning.toLowerCase()} Plays</>,
+        !isFinal ? <>{currentInning.toLowerCase()} Plays</> : null,
         <>Scoring Plays</>,
         <>All Plays</>,
+        <>Highlights</>,
       ]}
     >
-      <PlaysByInning
-        playsByInning={playsByInning}
-        onPlayerClick={onPlayerClick}
-      />
+      {!isFinal && (
+        <PlaysByInning
+          playsByInning={playsByInning}
+          onPlayerClick={onPlayerClick}
+        />
+      )}
       <ScoringPlays scoringPlays={scoringPlays} onPlayerClick={onPlayerClick} />
       <AllPlays allPlays={allPlays} onPlayerClick={onPlayerClick} />
+      <GameHighlights highlights={highlights} />
     </Tabs>
   );
 };

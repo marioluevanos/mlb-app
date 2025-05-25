@@ -5,7 +5,7 @@
 .tabs .tabs-actions {
   background: var(--bg);
   display: flex;
-  padding: 0 0.5rem;
+  height: 48px;
   flex-direction: row;
   overflow: scroll hidden;
   scroll-behavior: smooth;
@@ -13,7 +13,8 @@
   overscroll-behavior-x: contain;
   scrollbar-width: none; /* Firefox */
   overflow: -moz-scrollbars-none;
-  scroll-padding: 0 1rem 0 1rem;
+  scroll-padding: 0 50vw 0 1rem;
+  padding: 0 50vw 0 0.5rem;
   z-index: 100;
   flex: 1;
 
@@ -82,6 +83,10 @@
   &:empty {
     display: none;
   }
+}
+
+.button.tabs-scrollright-reset {
+  margin-left: 1rem;
 }
 
 .tabs-content h3 {

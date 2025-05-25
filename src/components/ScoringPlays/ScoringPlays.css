@@ -8,14 +8,14 @@
     list-style: none;
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
 
   & .scoring-event-inning {
     display: flex;
   }
 
-  & .scoring-event-inning:not(:first-child) {
+  & .scoring-event-inning:not(:last-child) {
     & h3 {
       margin-top: 0.25rem;
     }
