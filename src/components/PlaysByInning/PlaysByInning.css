@@ -46,10 +46,6 @@
     margin-right: 0.25rem;
   }
 
-  & .is-out .event:before {
-    color: var(--red);
-  }
-
   & .description {
     color: var(--text1);
     line-height: 1.5;

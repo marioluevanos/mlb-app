@@ -15,6 +15,7 @@ import type {
 import {
   fetchScheduledGames,
   findPlayerProfile,
+  formatStatus,
   getPlayerProfileStats,
   headshot,
   isWinner,
@@ -268,7 +269,9 @@ export const Route = createFileRoute('/live/$id')({
           navChildren={
             <>
               <span className="date">{date}</span>
-              {game?.status && <span className="status">{game?.status}</span>}
+              {game?.status && (
+                <span className="status">{formatStatus(game?.status)}</span>
+              )}
               {!isFinal && gameStreams.length ? (
                 <button
                   className="streams"

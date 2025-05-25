@@ -22,22 +22,12 @@
   }
 }
 
-.event-header .abbreviation,
-.event-header .event {
-  display: inline-flex;
-  color: var(--text);
-}
-
 .event-header + .player .player-name {
   font-size: 12px;
 }
 
-.event-header .abbreviation {
-  color: var(--text1);
-}
-
 .is-on-base.event-header {
-  color: var(--blue);
+  color: var(--text-blue);
   overflow: hidden;
   z-index: 1;
 
@@ -49,11 +39,17 @@
     opacity: 0.12;
     z-index: -1;
   }
+}
 
-  & .abbreviation,
-  & .current-inning,
-  & .event {
-    color: inherit;
+.event-header.is-out {
+  color: var(--text-red);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--red);
+    opacity: 0.12;
   }
 }
 
@@ -61,8 +57,6 @@
   border-color: var(--blue);
   background: var(--blue);
 
-  & .abbreviation,
-  & .current-inning,
   & .event {
     color: white;
   }

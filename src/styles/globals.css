@@ -6,7 +6,6 @@
   --secondary: hsl(161deg 40% 87%);
   --blue: hsl(240deg 97% 27%);
   --red: hsl(0 100% 40%);
-  --red2: hsl(0 100% 60%);
   --bg: hsl(210deg 0% 100%);
   --bg1: hsl(210deg 16% 96%);
   --bg2: hsl(210deg 8% 92%);
@@ -14,6 +13,8 @@
   --text: hsl(210deg 0% 0%);
   --text1: hsl(210deg 0% 30%);
   --text2: hsl(210deg 0% 64%);
+  --text-red: hsl(0 100% 50%);
+  --text-blue: hsl(240deg 97% 60%);
   --text-active: var(--text);
 }
 
@@ -24,7 +25,6 @@
     --secondary: hsl(161deg 40% 66%);
     --blue: hsl(240deg 100% 54%);
     --red: hsl(0 100% 32%);
-    --red2: hsl(0 100% 80%);
     --bg: hsl(210deg 22% 8%);
     --bg1: hsl(210deg 22% 12%);
     --bg2: hsl(210deg 22% 20%);
@@ -32,6 +32,8 @@
     --text: hsl(210deg 0% 100%);
     --text1: hsl(210deg 0% 70%);
     --text2: hsl(210deg 0% 30%);
+    --text-red: hsl(0 100% 80%);
+    --text-blue: hsl(240deg 100% 80%);
     --text-active: var(--text);
   }
 }

@@ -77,16 +77,6 @@
     margin: 0;
     align-items: center;
   }
-
-  & .abbreviation,
-  & .event {
-    display: inline-flex;
-    color: var(--text);
-  }
-
-  & .abbreviation {
-    color: var(--text1);
-  }
 }
 
 .all-plays-no-score {

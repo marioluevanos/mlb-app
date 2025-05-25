@@ -1,0 +1,71 @@
+.strike-zone-chart {
+  overflow: visible;
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  aspect-ratio: 4 / 5;
+}
+
+.strike-zone {
+  stroke: var(--bg3);
+  stroke-width: 0.25;
+  fill: none;
+}
+
+.grid-line {
+  stroke: var(--bg3);
+  stroke-width: 0.25;
+  stroke-dasharray: 4 2;
+}
+
+.zone-heat {
+  opacity: 0.2;
+}
+
+.plate {
+  fill: var(--text1);
+}
+
+.batter-box {
+  stroke-width: 2;
+  stroke: var(--bg3);
+  opacity: 0.3;
+}
+
+.pitch-dot.is-in-play {
+  stroke: var(--accent);
+  stroke-width: 0.5;
+  fill: none;
+}
+
+.pitch-dot.is-ball {
+  fill: var(--blue);
+}
+
+.pitch-dot.is-strike {
+  fill: var(--red);
+}
+
+.pitch-label {
+  font-size: 3px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-anchor: middle;
+  fill: white;
+  pointer-events: none;
+  dominant-baseline: middle;
+}
+
+.pitch-label.is-in-play {
+  fill: var(--accent);
+}
+
+.pitch-label.is-ball {
+  fill: white;
+}
+
+.pitch-label.is-strike {
+  fill: white;
+}

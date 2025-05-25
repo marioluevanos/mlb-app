@@ -56,6 +56,15 @@
     margin-left: auto;
     font-weight: 600;
     color: var(--text);
+    line-height: 1;
+
+    & .details {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 10px;
+      text-transform: uppercase;
+      color: var(--text1);
+    }
   }
 
   & .current-day {

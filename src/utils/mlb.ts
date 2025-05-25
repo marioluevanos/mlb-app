@@ -1,3 +1,4 @@
+import { Fragment, createElement } from 'react';
 import type {
   AtBat,
   Decisions,
@@ -738,6 +739,15 @@ export async function getPlayerProfileStats(
     people: [],
   };
 }
+
+export const formatStatus = (status: GameStatus) => {
+  const [main, details] = status.split(':');
+
+  return createElement(Fragment, {}, [
+    main,
+    createElement('span', { className: 'details' }, details),
+  ]);
+};
 
 /**
  * Modified player name

@@ -16,6 +16,8 @@ export const PlayEvents: FC<PlayEventsProps> = (props) => {
   const { status = '', className, events = [], result } = props;
   const isFinal = ['Final', 'Game Over'].includes(status);
 
+  console.log(JSON.stringify(events));
+
   const isSub = (event: Partial<PlayEvent>) => {
     return (
       event.type === 'action' &&
