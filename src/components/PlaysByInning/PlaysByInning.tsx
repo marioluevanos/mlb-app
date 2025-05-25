@@ -1,5 +1,6 @@
 import './PlaysByInning.css';
 import { Player } from '../Player/Player';
+import { EventHeader } from '../EventHeader/EventHeader';
 import type { BaseSyntheticEvent, FC } from 'react';
 import type { InningPlay } from '@/types';
 import { cn } from '@/utils/cn';
@@ -24,20 +25,8 @@ export const PlaysByInning: FC<PlaysByInningProps> = (props) => {
     <section className={cn('plays-by-inning', className)}>
       <ol>
         {filtered.map((event, i) => (
-          <li
-            className={cn(
-              'play-event-by-inning',
-              event?.result?.isOut && 'is-out',
-              !event.result?.isOut && event.result?.rbi && 'is-rbi',
-            )}
-            key={i}
-          >
-            {event.result?.event && (
-              <span className="header">
-                <span className="event">{event.result?.event}</span>
-              </span>
-            )}
-
+          <li className="play-event-by-inning tab-section" key={i}>
+            <EventHeader event={event} data-play={i + 1} />
             <Player
               onClick={onPlayerClick}
               player={{
@@ -48,7 +37,6 @@ export const PlaysByInning: FC<PlaysByInningProps> = (props) => {
                 summary: event.result?.rbi ? `(${event.result?.rbi} RBI)` : '',
               }}
             />
-
             <span className="description">{event.result?.description}</span>
           </li>
         ))}

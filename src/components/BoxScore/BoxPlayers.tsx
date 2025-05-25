@@ -8,7 +8,7 @@ import type { GamePlayer, StatSplit, StatType } from '@/types';
 import type { BattingRecord, PitchingRecord } from '@/types.mlb';
 import { toKebabCase } from '@/utils/toKebabCase';
 import { cn } from '@/utils/cn';
-import { getPlayerFirstName } from '@/utils/mlb';
+import { getPlayerName } from '@/utils/mlb';
 
 type SortKey = keyof PitchingRecord & keyof BattingRecord;
 
@@ -119,7 +119,7 @@ export const BoxPlayers: FC<BoxPlayersProps> = (props) => {
               key={`${player.id}-${index}`}
               onClick={onPlayerClick}
             >
-              {getPlayerFirstName(player.fullName)}
+              {getPlayerName(player.fullName)}
             </span>
           ))}
         </div>

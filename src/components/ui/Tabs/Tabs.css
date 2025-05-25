@@ -96,10 +96,10 @@
   align-items: flex-start;
   justify-content: center;
   align-self: flex-start;
+}
 
-  & + div {
-    padding: 1rem 1rem 0 0;
-    display: flex;
-    flex-direction: column;
-  }
+.tabs-content .tab-section {
+  padding: 1rem 1rem 0 0;
+  display: flex;
+  flex-direction: column-reverse;
 }

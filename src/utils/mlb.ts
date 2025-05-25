@@ -1,6 +1,5 @@
 import type {
   AtBat,
-  BattingRecord,
   Decisions,
   GameData,
   HighlightItem,
@@ -12,7 +11,6 @@ import type {
   Matchup,
   Performer,
   PersonRef,
-  PitchingRecord,
   Player,
   PlayerProfile,
 } from '../types.mlb';
@@ -28,9 +26,6 @@ import type {
   PlayerSeasonProfile,
   PlayerStatParams,
   ScoringPlay,
-  StatMap,
-  StatSplit,
-  StatType,
   TeamClub,
   TeamScore,
 } from '../types';
@@ -298,7 +293,7 @@ export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
     home: homeTeam,
     innings: linescore.innings,
     topPerformers: boxscore.topPerformers.map(topPerformers) || [],
-    playsByInning: getCurrentPlays(),
+    playsByInning: getCurrentPlays([awayTeam.id, homeTeam.id]),
     scoringPlays: getScoringPlays([awayTeam.id, homeTeam.id]),
     allPlays: getAllPlays([awayTeam.id, homeTeam.id]),
     currentPlay: {
@@ -430,17 +425,18 @@ export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
     }
   }
 
-  function getCurrentPlays() {
+  function getCurrentPlays(teamIds: [awayId: number, homeId: number]) {
     const currentInning = playsByInning[linescore.currentInning - 1];
     const currentPlays =
       (linescore.isTopInning ? currentInning?.top : currentInning?.bottom) ||
       [];
-
+    const teamId = linescore.isTopInning ? teamIds[0] : teamIds[1];
     return currentPlays.reduce<Array<InningPlay>>(
       playByInning.bind(null, {
         allPlays,
         allPlayers,
         teamAbbreviation: [awayTeam.abbreviation, homeTeam.abbreviation],
+        teamId,
       }),
       [],
     );
@@ -450,6 +446,7 @@ export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
         allPlays: Array<AtBat>;
         allPlayers: Array<GamePlayer>;
         teamAbbreviation: Array<string>;
+        teamId: number;
       },
       acc: Array<InningPlay>,
       playIndex: number,
@@ -467,7 +464,7 @@ export async function mapToLiveGame(data: MLBLive): Promise<LiveGame> {
           teamAbbreviation: play.about.isTopInning
             ? teamAbbreviation[0]
             : teamAbbreviation[1],
-          teamLogo: '', // intentionally left blank
+          teamLogo: logo(teamId),
           result: play?.result,
           matchup: {
             batter: mapToBatter(matchup?.batter, play?.result),
@@ -745,9 +742,25 @@ export async function getPlayerProfileStats(
 /**
  * Modified player name
  */
-export function getPlayerFirstName(name: string = '') {
+export function getPlayerName(
+  name: string = '',
+  format: 'First' | 'Last' | 'F. Last' = 'F. Last',
+) {
   const [last, first] = name.split(' ').reverse();
-  return `${first.charAt(0)}. ${last}`;
+
+  if (format === 'F. Last') {
+    return `${first.charAt(0)}. ${last}`;
+  }
+
+  if (format === 'Last') {
+    return last;
+  }
+
+  if (format === 'First') {
+    return first;
+  }
+
+  return name;
 }
 
 export function avatar(id: string | number, size: number = 64) {

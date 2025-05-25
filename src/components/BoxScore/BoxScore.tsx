@@ -5,7 +5,7 @@ import { BoxPlayers } from './BoxPlayers';
 import type { GameStatus, TeamClub } from '@/types';
 import type { BaseSyntheticEvent, FC } from 'react';
 import { cn } from '@/utils/cn';
-import { getPlayerFirstName, parseStatus } from '@/utils/mlb';
+import { getPlayerName, parseStatus } from '@/utils/mlb';
 import { cssVars } from '@/utils/cssVars';
 
 export type BoxScoreProps = {
@@ -38,7 +38,7 @@ export const BoxScore: FC<BoxScoreProps> = (props) => {
     ...(away.players || []),
     ...(home.players || []),
   ].reduce<string>((acc, player) => {
-    const name = getPlayerFirstName(player.fullName);
+    const name = getPlayerName(player.fullName);
     if (acc.length < name.length) {
       acc = name;
     }

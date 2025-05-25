@@ -11,10 +11,17 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LeadersImport } from './routes/leaders'
 import { Route as IndexImport } from './routes/index'
 import { Route as LiveIdImport } from './routes/live/$id'
 
 // Create/Update Routes
+
+const LeadersRoute = LeadersImport.update({
+  id: '/leaders',
+  path: '/leaders',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -39,6 +46,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/leaders': {
+      id: '/leaders'
+      path: '/leaders'
+      fullPath: '/leaders'
+      preLoaderRoute: typeof LeadersImport
+      parentRoute: typeof rootRoute
+    }
     '/live/$id': {
       id: '/live/$id'
       path: '/live/$id'
@@ -53,36 +67,41 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/leaders': typeof LeadersRoute
   '/live/$id': typeof LiveIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/leaders': typeof LeadersRoute
   '/live/$id': typeof LiveIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/leaders': typeof LeadersRoute
   '/live/$id': typeof LiveIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/live/$id'
+  fullPaths: '/' | '/leaders' | '/live/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/live/$id'
-  id: '__root__' | '/' | '/live/$id'
+  to: '/' | '/leaders' | '/live/$id'
+  id: '__root__' | '/' | '/leaders' | '/live/$id'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LeadersRoute: typeof LeadersRoute
   LiveIdRoute: typeof LiveIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LeadersRoute: LeadersRoute,
   LiveIdRoute: LiveIdRoute,
 }
 
@@ -97,11 +116,15 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/leaders",
         "/live/$id"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/leaders": {
+      "filePath": "leaders.tsx"
     },
     "/live/$id": {
       "filePath": "live/$id.tsx"

@@ -6,6 +6,7 @@
   --secondary: hsl(161deg 40% 87%);
   --blue: hsl(240deg 97% 27%);
   --red: hsl(0 100% 40%);
+  --red2: hsl(0 100% 60%);
   --bg: hsl(210deg 0% 100%);
   --bg1: hsl(210deg 16% 96%);
   --bg2: hsl(210deg 8% 92%);
@@ -23,6 +24,7 @@
     --secondary: hsl(161deg 40% 66%);
     --blue: hsl(240deg 100% 54%);
     --red: hsl(0 100% 32%);
+    --red2: hsl(0 100% 80%);
     --bg: hsl(210deg 22% 8%);
     --bg1: hsl(210deg 22% 12%);
     --bg2: hsl(210deg 22% 20%);

@@ -1,0 +1,6 @@
+.leaders {
+  position: relative;
+  padding-bottom: 4rem;
+  display: flex;
+  flex-direction: column;
+}

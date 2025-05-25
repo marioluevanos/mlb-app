@@ -5,6 +5,7 @@ import { EventHeader } from '../EventHeader/EventHeader';
 import type { BaseSyntheticEvent, FC } from 'react';
 import type { LiveGame } from '@/types';
 import { cn } from '@/utils/cn';
+import { getPlayerName } from '@/utils/mlb';
 
 type AllPlaysProps = {
   allPlays?: LiveGame['allPlays'];
@@ -21,14 +22,10 @@ export const AllPlays: FC<AllPlaysProps> = (props) => {
         {Object.entries(allPlays).map(([inning, events], i) => (
           <li className={cn('all-event-inning')} key={i}>
             <h3>{inning}</h3>
-            <div className="all-events">
+            <div className="all-events tab-section">
               {events.map((event, index) => (
                 <div
-                  className={cn(
-                    'all-event',
-                    event.result?.isOut && 'is-out',
-                    event.result?.rbi && 'is-rbi',
-                  )}
+                  className="all-event"
                   key={`${event.teamAbbreviation}-${index}`}
                 >
                   <EventHeader event={event} />
@@ -37,7 +34,10 @@ export const AllPlays: FC<AllPlaysProps> = (props) => {
                     player={{
                       id: event.matchup.batter.id,
                       avatar: event.matchup.batter.avatar,
-                      fullName: event.matchup.batter.fullName,
+                      fullName: getPlayerName(
+                        event.matchup.batter.fullName,
+                        'Last',
+                      ),
                       position: event.matchup.batter.position,
                       summary: event.result?.rbi
                         ? `(${event.result?.rbi} RBI)`
